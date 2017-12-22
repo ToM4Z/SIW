@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Title</title>
+</head>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script>
+
+	function getJSON(){
+		$.getJSON("https://dog.ceo/api/breeds/list/all", function( resp ) {
+			 
+		    // Log each key in the response data
+		    $.each( resp, function( key, value ) {
+		        console.log( key + " : " + value );
+		    })
+		});
+	}
+		
+	function Prova(){
+		$.ajax({
+			url : "https://dog.ceo/api/breeds/list/all",
+			
+			type:"GET",
+			
+			dataType:"json"
+		})
+		  .done(function( json ) {
+			     $( "<h1>" ).text( json.title ).appendTo( "body" );
+			     $( "<div class=\"content\">").html( json.html ).appendTo( "body" );
+			  })
+			  // Code to run if the request fails; the raw request and
+			  // status codes are passed to the function
+			  .fail(function( xhr, status, errorThrown ) {
+			    alert( "Sorry, there was a problem!" );
+			    console.log( "Error: " + errorThrown );
+			    console.log( "Status: " + status );
+			    console.dir( xhr );
+			  })
+			  // Code to run regardless of success or failure;
+			  .always(function( xhr, status ) {
+			    alert( "The request is complete!" );
+			  });
+	}
+</script>
+
+<body>
+	<button onClick="getJSON()"> Avvia</button>
+</body>
+</html>
+
