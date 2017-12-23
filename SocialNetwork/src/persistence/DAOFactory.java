@@ -7,7 +7,9 @@ public abstract class DAOFactory {
 	
 		public static final int HSQLDB = 1;
 		public static final int POSTGRESQL = 2;
-				
+		
+		
+		//ciao thomas
 		/**
 		 * Depending on the input parameter
 		 * this method returns one out of several possible 
