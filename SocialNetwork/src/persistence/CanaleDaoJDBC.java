@@ -18,15 +18,12 @@ public class CanaleDaoJDBC implements CanaleDao {
 	DataSource dataSource;
 	
 	CanaleDaoJDBC(DataSource d){
-		
 		dataSource = d;
 	}
 
 	@Override
 	public void save(Canale canale) {
-
-		Connection connection = dataSource.getConnection();
-		
+		Connection connection = dataSource.getConnection();		
 		try{
 			String insert = "insert into canale(nome, descrizione) values (?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
@@ -59,13 +56,13 @@ public class CanaleDaoJDBC implements CanaleDao {
 		
 		UtenteDao utenteDao = new UtenteDaoJDBC(dataSource);
 		for (Utente utente : canale.getMembri()) {
-			if (utenteDao.findByPrimaryKey(utente.getId()) == null){
+			if (utenteDao.findByPrimaryKey(utente.getId_utente()) == null){
 				utenteDao.save(utente);
 			}
 			
 			String iscrittoCanale = "select id from iscritto_canale where id_utente=? AND nome_canale=?";
 			PreparedStatement statementIscritto = connection.prepareStatement(iscrittoCanale);
-			statementIscritto.setLong(1, utente.getId());
+			statementIscritto.setLong(1, utente.getId_utente());
 			statementIscritto.setString(2, canale.getNome());
 			ResultSet result = statementIscritto.executeQuery();
 			if(result.next()){
@@ -79,7 +76,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 				PreparedStatement statementIscrivi = connection.prepareStatement(iscrivi);
 				Long id = IdBroker.getId(connection);
 				statementIscrivi.setLong(1, id);
-				statementIscrivi.setLong(2, utente.getId());
+				statementIscrivi.setLong(2, utente.getId_utente());
 				statementIscrivi.setString(3, canale.getNome());
 				statementIscrivi.executeUpdate();
 			}
@@ -90,7 +87,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 		for (Utente utente : canale.getMembri()) {
 			String update = "update iscritto_canale SET nome_canale = NULL WHERE id_utente = ?";
 			PreparedStatement statement = connection.prepareStatement(update);
-			statement.setLong(1, utente.getId());
+			statement.setLong(1, utente.getId_utente());
 			statement.executeUpdate();
 		}	
 	}

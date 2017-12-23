@@ -26,31 +26,26 @@ public class PostgresDAOFactory extends DAOFactory {
 
 	@Override
 	public CanaleDao getCanaleDAO() {
-		// TODO Auto-generated method stub
-		return null;
+		return new CanaleDaoJDBC(dataSource);
 	}
 
 	@Override
 	public GruppoDao getGruppoDAO() {
-		// TODO Auto-generated method stub
-		return null;
+		return new GruppoDaoJDBC(dataSource);
 	}
 
 	@Override
 	public UtenteDao getUtenteDAO() {
-		// TODO Auto-generated method stub
-		return null;
+		return new UtenteDaoJDBC(dataSource);
 	}
 
 	@Override
 	public PostDao getPostDAO() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public CommentoDao getCommentoDAO() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

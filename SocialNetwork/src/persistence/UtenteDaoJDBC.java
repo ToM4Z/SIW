@@ -23,7 +23,7 @@ public class UtenteDaoJDBC implements UtenteDao{
 		Connection connection = dataSource.getConnection();
 		try {
 			Long id = IdBroker.getId(connection);
-			utente.setId(id);
+			utente.setId_utente(id);
 			String insert = "insert into utente(nome, cognome, data_nascita) values (?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setString(1, utente.getNome());
@@ -55,7 +55,7 @@ public class UtenteDaoJDBC implements UtenteDao{
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
 				utente = new Utente();
-				utente.setId(result.getLong("id"));				
+				utente.setId_utente(result.getLong("id"));				
 				utente.setNome(result.getString("nome"));
 				utente.setCognome(result.getString("cognome"));
 				long secs = result.getDate("data_nascita").getTime();
@@ -85,7 +85,7 @@ public class UtenteDaoJDBC implements UtenteDao{
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {
 				utente = new Utente();
-				utente.setId(result.getLong("id"));				
+				utente.setId_utente(result.getLong("id"));				
 				utente.setNome(result.getString("nome"));
 				utente.setCognome(result.getString("cognome"));
 				long secs = result.getDate("data_nascita").getTime();

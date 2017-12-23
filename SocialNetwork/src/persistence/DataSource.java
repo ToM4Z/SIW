@@ -2,13 +2,10 @@ package persistence;
 
 import java.sql.*;
 
-
 class DataSource {
 	final private String dbURI;// = "jdbc:postgresql://localhost/test";
 	final private String userName;// = "postgres";
 	final private String password;// = "postgres";
-	
-	
 
 	public DataSource(String dbURI, String userName, String password) {
 		this.dbURI=dbURI;
@@ -20,8 +17,6 @@ class DataSource {
 		Connection connection = null;
 		try {
 		    connection = DriverManager.getConnection(dbURI,userName, password);
-			
-		
 		} catch(SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		}

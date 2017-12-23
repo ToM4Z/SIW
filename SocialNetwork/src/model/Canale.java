@@ -1,15 +1,26 @@
 package model;
 
+import java.util.Date;
 import java.util.Set;
 
 public class Canale {
 	
-	String nome;
-	String descrizione;
-	Utente admin;
-	Set<Utente> membri;
-	Set<Gruppo> gruppi;
-	
+	private String nome;
+	private String descrizione;
+	private Date data_creazione;
+	private Utente admin;
+	private Set<Utente> membri;
+	private Set<Gruppo> gruppi;
+	//private Image image;
+
+	public Date getData_creazione() {
+		return data_creazione;
+	}
+
+	public void setData_creazione(Date data_creazione) {
+		this.data_creazione = data_creazione;
+	}
+
 	public Set<Gruppo> getGruppi() {
 		return gruppi;
 	}

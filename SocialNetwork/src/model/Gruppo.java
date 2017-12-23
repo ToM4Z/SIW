@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Date;
 import java.util.Set;
 
 public class Gruppo {
@@ -8,7 +9,25 @@ public class Gruppo {
 	private Set<Utente> admin;
 	private Set<Utente> membri;
 	private Set<Post> post;
+	private Date data_creazione;
+	private Canale canale;
 	
+	public Canale getCanale() {
+		return canale;
+	}
+
+	public void setCanale(Canale canale) {
+		this.canale = canale;
+	}
+	
+	public Date getData_creazione() {
+		return data_creazione;
+	}
+
+	public void setData_creazione(Date data_creazione) {
+		this.data_creazione = data_creazione;
+	}
+
 	public Set<Utente> getMembri() {
 		return membri;
 	}

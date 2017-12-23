@@ -30,7 +30,7 @@ public class GruppoProxy extends Gruppo {
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {
 				Utente utente = new Utente();
-				utente.setId(result.getLong("id"));				
+				utente.setId_utente(result.getLong("id"));				
 				utente.setNome(result.getString("nome"));
 				utente.setCognome(result.getString("cognome"));
 				long secs = result.getDate("data_nascita").getTime();

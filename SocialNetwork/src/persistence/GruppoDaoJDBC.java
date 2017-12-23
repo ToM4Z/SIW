@@ -26,11 +26,13 @@ public class GruppoDaoJDBC implements GruppoDao{
 		Connection connection = dataSource.getConnection();
 		
 		try{
-			String insert = "insert into gruppo(nome) values (?)";
+			String insert = "insert into gruppo(nome,data_creazione,canale) values (?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setString(1, gruppo.getNome());
-			
+			statement.setDate(2, new java.sql.Date(gruppo.getData_creazione().getTime()));
+			statement.setString(3, gruppo.getCanale().getNome());
 			statement.executeUpdate();
+			
 			// salviamo anche tutti gli utenti del canale in CASACATA
 			this.updateMembri(gruppo, connection);
 		
@@ -56,13 +58,13 @@ public class GruppoDaoJDBC implements GruppoDao{
 		
 		UtenteDao utenteDao = new UtenteDaoJDBC(dataSource);
 		for (Utente utente : gruppo.getMembri()) {
-			if (utenteDao.findByPrimaryKey(utente.getId()) == null){
+			if (utenteDao.findByPrimaryKey(utente.getId_utente()) == null){
 				utenteDao.save(utente);
 			}
 			
 			String iscrittoCanale = "select id from iscritto_gruppo where id_utente=? AND nome_gruppo=?";
 			PreparedStatement statementIscritto = connection.prepareStatement(iscrittoCanale);
-			statementIscritto.setLong(1, utente.getId());
+			statementIscritto.setLong(1, utente.getId_utente());
 			statementIscritto.setString(2, gruppo.getNome());
 			ResultSet result = statementIscritto.executeQuery();
 			if(result.next()){
@@ -76,7 +78,7 @@ public class GruppoDaoJDBC implements GruppoDao{
 				PreparedStatement statementIscrivi = connection.prepareStatement(iscrivi);
 				Long id = IdBroker.getId(connection);
 				statementIscrivi.setLong(1, id);
-				statementIscrivi.setLong(2, utente.getId());
+				statementIscrivi.setLong(2, utente.getId_utente());
 				statementIscrivi.setString(3, gruppo.getNome());
 				statementIscrivi.executeUpdate();
 			}
@@ -87,7 +89,7 @@ public class GruppoDaoJDBC implements GruppoDao{
 		for (Utente utente : gruppo.getMembri()) {
 			String update = "update iscritto_gruppo SET nome_gruppo = NULL WHERE id_utente = ?";
 			PreparedStatement statement = connection.prepareStatement(update);
-			statement.setLong(1, utente.getId());
+			statement.setLong(1, utente.getId_utente());
 			statement.executeUpdate();
 		}	
 	}

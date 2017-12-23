@@ -4,11 +4,30 @@ import java.util.Date;
 
 public class Utente {
 	
+	private Long id_utente;
 	private String nome;
 	private String cognome;
+	private String username;
 	private Date dataDiNascita;
-	private Long id;
+	private Date dataIscrizione;
+	//private Image image;
 	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public Date getDataIscrizione() {
+		return dataIscrizione;
+	}
+
+	public void setDataIscrizione(Date dataIscrizione) {
+		this.dataIscrizione = dataIscrizione;
+	}
+
 	public Utente(){}
 	
 	public Utente(String n, String c, Date ddn){
@@ -18,12 +37,12 @@ public class Utente {
 		dataDiNascita = ddn;
 	}
 	
-	public Long getId() {
-		return id;
+	public Long getId_utente() {
+		return id_utente;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setId_utente(Long id) {
+		this.id_utente = id;
 	}
 
 	public String getNome() {
@@ -50,8 +69,4 @@ public class Utente {
 		this.dataDiNascita = dataDiNascita;
 	}
 	
-	
-	
-	
-
 }
