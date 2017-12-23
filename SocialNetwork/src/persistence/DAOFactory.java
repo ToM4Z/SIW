@@ -9,7 +9,7 @@ public abstract class DAOFactory {
 		public static final int POSTGRESQL = 2;
 		
 		
-		//ciao thomas
+		//ciao thomas!
 		/**
 		 * Depending on the input parameter
 		 * this method returns one out of several possible 
