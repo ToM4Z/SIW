@@ -80,18 +80,15 @@ public class Canale {
 		this.getMembri().add(u);   //importante usare getMembri() per il proxy
 	}
 	
-	public void removeMembro(Utente u){
-		
+	public void removeMembro(Utente u){		
 		this.getMembri().remove(u);
 	}
 	
-	public void addGruppo(Gruppo g){
-		
+	public void addGruppo(Gruppo g){		
 		this.getGruppi().add(g);
 	}
 	
-	public void removeGruppo(Gruppo g){
-		
+	public void removeGruppo(Gruppo g){		
 		this.getGruppi().remove(g);
 	}
 }

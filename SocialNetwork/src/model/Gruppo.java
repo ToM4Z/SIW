@@ -1,6 +1,5 @@
 package model;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
@@ -16,10 +15,10 @@ public class Gruppo {
 	public Gruppo() {
 	}
 	
-	public Gruppo(String nome, String canale) {
+	public Gruppo(String nome,Date dc, String canale) {
 		this.nome=nome;
+		data_creazione=dc;
 		this.canale=canale;
-		data_creazione= Calendar.getInstance().getTime();
 	}
 
 	public void addMembro(Utente u) {
