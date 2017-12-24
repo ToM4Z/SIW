@@ -12,29 +12,14 @@ public class Utente {
 	private Date dataIscrizione;
 	//private Image image;
 	
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public Date getDataIscrizione() {
-		return dataIscrizione;
-	}
-
-	public void setDataIscrizione(Date dataIscrizione) {
-		this.dataIscrizione = dataIscrizione;
-	}
-
 	public Utente(){}
 	
-	public Utente(String n, String c, Date ddn){
-		
+	public Utente(String n, String c,String un,Date di, Date ddn){
 		nome = n;
 		cognome = c;
+		username = un;
 		dataDiNascita = ddn;
+		dataIscrizione = di;
 	}
 	
 	public Long getId_utente() {
@@ -67,6 +52,22 @@ public class Utente {
 
 	public void setDataDiNascita(Date dataDiNascita) {
 		this.dataDiNascita = dataDiNascita;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public Date getDataIscrizione() {
+		return dataIscrizione;
+	}
+
+	public void setDataIscrizione(Date dataIscrizione) {
+		this.dataIscrizione = dataIscrizione;
 	}
 	
 }

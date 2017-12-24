@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Canale {
@@ -8,11 +9,25 @@ public class Canale {
 	private String nome;
 	private String descrizione;
 	private Date data_creazione;
-	private Utente admin;
+	private Long admin;
 	private Set<Utente> membri;
 	private Set<Gruppo> gruppi;
 	//private Image image;
 
+	public Canale() {
+		membri = new HashSet<>();
+		gruppi = new HashSet<>();
+	}
+	
+	public Canale(String n, String d, Date dc, Long ad) {
+		nome=n;
+		descrizione=d;
+		data_creazione=dc;
+		admin=ad;
+		membri = new HashSet<>();
+		gruppi = new HashSet<>();
+	}
+	
 	public Date getData_creazione() {
 		return data_creazione;
 	}
@@ -45,14 +60,14 @@ public class Canale {
 		this.descrizione = descrizione;
 	}
 	
-	public Utente getAdmin() {
+	public Long getAdmin() {
 		return admin;
 	}
 	
-	public void setAdmin(Utente admin) {
+	public void setAdmin(Long admin) {
 		this.admin = admin;
 	}
-	
+		
 	public Set<Utente> getMembri() {
 		return membri;
 	}
@@ -61,8 +76,7 @@ public class Canale {
 		this.membri = membri;
 	}
 	
-	public void addMembro(Utente u){
-		
+	public void addMembro(Utente u){		
 		this.getMembri().add(u);   //importante usare getMembri() per il proxy
 	}
 	
@@ -80,6 +94,4 @@ public class Canale {
 		
 		this.getGruppi().remove(g);
 	}
-	
-
 }

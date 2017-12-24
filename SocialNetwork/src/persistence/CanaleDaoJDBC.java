@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import model.Canale;
 import model.Gruppo;
@@ -14,35 +14,37 @@ import persistence.dao.GruppoDao;
 import persistence.dao.UtenteDao;
 
 public class CanaleDaoJDBC implements CanaleDao {
-	
+
 	DataSource dataSource;
-	
-	CanaleDaoJDBC(DataSource d){
+
+	CanaleDaoJDBC(DataSource d) {
 		dataSource = d;
 	}
 
 	@Override
 	public void save(Canale canale) {
-		Connection connection = dataSource.getConnection();		
-		try{
-			String insert = "insert into canale(nome, descrizione) values (?,?)";
+		Connection connection = dataSource.getConnection();
+		try {
+			String insert = "insert into canale(nome, descrizione, data_creazione, id_admin) values (?,?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setString(1, canale.getNome());
 			statement.setString(2, canale.getDescrizione());
-			
+			statement.setDate(3, new java.sql.Date(canale.getData_creazione().getTime()));
+			statement.setLong(4, canale.getAdmin());
 			statement.executeUpdate();
-			// salviamo anche tutti gli utenti del canale ed i gruppi in CASACATA
-			this.updateMembri(canale, connection);
-			this.updateGruppi(canale, connection);
-			
+
+			// salviamo anche tutti gli utenti del canale ed i gruppi in CASCATA
+			updateMembri(canale, connection);
+			updateGruppi(canale, connection);
+
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
 					connection.rollback();
-				} catch(SQLException excep) {
+				} catch (SQLException excep) {
 					throw new PersistenceException(e.getMessage());
 				}
-			} 
+			}
 		} finally {
 			try {
 				connection.close();
@@ -51,88 +53,70 @@ public class CanaleDaoJDBC implements CanaleDao {
 			}
 		}
 	}
-	
+
 	private void updateMembri(Canale canale, Connection connection) throws SQLException {
-		
+
 		UtenteDao utenteDao = new UtenteDaoJDBC(dataSource);
 		for (Utente utente : canale.getMembri()) {
-			if (utenteDao.findByPrimaryKey(utente.getId_utente()) == null){
+			if (utenteDao.findByPrimaryKey(utente.getId_utente()) == null) {
 				utenteDao.save(utente);
 			}
-			
-			String iscrittoCanale = "select id from iscritto_canale where id_utente=? AND nome_canale=?";
-			PreparedStatement statementIscritto = connection.prepareStatement(iscrittoCanale);
-			statementIscritto.setLong(1, utente.getId_utente());
-			statementIscritto.setString(2, canale.getNome());
-			ResultSet result = statementIscritto.executeQuery();
-			if(result.next()){
-				String update = "update iscritto_canale SET nome_canale = ? WHERE id = ?"; //da controllare
-				PreparedStatement statement = connection.prepareStatement(update);
-				statement.setString(1, canale.getNome());
-				statement.setLong(2, result.getLong("id"));
+
+			String iscrittoCanale = "select * from iscrizione where id_utente = ? AND gruppo = 'home' AND canale = ?";
+			PreparedStatement statement = connection.prepareStatement(iscrittoCanale);
+			statement.setLong(1, utente.getId_utente());
+			statement.setString(2, canale.getNome());
+			ResultSet result = statement.executeQuery();
+			if (result.next()) {
+				String iscrivi = "insert into iscrizione (id_utente, gruppo, canale) values (?,?,?)";
+				statement = connection.prepareStatement(iscrivi);
+				statement.setLong(1, utente.getId_utente());
+				statement.setString(2, "'home'");
+				statement.setString(2, canale.getNome());
 				statement.executeUpdate();
-			}else{			
-				String iscrivi = "insert into iscritto_canale (id, id_utente, nome_canale) values (?,?,?)";
-				PreparedStatement statementIscrivi = connection.prepareStatement(iscrivi);
-				Long id = IdBroker.getId(connection);
-				statementIscrivi.setLong(1, id);
-				statementIscrivi.setLong(2, utente.getId_utente());
-				statementIscrivi.setString(3, canale.getNome());
-				statementIscrivi.executeUpdate();
 			}
 		}
 	}
-	
-	private void removeForeignKeyFromUtente(Canale canale, Connection connection) throws SQLException {
-		for (Utente utente : canale.getMembri()) {
-			String update = "update iscritto_canale SET nome_canale = NULL WHERE id_utente = ?";
-			PreparedStatement statement = connection.prepareStatement(update);
-			statement.setLong(1, utente.getId_utente());
-			statement.executeUpdate();
-		}	
+
+	private void removeAllUtentiFromCanale(Canale canale, Connection connection) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("delete from iscrizione where gruppo='home' and canale=?");
+		statement.setString(1, canale.getNome());
+		statement.executeUpdate();
 	}
-	
+
 	private void updateGruppi(Canale canale, Connection connection) throws SQLException {
-		
+
 		GruppoDao gruppoDao = new GruppoDaoJDBC(dataSource);
 		for (Gruppo gruppo : canale.getGruppi()) {
-			if (gruppoDao.findByPrimaryKey(gruppo.getNome()) == null){
+			if (gruppoDao.findByPrimaryKey(gruppo.getNome(),canale.getNome()) == null) {
 				gruppoDao.save(gruppo);
 			}
 			
-			String gruppoCanale = "select id from gruppo_canale where nome_gruppo=? AND nome_canale=?";
+			/*String gruppoCanale = "select nome from gruppo where nome=? AND canale=?";
 			PreparedStatement statementGruppoCanale = connection.prepareStatement(gruppoCanale);
 			statementGruppoCanale.setString(1, gruppo.getNome());
 			statementGruppoCanale.setString(2, canale.getNome());
 			ResultSet result = statementGruppoCanale.executeQuery();
-			if(result.next()){
-				String update = "update gruppo_canale SET nome_canale = ? WHERE id = ?"; //da controllare
-				PreparedStatement statement = connection.prepareStatement(update);
-				statement.setString(1, canale.getNome());
-				statement.setLong(2, result.getLong("id"));
-				statement.executeUpdate();
-			}else{			
-				String iscrivi = "insert into gruppo_canale (id, nome_gruppo, nome_canale) values (?,?,?)";
+			if (!result.next()) {
+				String iscrivi = "insert into gruppo (nome_gruppo, nome_canale) values (?,?,?)";
 				PreparedStatement statementIscrivi = connection.prepareStatement(iscrivi);
 				Long id = IdBroker.getId(connection);
 				statementIscrivi.setLong(1, id);
 				statementIscrivi.setString(2, gruppo.getNome());
 				statementIscrivi.setString(3, canale.getNome());
 				statementIscrivi.executeUpdate();
-			}
+			}*/
 		}
 	}
-	
+
 	private void deleteGruppi(Canale canale, Connection connection) throws SQLException {
 		GruppoDao gruppoDao = new GruppoDaoJDBC(dataSource);
 		for (Gruppo gruppo : canale.getGruppi()) {
 			gruppoDao.delete(gruppo);
-		}	
+		}
 	}
 
-
-	
-	//implementato con lazy load (proxy)
+	// implementato con lazy load (proxy)
 	@Override
 	public Canale findByPrimaryKey(String nome) {
 		Connection connection = this.dataSource.getConnection();
@@ -145,8 +129,10 @@ public class CanaleDaoJDBC implements CanaleDao {
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
 				canale = new CanaleProxy(dataSource);
-				canale.setNome(result.getString("nome"));				
+				canale.setNome(result.getString("nome"));
 				canale.setDescrizione(result.getString("descrizione"));
+				canale.setData_creazione(result.getDate("data_creazione"));
+				canale.setAdmin(result.getLong("id_admin"));
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -156,28 +142,24 @@ public class CanaleDaoJDBC implements CanaleDao {
 			} catch (SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}
-		}	
+		}
 		return canale;
 	}
 
 	@Override
 	public List<Canale> findAll() {
-		
+
 		Connection connection = this.dataSource.getConnection();
-		List<Canale> canali = new ArrayList<>();
-		try {			
-			Canale canale;
-			PreparedStatement statement;
-			String query = "select * from canale";
-			statement = connection.prepareStatement(query);
+		List<Canale> canali = new LinkedList<>();
+		try {
+			PreparedStatement statement = connection.prepareStatement("select nome from canale");
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {
-				canale = findByPrimaryKey(result.getString("nome"));
-				canali.add(canale);
+				canali.add(findByPrimaryKey(result.getString("nome")));
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
-		}	 finally {
+		} finally {
 			try {
 				connection.close();
 			} catch (SQLException e) {
@@ -191,23 +173,23 @@ public class CanaleDaoJDBC implements CanaleDao {
 	public void update(Canale canale) {
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String update = "update canale SET descrizione = ? WHERE nome = ?";
+			String update = "update canale SET descrizione = ? WHERE nome = ?";	//anche l'immagine
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setString(1, canale.getDescrizione());
 			statement.setString(2, canale.getNome());
-			
+
 			statement.executeUpdate();
-			this.updateMembri(canale, connection); 
+			this.updateMembri(canale, connection);
 			this.updateGruppi(canale, connection);
-			//connection.commit();
+			// connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
 					connection.rollback();
-				} catch(SQLException excep) {
+				} catch (SQLException excep) {
 					throw new PersistenceException(e.getMessage());
 				}
-			} 
+			}
 		} finally {
 			try {
 				connection.close();
@@ -215,7 +197,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 				throw new PersistenceException(e.getMessage());
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -226,13 +208,13 @@ public class CanaleDaoJDBC implements CanaleDao {
 			String delete = "delete FROM canale WHERE nome = ? ";
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.setString(1, canale.getNome());
-
 			connection.setAutoCommit(false);
-			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);			
-			this.removeForeignKeyFromUtente(canale, connection);     			
-			this.deleteGruppi(canale, connection);
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			
+			deleteGruppi(canale, connection);
+			removeAllUtentiFromCanale(canale, connection);
 			statement.executeUpdate();
+			
 			connection.commit();
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());

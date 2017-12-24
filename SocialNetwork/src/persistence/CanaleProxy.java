@@ -20,20 +20,22 @@ public class CanaleProxy extends Canale {
 	
 	public Set<Utente> getMembri() { 
 		Set<Utente> utenti = new HashSet<>();
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = dataSource.getConnection();
 		try {
-			PreparedStatement statement;
-			String query = "select * from utente where id IN select id_utente from iscritto_canale where nome_canale = ?";
-			statement = connection.prepareStatement(query);
-			statement.setString(1, this.getNome());
+			String query = "select * from utente where id_utente IN "
+							+ "(select id_utente from iscrizione_canale where canale = ?)";
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, getNome());
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {
 				Utente utente = new Utente();
-				utente.setId_utente(result.getLong("id"));				
+				utente.setId_utente(result.getLong("id_utente"));
 				utente.setNome(result.getString("nome"));
 				utente.setCognome(result.getString("cognome"));
-				long secs = result.getDate("data_nascita").getTime();
-				utente.setDataDiNascita(new java.util.Date(secs));
+				utente.setUsername(result.getString("username"));
+				utente.setDataDiNascita(new java.util.Date(result.getDate("data_nascita").getTime()));
+				utente.setDataIscrizione(new java.util.Date(result.getDate("data_iscrizione").getTime()));
+			
 				utenti.add(utente);
 			}
 		} catch (SQLException e) {
@@ -45,23 +47,23 @@ public class CanaleProxy extends Canale {
 				throw new PersistenceException(e.getMessage());
 			}
 		}	
-		this.setMembri(utenti);
+		setMembri(utenti);
 		return super.getMembri(); 
 	}
 	
 	
 	public Set<Gruppo> getGruppi() { 
 		Set<Gruppo> gruppi = new HashSet<>();
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = dataSource.getConnection();
 		try {
-			PreparedStatement statement;
-			String query = "select * from gruppo where nome IN select nome_gruppo from gruppo_canale where nome_canale = ?";
-			statement = connection.prepareStatement(query);
-			statement.setString(1, this.getNome());
+			PreparedStatement statement = connection.prepareStatement("select nome, data_creazione from gruppo where canale = ?");
+			statement.setString(1, getNome());
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {
 				Gruppo gruppo = new GruppoProxy(dataSource);			
 				gruppo.setNome(result.getString("nome"));
+				gruppo.setData_creazione(result.getDate("data_creazione"));
+				gruppo.setCanale(getNome());
 				gruppi.add(gruppo);
 			}
 		} catch (SQLException e) {
@@ -73,7 +75,7 @@ public class CanaleProxy extends Canale {
 				throw new PersistenceException(e.getMessage());
 			}
 		}	
-		this.setGruppi(gruppi);
+		setGruppi(gruppi);
 		return super.getGruppi(); 
 	}
 

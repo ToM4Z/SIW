@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import model.Gruppo;
@@ -12,38 +12,36 @@ import model.Utente;
 import persistence.dao.GruppoDao;
 import persistence.dao.UtenteDao;
 
-public class GruppoDaoJDBC implements GruppoDao{
+public class GruppoDaoJDBC implements GruppoDao {
 
 	private DataSource dataSource;
 
 	public GruppoDaoJDBC(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-	
-	
+
 	@Override
 	public void save(Gruppo gruppo) {
 		Connection connection = dataSource.getConnection();
-		
-		try{
+
+		try {
 			String insert = "insert into gruppo(nome,data_creazione,canale) values (?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setString(1, gruppo.getNome());
 			statement.setDate(2, new java.sql.Date(gruppo.getData_creazione().getTime()));
-			statement.setString(3, gruppo.getCanale().getNome());
+			statement.setString(3, gruppo.getCanale());
 			statement.executeUpdate();
-			
-			// salviamo anche tutti gli utenti del canale in CASACATA
+
+			// salviamo anche tutti gli utenti del gruppo in CASCATA
 			this.updateMembri(gruppo, connection);
-		
+
 		} catch (SQLException e) {
-			if (connection != null) {
+			if (connection != null)
 				try {
 					connection.rollback();
-				} catch(SQLException excep) {
+				} catch (SQLException excep) {
 					throw new PersistenceException(e.getMessage());
 				}
-			} 
 		} finally {
 			try {
 				connection.close();
@@ -51,63 +49,59 @@ public class GruppoDaoJDBC implements GruppoDao{
 				throw new PersistenceException(e.getMessage());
 			}
 		}
-		
+
 	}
-	
+
 	private void updateMembri(Gruppo gruppo, Connection connection) throws SQLException {
-		
+
 		UtenteDao utenteDao = new UtenteDaoJDBC(dataSource);
 		for (Utente utente : gruppo.getMembri()) {
-			if (utenteDao.findByPrimaryKey(utente.getId_utente()) == null){
+			if (utenteDao.findByPrimaryKey(utente.getId_utente()) == null) {
 				utenteDao.save(utente);
 			}
+
+			String iscritto = "select * from iscrizione where id_utente = ? AND gruppo = ? and canale = ?";
+			PreparedStatement statement = connection.prepareStatement(iscritto);
+			statement.setLong(1, utente.getId_utente());
+			statement.setString(2, gruppo.getNome());
+			ResultSet result = statement.executeQuery();
 			
-			String iscrittoCanale = "select id from iscritto_gruppo where id_utente=? AND nome_gruppo=?";
-			PreparedStatement statementIscritto = connection.prepareStatement(iscrittoCanale);
-			statementIscritto.setLong(1, utente.getId_utente());
-			statementIscritto.setString(2, gruppo.getNome());
-			ResultSet result = statementIscritto.executeQuery();
-			if(result.next()){
-				String update = "update iscritto_gruppo SET nome_gruppo = ? WHERE id = ?"; //da controllare
-				PreparedStatement statement = connection.prepareStatement(update);
-				statement.setString(1, gruppo.getNome());
-				statement.setLong(2, result.getLong("id"));
+			if (!result.next()) {
+				String iscrivi = "insert into iscrizione (id_utente, gruppo, canale) values (?,?,?)";
+				statement = connection.prepareStatement(iscrivi);
+				statement.setLong(1, utente.getId_utente());
+				statement.setString(2, gruppo.getNome());
+				statement.setString(3, gruppo.getCanale());
 				statement.executeUpdate();
-			}else{			
-				String iscrivi = "insert into iscritto_gruppo (id, id_utente, nome_gruppo) values (?,?,?)";
-				PreparedStatement statementIscrivi = connection.prepareStatement(iscrivi);
-				Long id = IdBroker.getId(connection);
-				statementIscrivi.setLong(1, id);
-				statementIscrivi.setLong(2, utente.getId_utente());
-				statementIscrivi.setString(3, gruppo.getNome());
-				statementIscrivi.executeUpdate();
 			}
 		}
 	}
 
-	private void removeForeignKeyFromUtente(Gruppo gruppo, Connection connection) throws SQLException {
-		for (Utente utente : gruppo.getMembri()) {
-			String update = "update iscritto_gruppo SET nome_gruppo = NULL WHERE id_utente = ?";
-			PreparedStatement statement = connection.prepareStatement(update);
-			statement.setLong(1, utente.getId_utente());
-			statement.executeUpdate();
-		}	
+	private void removeAllUsersFromGroup(Gruppo gruppo, Connection connection) throws SQLException {
+		String delete = "delete from iscrizione_gruppo WHERE gruppo = ?, canale = ?";
+		PreparedStatement statement = connection.prepareStatement(delete);
+		statement.setString(1, gruppo.getNome());
+		statement.setString(2, gruppo.getCanale());
+		statement.executeUpdate();
 	}
-	
-	//implementato con lazy load
+
+	// implementato con lazy load
 	@Override
-	public Gruppo findByPrimaryKey(String nome) {
+	public Gruppo findByPrimaryKey(String nome,String canale) {
 		Connection connection = this.dataSource.getConnection();
 		Gruppo gruppo = null;
 		try {
 			PreparedStatement statement;
-			String query = "select * from gruppo where nome = ?";
+			String query = "select * from gruppo where nome = ? and canale = ?";
 			statement = connection.prepareStatement(query);
 			statement.setString(1, nome);
+			statement.setString(2, canale);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
 				gruppo = new GruppoProxy(dataSource);
-				gruppo.setNome(result.getString("nome"));				
+				gruppo.setNome(nome);
+				gruppo.setCanale(canale);
+				gruppo.setData_creazione(result.getDate("data_creazione"));
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -117,28 +111,25 @@ public class GruppoDaoJDBC implements GruppoDao{
 			} catch (SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}
-		}	
+		}
 		return gruppo;
 	}
 
 	@Override
 	public List<Gruppo> findAll() {
-		
+
 		Connection connection = this.dataSource.getConnection();
-		List<Gruppo> gruppi = new ArrayList<>();
-		try {			
-			Gruppo gruppo;
-			PreparedStatement statement;
-			String query = "select * from gruppo";
-			statement = connection.prepareStatement(query);
+		List<Gruppo> gruppi = new LinkedList<>();
+		try {
+			PreparedStatement statement = connection.prepareStatement("select nome,canale from gruppo");
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {
-				gruppo = findByPrimaryKey(result.getString("nome"));
+				Gruppo gruppo = findByPrimaryKey(result.getString("nome"),result.getString("canale"));
 				gruppi.add(gruppo);
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
-		}	 finally {
+		} finally {
 			try {
 				connection.close();
 			} catch (SQLException e) {
@@ -152,17 +143,16 @@ public class GruppoDaoJDBC implements GruppoDao{
 	public void update(Gruppo gruppo) {
 		Connection connection = this.dataSource.getConnection();
 		try {
-			
-			this.updateMembri(gruppo, connection); 
+			this.updateMembri(gruppo, connection);
 			//connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
 					connection.rollback();
-				} catch(SQLException excep) {
+				} catch (SQLException excep) {
 					throw new PersistenceException(e.getMessage());
 				}
-			} 
+			}
 		} finally {
 			try {
 				connection.close();
@@ -170,21 +160,22 @@ public class GruppoDaoJDBC implements GruppoDao{
 				throw new PersistenceException(e.getMessage());
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void delete(Gruppo gruppo) {
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String delete = "delete FROM gruppo WHERE nome = ? ";
+			String delete = "delete FROM gruppo WHERE nome = ? and canale = ?";
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.setString(1, gruppo.getNome());
+			statement.setString(2, gruppo.getCanale());
 
 			connection.setAutoCommit(false);
-			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);			
-			this.removeForeignKeyFromUtente(gruppo, connection);     			
-			
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			this.removeAllUsersFromGroup(gruppo, connection);
+
 			statement.executeUpdate();
 			connection.commit();
 		} catch (SQLException e) {
@@ -196,7 +187,7 @@ public class GruppoDaoJDBC implements GruppoDao{
 				throw new PersistenceException(e.getMessage());
 			}
 		}
-		
+
 	}
 
 }
