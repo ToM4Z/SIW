@@ -23,7 +23,7 @@ public class CanaleProxy extends Canale {
 		Connection connection = dataSource.getConnection();
 		try {
 			String query = "select * from utente where id_utente IN "
-							+ "(select id_utente from iscrizione_canale where canale = ?)";
+							+ "(select id_utente from iscrizione where canale = ?)";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, getNome());
 			ResultSet result = statement.executeQuery();
@@ -63,7 +63,7 @@ public class CanaleProxy extends Canale {
 				Gruppo gruppo = new GruppoProxy(dataSource);			
 				gruppo.setNome(result.getString("nome"));
 				gruppo.setData_creazione(result.getDate("data_creazione"));
-				gruppo.setCanale(getNome());
+				gruppo.setCanale(this);
 				gruppi.add(gruppo);
 			}
 		} catch (SQLException e) {

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Gruppo {
@@ -10,15 +11,19 @@ public class Gruppo {
 	private Set<Utente> membri;
 	// private Set<Post> post;
 	private Date data_creazione;
-	private String canale;
+	private Canale canale;
 	
 	public Gruppo() {
+		admins = new HashSet<>();
+		membri = new HashSet<>();
 	}
 	
-	public Gruppo(String nome,Date dc, String canale) {
+	public Gruppo(String nome,Date dc, Canale canale) {
 		this.nome=nome;
 		data_creazione=dc;
 		this.canale=canale;
+		admins = new HashSet<>();
+		membri = new HashSet<>();
 	}
 
 	public void addMembro(Utente u) {
@@ -37,11 +42,11 @@ public class Gruppo {
 		this.getAdmins().remove(u);
 	}
 
-	public String getCanale() {
+	public Canale getCanale() {
 		return canale;
 	}
 
-	public void setCanale(String canale) {
+	public void setCanale(Canale canale) {
 		this.canale = canale;
 	}
 

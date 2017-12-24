@@ -29,12 +29,11 @@ public class GruppoDaoJDBC implements GruppoDao {
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setString(1, gruppo.getNome());
 			statement.setDate(2, new java.sql.Date(gruppo.getData_creazione().getTime()));
-			statement.setString(3, gruppo.getCanale());
+			statement.setString(3, gruppo.getCanale().getNome());
 			statement.executeUpdate();
 
 			// salviamo anche tutti gli utenti del gruppo in CASCATA
 			this.updateMembri(gruppo, connection);
-
 		} catch (SQLException e) {
 			if (connection != null)
 				try {
@@ -64,6 +63,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 			PreparedStatement statement = connection.prepareStatement(iscritto);
 			statement.setLong(1, utente.getId_utente());
 			statement.setString(2, gruppo.getNome());
+			statement.setString(3, gruppo.getCanale().getNome());
 			ResultSet result = statement.executeQuery();
 			
 			if (!result.next()) {
@@ -71,7 +71,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 				statement = connection.prepareStatement(iscrivi);
 				statement.setLong(1, utente.getId_utente());
 				statement.setString(2, gruppo.getNome());
-				statement.setString(3, gruppo.getCanale());
+				statement.setString(3, gruppo.getCanale().getNome());
 				statement.executeUpdate();
 			}
 		}
@@ -81,7 +81,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 		String delete = "delete from iscrizione_gruppo WHERE gruppo = ?, canale = ?";
 		PreparedStatement statement = connection.prepareStatement(delete);
 		statement.setString(1, gruppo.getNome());
-		statement.setString(2, gruppo.getCanale());
+		statement.setString(2, gruppo.getCanale().getNome());
 		statement.executeUpdate();
 	}
 
@@ -100,7 +100,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 			if (result.next()) {
 				gruppo = new GruppoProxy(dataSource);
 				gruppo.setNome(nome);
-				gruppo.setCanale(canale);
+				gruppo.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(canale));
 				gruppo.setData_creazione(result.getDate("data_creazione"));
 			}
 		} catch (SQLException e) {
@@ -170,7 +170,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 			String delete = "delete FROM gruppo WHERE nome = ? and canale = ?";
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.setString(1, gruppo.getNome());
-			statement.setString(2, gruppo.getCanale());
+			statement.setString(2, gruppo.getCanale().getNome());
 
 			connection.setAutoCommit(false);
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);

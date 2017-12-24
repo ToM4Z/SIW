@@ -30,13 +30,12 @@ public class CanaleDaoJDBC implements CanaleDao {
 			statement.setString(1, canale.getNome());
 			statement.setString(2, canale.getDescrizione());
 			statement.setDate(3, new java.sql.Date(canale.getData_creazione().getTime()));
-			statement.setLong(4, canale.getAdmin());
+			statement.setLong(4, canale.getAdmin().getId_utente());
 			statement.executeUpdate();
 
 			// salviamo anche tutti gli utenti del canale ed i gruppi in CASCATA
 			updateMembri(canale, connection);
 			updateGruppi(canale, connection);
-
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
@@ -62,25 +61,27 @@ public class CanaleDaoJDBC implements CanaleDao {
 				utenteDao.save(utente);
 			}
 
-			String iscrittoCanale = "select * from iscrizione where id_utente = ? AND gruppo = 'home' AND canale = ?";
+			String iscrittoCanale = "select * from iscrizione where id_utente = ? AND gruppo = ? AND canale = ?";
 			PreparedStatement statement = connection.prepareStatement(iscrittoCanale);
 			statement.setLong(1, utente.getId_utente());
-			statement.setString(2, canale.getNome());
+			statement.setString(2, "home");
+			statement.setString(3, canale.getNome());
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
 				String iscrivi = "insert into iscrizione (id_utente, gruppo, canale) values (?,?,?)";
 				statement = connection.prepareStatement(iscrivi);
 				statement.setLong(1, utente.getId_utente());
-				statement.setString(2, "'home'");
-				statement.setString(2, canale.getNome());
+				statement.setString(2, "home");
+				statement.setString(3, canale.getNome());
 				statement.executeUpdate();
 			}
 		}
 	}
 
 	private void removeAllUtentiFromCanale(Canale canale, Connection connection) throws SQLException {
-		PreparedStatement statement = connection.prepareStatement("delete from iscrizione where gruppo='home' and canale=?");
-		statement.setString(1, canale.getNome());
+		PreparedStatement statement = connection.prepareStatement("delete from iscrizione where gruppo=? and canale=?");
+		statement.setString(1, "home");
+		statement.setString(2, canale.getNome());
 		statement.executeUpdate();
 	}
 
@@ -122,9 +123,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 		Connection connection = this.dataSource.getConnection();
 		Canale canale = null;
 		try {
-			PreparedStatement statement;
-			String query = "select * from canale where nome = ?";
-			statement = connection.prepareStatement(query);
+			PreparedStatement statement = connection.prepareStatement("select * from canale where nome = ?");
 			statement.setString(1, nome);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
@@ -132,7 +131,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 				canale.setNome(result.getString("nome"));
 				canale.setDescrizione(result.getString("descrizione"));
 				canale.setData_creazione(result.getDate("data_creazione"));
-				canale.setAdmin(result.getLong("id_admin"));
+				canale.setAdmin(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getLong("id_admin")));
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -181,7 +180,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 			statement.executeUpdate();
 			this.updateMembri(canale, connection);
 			this.updateGruppi(canale, connection);
-			// connection.commit();
+			connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
@@ -202,7 +201,6 @@ public class CanaleDaoJDBC implements CanaleDao {
 
 	@Override
 	public void delete(Canale canale) {
-
 		Connection connection = this.dataSource.getConnection();
 		try {
 			String delete = "delete FROM canale WHERE nome = ? ";

@@ -16,11 +16,11 @@ public class UtilDao {
 		Connection connection = dataSource.getConnection();
 		try {
 			String drop = "drop SEQUENCE if EXISTS sequenza_id;" 
-					+ "drop table if exists utente;"
-					+ "drop table if exists canale;"
-					+ "drop table if exists gruppo;"
 					+ "drop table if exists gestione_gruppo;"
 					+ "drop table if exists iscrizione;"
+					+ "drop table if exists gruppo;"
+					+ "drop table if exists canale;"
+					+ "drop table if exists utente;"
 					;
 			PreparedStatement statement = connection.prepareStatement(drop);
 			statement.executeUpdate();
@@ -53,10 +53,11 @@ public class UtilDao {
 						+ "canale varchar(255) REFERENCES canale(nome), PRIMARY KEY (nome,canale));"
 					
 					+ "create table gestione_gruppo (id_utente bigint REFERENCES utente(id_utente)," 
-						+ " gruppo varchar(255) REFERENCES gruppo(nome), PRIMARY KEY(id_utente,gruppo));"
+						+ " gruppo varchar(255), canale varchar(255), "
+						+ "FOREIGN KEY(gruppo,canale) REFERENCES gruppo(nome,canale), PRIMARY KEY(id_utente,gruppo,canale));"
 											
 					+ "create table iscrizione (id_utente bigint REFERENCES utente(id_utente),"
-						+ " gruppo varchar(255) REFERENCES gruppo(nome), canale varchar(255) REFERENCES canale(nome)"
+						+ " gruppo varchar(255), canale varchar(255), FOREIGN KEY(gruppo,canale) REFERENCES gruppo(nome,canale), "
 						+ "PRIMARY KEY(id_utente,gruppo,canale));"
 					;
 			PreparedStatement statement = connection.prepareStatement(create);
@@ -81,20 +82,20 @@ public class UtilDao {
 		try {
 			PreparedStatement statement;
 			
-			statement = connection.prepareStatement("delete FROM utente");
-			statement.executeUpdate();
-			
-			statement = connection.prepareStatement("delete FROM canale");
-			statement.executeUpdate();
-			
-			statement = connection.prepareStatement("delete FROM gruppo");
-			statement.executeUpdate();
-			
 			statement = connection.prepareStatement("delete FROM gestione_gruppo");
 			statement.executeUpdate();
 						
 			statement = connection.prepareStatement("delete FROM iscrizione");
 			statement.executeUpdate();
+			
+			statement = connection.prepareStatement("delete FROM gruppo");
+			statement.executeUpdate();
+			
+			statement = connection.prepareStatement("delete FROM canale");
+			statement.executeUpdate();
+			
+			statement = connection.prepareStatement("delete FROM utente");
+			statement.executeUpdate();			
 			
 			System.out.println("Reset database: Success");
 			

@@ -9,7 +9,7 @@ public class Canale {
 	private String nome;
 	private String descrizione;
 	private Date data_creazione;
-	private Long admin;
+	private Utente admin;
 	private Set<Utente> membri;
 	private Set<Gruppo> gruppi;
 	//private Image image;
@@ -19,7 +19,7 @@ public class Canale {
 		gruppi = new HashSet<>();
 	}
 	
-	public Canale(String n, String d, Date dc, Long ad) {
+	public Canale(String n, String d, Date dc, Utente ad) {
 		nome=n;
 		descrizione=d;
 		data_creazione=dc;
@@ -60,11 +60,11 @@ public class Canale {
 		this.descrizione = descrizione;
 	}
 	
-	public Long getAdmin() {
+	public Utente getAdmin() {
 		return admin;
 	}
 	
-	public void setAdmin(Long admin) {
+	public void setAdmin(Utente admin) {
 		this.admin = admin;
 	}
 		
