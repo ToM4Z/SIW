@@ -31,7 +31,7 @@ public class MainJDBC {
 		Canale c1 = new Canale("UNICAL","per studenti unical",Calendar.getInstance().getTime(),u1);
 		c1.addMembro(u1);
 		
-		Gruppo g1 = new Gruppo("home",Calendar.getInstance().getTime(),c1);
+		Gruppo g1 = new Gruppo("home2",Calendar.getInstance().getTime(),c1);
 		g1.addAdmin(u1);
 		g1.addMembro(u1);
 		

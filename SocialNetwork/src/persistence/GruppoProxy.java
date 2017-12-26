@@ -24,7 +24,7 @@ public class GruppoProxy extends Gruppo {
 		
 		try {
 			PreparedStatement statement;
-			String query = "select * from utente where id_utente IN (select id_utente from iscrizione_gruppo where gruppo = ?)";
+			String query = "select * from utente where id_utente IN (select id_utente from iscrizione where gruppo = ?)";
 			statement = connection.prepareStatement(query);
 			statement.setString(1, this.getNome());
 			ResultSet result = statement.executeQuery();

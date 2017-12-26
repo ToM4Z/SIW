@@ -6,9 +6,9 @@ public class Commento {
 	private String contenuto;
 	private Utente creatore;
 	
-	Commento(){}
+	public Commento(){}
 	
-	Commento(String co, Utente cr){
+	public Commento(String co, Utente cr){
 		
 		contenuto = co;
 		creatore = cr;

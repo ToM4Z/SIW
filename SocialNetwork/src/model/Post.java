@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Date;
 import java.util.Set;
 
 public class Post {
@@ -8,8 +9,12 @@ public class Post {
 	private String contenuto;
 	private Long id;
 	private Set<Commento> commenti;
+	private Gruppo gruppo;
+	private Canale canale;
+	private Date dataCreazione;
 	
-	Post(){}
+
+	public Post(){}
 	
 	Post(Utente cr, String co){
 		
@@ -58,6 +63,31 @@ public class Post {
 		
 		this.getCommenti().remove(c);
 	}
+	
+	public Gruppo getGruppo() {
+		return gruppo;
+	}
+
+	public void setGruppo(Gruppo gruppo) {
+		this.gruppo = gruppo;
+	}
+
+	public Canale getCanale() {
+		return canale;
+	}
+
+	public void setCanale(Canale canale) {
+		this.canale = canale;
+	}
+
+	public Date getDataCreazione() {
+		return dataCreazione;
+	}
+
+	public void setDataCreazione(Date dataCreazione) {
+		this.dataCreazione = dataCreazione;
+	}
+	
 	
 
 }
