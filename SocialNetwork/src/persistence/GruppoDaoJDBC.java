@@ -25,8 +25,17 @@ public class GruppoDaoJDBC implements GruppoDao {
 		Connection connection = dataSource.getConnection();
 
 		try {
+			//CONTROLLO SE ESISTE UN ALTRO GRUPPO IN QUESTO CANALE CON LO STESSO NOME
+			PreparedStatement statement = connection.prepareStatement("Select nome from gruppo where nome=? and canale=?");
+			statement.setString(1, gruppo.getNome());
+			statement.setString(2, gruppo.getCanale().getNome());
+			ResultSet result = statement.executeQuery();
+			if(result.next())
+				throw new PersistenceException("Gruppo "+gruppo.getNome()+" già presente nel canale "+gruppo.getCanale().getNome());
+			
+			//INSERISCO IL GRUPPO
 			String insert = "insert into gruppo(nome,data_creazione,canale) values (?,?,?)";
-			PreparedStatement statement = connection.prepareStatement(insert);
+			statement = connection.prepareStatement(insert);
 			statement.setString(1, gruppo.getNome());
 			statement.setDate(2, new java.sql.Date(gruppo.getData_creazione().getTime()));
 			statement.setString(3, gruppo.getCanale().getNome());

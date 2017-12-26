@@ -39,6 +39,19 @@ public class MainJDBC {
 		canaledao.save(c1);
 		gruppodao.save(g1);
 				
+		u1 = new Utente("Giusy","Voce","Scema",cal.getTime(),Calendar.getInstance().getTime());
+		
+		//c1 = new Canale("UNICAL2","2",Calendar.getInstance().getTime(),u1);
+		c1.addMembro(u1);
+		
+		g1 = new Gruppo("home",Calendar.getInstance().getTime(),c1);
+		g1.addAdmin(u1);
+		g1.addMembro(u1);
+		
+		utentedao.save(u1);
+		//canaledao.save(c1);
+		gruppodao.save(g1);
+		
 		for(Canale c : canaledao.findAll()) {
 			System.out.println("Canale: "+c.getNome());
 			System.out.println("Descrizione: "+c.getDescrizione());
@@ -47,7 +60,7 @@ public class MainJDBC {
 			System.out.println("Admin: "+admin.getCognome()+" "+admin.getNome());
 			System.out.println("Utenti iscritti al canale: ");
 			for(Utente u : c.getMembri()) {
-				System.out.println(u.getCognome()+" "+u.getNome());
+				System.out.println(u.getId_utente()+": "+u.getCognome()+" "+u.getNome());
 			}
 		}
 	}

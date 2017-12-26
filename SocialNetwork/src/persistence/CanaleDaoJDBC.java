@@ -25,8 +25,16 @@ public class CanaleDaoJDBC implements CanaleDao {
 	public void save(Canale canale) {
 		Connection connection = dataSource.getConnection();
 		try {
+			//CONTROLLO SE ESISTE UN ALTRO CANALE CON LO STESSO NOME
+			PreparedStatement statement = connection.prepareStatement("Select nome from canale where nome=?");
+			statement.setString(1, canale.getNome());
+			ResultSet result = statement.executeQuery();
+			if(result.next())
+				throw new PersistenceException("Canale "+canale.getNome()+" già esistente");
+			
+			//INSERISCO IL CANALE
 			String insert = "insert into canale(nome, descrizione, data_creazione, id_admin) values (?,?,?,?)";
-			PreparedStatement statement = connection.prepareStatement(insert);
+			statement = connection.prepareStatement(insert);
 			statement.setString(1, canale.getNome());
 			statement.setString(2, canale.getDescrizione());
 			statement.setDate(3, new java.sql.Date(canale.getData_creazione().getTime()));
