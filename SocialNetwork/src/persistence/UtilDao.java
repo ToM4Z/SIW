@@ -21,6 +21,8 @@ public class UtilDao {
 					+ "drop table if exists gruppo;"
 					+ "drop table if exists canale;"
 					+ "drop table if exists utente;"
+					+ "drop table if exists post;"
+					+ "drop table if exists commento;"
 					;
 			PreparedStatement statement = connection.prepareStatement(drop);
 			statement.executeUpdate();
@@ -46,7 +48,7 @@ public class UtilDao {
 					+ "create table utente (id_utente bigint primary key, nome varchar(255), cognome varchar(255), "
 						+ "username varchar(255), \"password\" varchar(255), data_nascita date, data_iscrizione date);"
 					
-					+ "create table canale (nome varchar(255) primary key, descrizione varchar(255), "
+					+ "create table canale (nome varchar(255) primary key, descrizione text, "
 						+ "data_creazione date, id_admin bigint REFERENCES utente(id_utente));"
 					
 					+ "create table gruppo (nome varchar(255), data_creazione date, "
@@ -59,6 +61,14 @@ public class UtilDao {
 					+ "create table iscrizione (id_utente bigint REFERENCES utente(id_utente),"
 						+ " gruppo varchar(255), canale varchar(255), FOREIGN KEY(gruppo,canale) REFERENCES gruppo(nome,canale), "
 						+ "PRIMARY KEY(id_utente,gruppo,canale));"
+					
+					+ "create table post (id_post bigint primary key, id_utente bigint REFERENCES utente(id_utente),"
+						+"contenuto text, canale varchar(255), gruppo varchar(255), FOREIGN KEY(gruppo,canale) REFERENCES gruppo(nome,canale),"
+						+" data_creazione date);"
+					
+					+"create table commento (id_commento bigint primary key, id_post bigint REFERENCES post(id_post),"
+                    	+ "id_utente bigint REFERENCES utente(id_utente), contenuto text, data_creazione date)"
+					
 					;
 			PreparedStatement statement = connection.prepareStatement(create);
 			statement.executeUpdate();
@@ -95,7 +105,13 @@ public class UtilDao {
 			statement.executeUpdate();
 			
 			statement = connection.prepareStatement("delete FROM utente");
-			statement.executeUpdate();			
+			statement.executeUpdate();
+			
+			statement = connection.prepareStatement("delete FROM post");
+			statement.executeUpdate();
+			
+			statement = connection.prepareStatement("delete FROM commento");
+			statement.executeUpdate();	
 			
 			System.out.println("Reset database: Success");
 			

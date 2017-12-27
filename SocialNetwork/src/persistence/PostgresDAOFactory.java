@@ -1,9 +1,9 @@
 package persistence;
 
 import persistence.dao.CanaleDao;
-//import persistence.dao.CommentoDao;
+import persistence.dao.CommentoDao;
 import persistence.dao.GruppoDao;
-//import persistence.dao.PostDao;
+import persistence.dao.PostDao;
 import persistence.dao.UtenteDao;
 
 public class PostgresDAOFactory extends DAOFactory {	
@@ -13,7 +13,7 @@ public class PostgresDAOFactory extends DAOFactory {
 	static {
 		try {
 			Class.forName("org.postgresql.Driver").newInstance();
-			dataSource=new DataSource("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","postgres");
+			dataSource=new DataSource("jdbc:postgresql://localhost:5432/SocialNetwork","postgres","daniele");
 		} 
 		catch (Exception e) {
 			System.err.println("PostgresDAOFactory.class: failed to load MySQL JDBC driver\n"+e);
@@ -42,14 +42,16 @@ public class PostgresDAOFactory extends DAOFactory {
 		return new UtilDao(dataSource);
 	}
 
-//	@Override
-//	public PostDao getPostDAO() {
-//		return null;
-//	}
-//
-//	@Override
-//	public CommentoDao getCommentoDAO() {
-//		return null;
-//	}
+	@Override
+	public PostDao getPostDAO() {
+		
+		return new PostDaoJDBC(dataSource);
+	}
+
+	@Override
+	public CommentoDao getCommentoDAO() {
+		
+		return new CommentoDaoJDBC(dataSource);
+	}
 
 }

@@ -26,8 +26,8 @@ public abstract class DAOFactory {
 
 	public abstract persistence.UtilDao getUtilDAO();
 	
-	// public abstract PostDao getPostDAO();
+	public abstract PostDao getPostDAO();
 
-	// public abstract CommentoDao getCommentoDAO();
+	public abstract CommentoDao getCommentoDAO();
 
 }

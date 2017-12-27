@@ -1,10 +1,14 @@
 package model;
 
+import java.util.Date;
+
 public class Commento {
 	
 	private Long id;
 	private String contenuto;
 	private Utente creatore;
+	private Post post;
+	private Date dataCreazione;
 	
 	public Commento(){}
 	
@@ -37,6 +41,24 @@ public class Commento {
 	public void setCreatore(Utente creatore) {
 		this.creatore = creatore;
 	}
+
+	public Post getPost() {
+		return post;
+	}
+
+	public void setPost(Post post) {
+		this.post = post;
+	}
+
+	public Date getDataCreazione() {
+		return dataCreazione;
+	}
+
+	public void setDataCreazione(Date dataCreazione) {
+		this.dataCreazione = dataCreazione;
+	}
+	
+	
 	
 	
 

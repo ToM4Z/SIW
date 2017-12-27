@@ -87,7 +87,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 	}
 
 	private void removeAllUsersFromGroup(Gruppo gruppo, Connection connection) throws SQLException {
-		String delete = "delete from iscrizione_gruppo WHERE gruppo = ?, canale = ?";
+		String delete = "delete from iscrizione WHERE gruppo = ?, canale = ?";
 		PreparedStatement statement = connection.prepareStatement(delete);
 		statement.setString(1, gruppo.getNome());
 		statement.setString(2, gruppo.getCanale().getNome());

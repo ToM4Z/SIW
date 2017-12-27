@@ -33,7 +33,7 @@ public class PostDaoJDBC implements PostDao {
 
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1, post.getId());
-			statement.setString(2, post.getCreatore().getNome());
+			statement.setLong(2, post.getCreatore().getId_utente());
 			statement.setString(3, post.getContenuto());
 			statement.setString(4, post.getCanale().getNome());
 			statement.setString(5, post.getGruppo().getNome());
@@ -57,12 +57,12 @@ public class PostDaoJDBC implements PostDao {
 		Post post = null;
 		try {
 			PreparedStatement statement;
-			statement = connection.prepareStatement("select * from post where id = ?");
+			statement = connection.prepareStatement("select * from post where id_post = ?");
 			statement.setLong(1, id);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
-				post = new Post();
-				post.setId(result.getLong("id"));
+				post = new PostProxy(dataSource);
+				post.setId(result.getLong("id_post"));
 				post.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getLong("id_utente")));;
 				post.setContenuto(result.getString("contenuto"));
 				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
@@ -92,8 +92,8 @@ public class PostDaoJDBC implements PostDao {
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
-				Post post = new Post();
-				post.setId(result.getLong("id"));
+				Post post = new PostProxy(dataSource);
+				post.setId(result.getLong("id_post"));
 				post.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getLong("id_utente")));;
 				post.setContenuto(result.getString("contenuto"));
 				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
@@ -113,13 +113,20 @@ public class PostDaoJDBC implements PostDao {
 		}
 		return allPost;
 	}
+	
+	private void removeAllCommentsFromPost(Post post, Connection connection) throws SQLException {
+		String delete = "delete from commento WHERE id_post = ?";
+		PreparedStatement statement = connection.prepareStatement(delete);
+		statement.setLong(1, post.getId());
+		statement.executeUpdate();
+	}
 
 	@Override
 	public void update(Post post) {
 		
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String update = "update post SET contenuto = ? WHERE id = ?";
+			String update = "update post SET contenuto = ? WHERE id_post = ?";
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setString(1, post.getContenuto());
 			statement.setLong(2, post.getId());
@@ -146,8 +153,29 @@ public class PostDaoJDBC implements PostDao {
 
 	@Override
 	public void delete(Post post) {
-		// TODO Auto-generated method stub
 		
+		Connection connection = this.dataSource.getConnection();
+		try {
+			String delete = "delete FROM post WHERE id_post = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setLong(1, post.getId());
+
+			connection.setAutoCommit(false);
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			this.removeAllCommentsFromPost(post, connection);;
+
+			statement.executeUpdate();
+			connection.commit();
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+
 	}
 
 }
