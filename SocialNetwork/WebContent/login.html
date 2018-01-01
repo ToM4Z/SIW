@@ -1,0 +1,60 @@
+<html>
+	<head lang="it">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Social Network</title>
+
+		<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+		<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+		<script src="js/jquery-3.2.1.min.js"></script>
+	</head>
+
+	<body>
+		<div class="container">
+			<span class="border border-primary">
+				<form method="post" action="register">
+					<h1>Register</h1>
+					<div class="form-group">
+						<input type="text" name="name" class="form-control" placeholder="Inserisci il nome">
+					</div>
+					<div class="form-group">
+						<input type="text" name="cognome" class="form-control" placeholder="Inserisci il cognome">
+					</div>
+					<div class="form-group">
+						<input type="text" name="username" class="form-control" placeholder="Inserisci l'username">
+					</div>
+					<div class="form-group">
+						<input type="text" onfocus="(this.type='date')" onblur="(this.type='text')" name="datadinascita"  class="form-control" placeholder="Inserisci la data di nascita">
+					</div>
+					<div class="form-group">
+			    	<input type="email" name="email" class="form-control" placeholder="Inserisci l'email">
+			    </div>
+			  	<div class="form-group">
+			    	<input type="password" name="password" class="form-control" placeholder="Inserisci la password">
+			  	</div>
+					<div class="form-group">
+			    	<input type="password" name="password" class="form-control" placeholder="Reinserisci la password">
+			  	</div>
+			  	<button type="submit" class="btn btn-primary">Registrati</button>
+				</form>
+			</span>
+		</div>
+		<div class="container">
+			<span class="border border-primary">
+				<form method="post" action="login">
+					<h1>Login</h1>
+					<div class="form-group">
+				    	<input type="email" name="email" class="form-control"
+				    		id="exampleInputEmail1" placeholder="Inserisci l'email">
+				    </div>
+				  	<div class="form-group">
+				    	<input type="password" name="password" class="form-control"
+				    		id="exampleInputPassword1" placeholder="Inserisci la password">
+				  	</div>
+				  	<button type="submit" class="btn btn-primary">Login</button>
+				</form>
+			</span>
+		</div>
+	</nav>
+	</body>
+</html>

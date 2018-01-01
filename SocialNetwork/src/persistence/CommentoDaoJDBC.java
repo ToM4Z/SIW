@@ -9,15 +9,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import model.Commento;
-import model.Post;
 import persistence.dao.CommentoDao;
 
 public class CommentoDaoJDBC implements CommentoDao {
 	
 	private DataSource dataSource;
 	
-	CommentoDaoJDBC(DataSource ds){
-		
+	public CommentoDaoJDBC(DataSource ds){		
 		dataSource = ds;
 	}
 

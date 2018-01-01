@@ -15,8 +15,7 @@ public class PostDaoJDBC implements PostDao {
 	
 	DataSource dataSource;
 	
-	PostDaoJDBC(DataSource ds){
-		
+	public PostDaoJDBC(DataSource ds){		
 		dataSource = ds;
 	}
 	
