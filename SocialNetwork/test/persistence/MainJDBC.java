@@ -36,6 +36,7 @@ public class MainJDBC {
 		g1.addMembro(u1);
 		
 		utentedao.save(u1);
+		utentedao.setPassword(u1, "ciccio");
 		canaledao.save(c1);
 		gruppodao.save(g1);
 				
@@ -49,6 +50,7 @@ public class MainJDBC {
 		g1.addMembro(u1);
 		
 		utentedao.save(u1);
+		utentedao.setPassword(u1, "pasticcio");
 		//canaledao.save(c1);
 		gruppodao.save(g1);
 		

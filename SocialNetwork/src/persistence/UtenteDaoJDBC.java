@@ -11,10 +11,10 @@ import java.util.List;
 import model.Utente;
 import persistence.dao.UtenteDao;
 
-public class UtenteDaoJDBC implements UtenteDao {
+class UtenteDaoJDBC implements UtenteDao {
 	private DataSource dataSource;
 
-	UtenteDaoJDBC(DataSource ds) {
+	public UtenteDaoJDBC(DataSource ds) {
 		dataSource = ds;
 	}
 
@@ -25,16 +25,14 @@ public class UtenteDaoJDBC implements UtenteDao {
 			utente.setDataIscrizione(Calendar.getInstance().getTime());
 
 			String insert = "insert into utente(email, nome, cognome, username, "
-					+ "\"password\", data_nascita, data_iscrizione) values (?,?,?,?,?,?,?)";
-
+					+ "data_nascita, data_iscrizione) values (?,?,?,?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setString(1, utente.getEmail());
 			statement.setString(2, utente.getNome());
 			statement.setString(3, utente.getCognome());
 			statement.setString(4, utente.getUsername());
-			statement.setString(5, "ciao"); // password ??
-			statement.setDate(6, new java.sql.Date(utente.getDataDiNascita().getTime()));
-			statement.setDate(7, new java.sql.Date(utente.getDataIscrizione().getTime()));
+			statement.setDate(5, new java.sql.Date(utente.getDataDiNascita().getTime()));
+			statement.setDate(6, new java.sql.Date(utente.getDataIscrizione().getTime()));
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -45,7 +43,6 @@ public class UtenteDaoJDBC implements UtenteDao {
 				throw new PersistenceException(e.getMessage());
 			}
 		}
-
 	}
 
 	@Override
@@ -143,11 +140,11 @@ public class UtenteDaoJDBC implements UtenteDao {
 		Connection connection = this.dataSource.getConnection();
 		try {
 			PreparedStatement statement;
-			
+
 			statement = connection.prepareStatement("delete from utente where email = ?");
 			statement.setString(1, utente.getEmail());
 			statement.executeQuery();
-			
+
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		} finally {
@@ -157,6 +154,42 @@ public class UtenteDaoJDBC implements UtenteDao {
 				throw new PersistenceException(e.getMessage());
 			}
 		}
+	}
+
+	@Override
+	public void setPassword(Utente user, String password) {
+		Connection connection = this.dataSource.getConnection();
+		try {
+			String update = "update utente SET \"password\" = ? WHERE email=?";
+			PreparedStatement statement = connection.prepareStatement(update);
+			statement.setString(1, password);
+			statement.setString(2, user.getEmail());
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+
+	}
+
+	@Override
+	public UtenteCredenziali findByPrimaryKeyCredential(String email) {
+		Utente user = findByPrimaryKey(email);
+		UtenteCredenziali userCred = null;
+		if (user != null) {
+			userCred = new UtenteCredenziali(dataSource);
+			userCred.setEmail(user.getEmail());
+			userCred.setNome(user.getNome());
+			userCred.setCognome(user.getCognome());
+			userCred.setDataDiNascita(user.getDataDiNascita());
+			userCred.setDataIscrizione(user.getDataIscrizione());
+		}
+		return userCred;
 	}
 
 }
