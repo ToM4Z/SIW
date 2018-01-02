@@ -64,21 +64,21 @@ public class GruppoDaoJDBC implements GruppoDao {
 
 		UtenteDao utenteDao = new UtenteDaoJDBC(dataSource);
 		for (Utente utente : gruppo.getMembri()) {
-			if (utenteDao.findByPrimaryKey(utente.getId_utente()) == null) {
+			if (utenteDao.findByPrimaryKey(utente.getEmail()) == null) {
 				utenteDao.save(utente);
 			}
 
-			String iscritto = "select * from iscrizione where id_utente = ? AND gruppo = ? and canale = ?";
+			String iscritto = "select * from iscrizione where email_utente = ? AND gruppo = ? and canale = ?";
 			PreparedStatement statement = connection.prepareStatement(iscritto);
-			statement.setLong(1, utente.getId_utente());
+			statement.setString(1, utente.getEmail());
 			statement.setString(2, gruppo.getNome());
 			statement.setString(3, gruppo.getCanale().getNome());
 			ResultSet result = statement.executeQuery();
 			
 			if (!result.next()) {
-				String iscrivi = "insert into iscrizione (id_utente, gruppo, canale) values (?,?,?)";
+				String iscrivi = "insert into iscrizione (email_utente, gruppo, canale) values (?,?,?)";
 				statement = connection.prepareStatement(iscrivi);
-				statement.setLong(1, utente.getId_utente());
+				statement.setString(1, utente.getEmail());
 				statement.setString(2, gruppo.getNome());
 				statement.setString(3, gruppo.getCanale().getNome());
 				statement.executeUpdate();

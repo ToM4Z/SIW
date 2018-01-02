@@ -33,12 +33,12 @@ public class CanaleDaoJDBC implements CanaleDao {
 				throw new PersistenceException("Canale "+canale.getNome()+" già esistente");
 			
 			//INSERISCO IL CANALE
-			String insert = "insert into canale(nome, descrizione, data_creazione, id_admin) values (?,?,?,?)";
+			String insert = "insert into canale(nome, descrizione, data_creazione, email_admin) values (?,?,?,?)";
 			statement = connection.prepareStatement(insert);
 			statement.setString(1, canale.getNome());
 			statement.setString(2, canale.getDescrizione());
 			statement.setDate(3, new java.sql.Date(canale.getData_creazione().getTime()));
-			statement.setLong(4, canale.getAdmin().getId_utente());
+			statement.setString(4, canale.getAdmin().getEmail());
 			statement.executeUpdate();
 
 			// salviamo anche tutti gli utenti del canale ed i gruppi in CASCATA
@@ -65,20 +65,20 @@ public class CanaleDaoJDBC implements CanaleDao {
 
 		UtenteDao utenteDao = new UtenteDaoJDBC(dataSource);
 		for (Utente utente : canale.getMembri()) {
-			if (utenteDao.findByPrimaryKey(utente.getId_utente()) == null) {
+			if (utenteDao.findByPrimaryKey(utente.getEmail()) == null) {
 				utenteDao.save(utente);
 			}
 
-			String iscrittoCanale = "select * from iscrizione where id_utente = ? AND gruppo = ? AND canale = ?";
+			String iscrittoCanale = "select * from iscrizione where email_utente = ? AND gruppo = ? AND canale = ?";
 			PreparedStatement statement = connection.prepareStatement(iscrittoCanale);
-			statement.setLong(1, utente.getId_utente());
+			statement.setString(1, utente.getEmail());
 			statement.setString(2, "home");
 			statement.setString(3, canale.getNome());
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
 				String iscrivi = "insert into iscrizione (id_utente, gruppo, canale) values (?,?,?)";
 				statement = connection.prepareStatement(iscrivi);
-				statement.setLong(1, utente.getId_utente());
+				statement.setString(1, utente.getEmail());
 				statement.setString(2, "home");
 				statement.setString(3, canale.getNome());
 				statement.executeUpdate();
@@ -139,7 +139,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 				canale.setNome(result.getString("nome"));
 				canale.setDescrizione(result.getString("descrizione"));
 				canale.setData_creazione(result.getDate("data_creazione"));
-				canale.setAdmin(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getLong("id_admin")));
+				canale.setAdmin(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_admin")));
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());

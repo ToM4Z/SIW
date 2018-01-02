@@ -27,12 +27,12 @@ public class PostDaoJDBC implements PostDao {
 			post.setId(id);
 			post.setDataCreazione(Calendar.getInstance().getTime());
 
-			String insert = "insert into post(id_post, id_utente, contenuto, "
+			String insert = "insert into post(id_post, email_utente, contenuto, "
 					+ "canale, gruppo, data_creazione) values (?,?,?,?,?,?)";
 
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1, post.getId());
-			statement.setLong(2, post.getCreatore().getId_utente());
+			statement.setString(2, post.getCreatore().getEmail());
 			statement.setString(3, post.getContenuto());
 			statement.setString(4, post.getCanale().getNome());
 			statement.setString(5, post.getGruppo().getNome());
@@ -62,7 +62,7 @@ public class PostDaoJDBC implements PostDao {
 			if (result.next()) {
 				post = new PostProxy(dataSource);
 				post.setId(result.getLong("id_post"));
-				post.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getLong("id_utente")));;
+				post.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
 				post.setContenuto(result.getString("contenuto"));
 				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
 				post.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), post.getCanale().getNome()));
@@ -93,7 +93,7 @@ public class PostDaoJDBC implements PostDao {
 			while (result.next()) {
 				Post post = new PostProxy(dataSource);
 				post.setId(result.getLong("id_post"));
-				post.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getLong("id_utente")));;
+				post.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
 				post.setContenuto(result.getString("contenuto"));
 				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
 				post.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), post.getCanale().getNome()));

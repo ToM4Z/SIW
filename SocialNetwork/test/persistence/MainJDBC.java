@@ -26,7 +26,7 @@ public class MainJDBC {
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(1996, 9, 24);		
-		Utente u1 = new Utente("Thomas","Voce","ToMaZ",cal.getTime(),Calendar.getInstance().getTime());
+		Utente u1 = new Utente("thomas@thomas.com","Thomas","Voce","ToMaZ",cal.getTime(),Calendar.getInstance().getTime());
 		
 		Canale c1 = new Canale("UNICAL","per studenti unical",Calendar.getInstance().getTime(),u1);
 		c1.addMembro(u1);
@@ -39,7 +39,7 @@ public class MainJDBC {
 		canaledao.save(c1);
 		gruppodao.save(g1);
 				
-		u1 = new Utente("Giusy","Voce","Scema",cal.getTime(),Calendar.getInstance().getTime());
+		u1 = new Utente("danielesalim@outlook.it","Daniele","Salimonti","ds.hitman",cal.getTime(),Calendar.getInstance().getTime());
 		
 		//c1 = new Canale("UNICAL2","2",Calendar.getInstance().getTime(),u1);
 		c1.addMembro(u1);
@@ -56,11 +56,11 @@ public class MainJDBC {
 			System.out.println("Canale: "+c.getNome());
 			System.out.println("Descrizione: "+c.getDescrizione());
 			System.out.println("Data Creazione: "+c.getData_creazione());
-			Utente admin = utentedao.findByPrimaryKey(c.getAdmin().getId_utente());
+			Utente admin = utentedao.findByPrimaryKey(c.getAdmin().getEmail());
 			System.out.println("Admin: "+admin.getCognome()+" "+admin.getNome());
 			System.out.println("Utenti iscritti al canale: ");
 			for(Utente u : c.getMembri()) {
-				System.out.println(u.getId_utente()+": "+u.getCognome()+" "+u.getNome());
+				System.out.println(u.getEmail()+": "+u.getCognome()+" "+u.getNome());
 			}
 		}
 	}

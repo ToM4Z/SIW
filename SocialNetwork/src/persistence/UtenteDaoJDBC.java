@@ -22,15 +22,13 @@ public class UtenteDaoJDBC implements UtenteDao {
 	public void save(Utente utente) {
 		Connection connection = dataSource.getConnection();
 		try {
-			Long id = IdBroker.getId(connection);
-			utente.setId_utente(id);
 			utente.setDataIscrizione(Calendar.getInstance().getTime());
 
-			String insert = "insert into utente(id_utente, nome, cognome, username, "
+			String insert = "insert into utente(email, nome, cognome, username, "
 					+ "\"password\", data_nascita, data_iscrizione) values (?,?,?,?,?,?,?)";
 
 			PreparedStatement statement = connection.prepareStatement(insert);
-			statement.setLong(1, utente.getId_utente());
+			statement.setString(1, utente.getEmail());
 			statement.setString(2, utente.getNome());
 			statement.setString(3, utente.getCognome());
 			statement.setString(4, utente.getUsername());
@@ -51,17 +49,17 @@ public class UtenteDaoJDBC implements UtenteDao {
 	}
 
 	@Override
-	public Utente findByPrimaryKey(Long id) {
+	public Utente findByPrimaryKey(String email) {
 		Connection connection = this.dataSource.getConnection();
 		Utente utente = null;
 		try {
 			PreparedStatement statement;
-			statement = connection.prepareStatement("select * from utente where id_utente = ?");
-			statement.setLong(1, id);
+			statement = connection.prepareStatement("select * from utente where email = ?");
+			statement.setString(1, email);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
 				utente = new Utente();
-				utente.setId_utente(result.getLong("id_utente"));
+				utente.setEmail(result.getString("email"));
 				utente.setNome(result.getString("nome"));
 				utente.setCognome(result.getString("cognome"));
 				utente.setUsername(result.getString("username"));
@@ -91,7 +89,7 @@ public class UtenteDaoJDBC implements UtenteDao {
 
 			while (result.next()) {
 				Utente utente = new Utente();
-				utente.setId_utente(result.getLong("id"));
+				utente.setEmail(result.getString("email"));
 				utente.setNome(result.getString("nome"));
 				utente.setCognome(result.getString("cognome"));
 				utente.setUsername(result.getString("username"));
@@ -117,12 +115,12 @@ public class UtenteDaoJDBC implements UtenteDao {
 		Connection connection = this.dataSource.getConnection();
 		try {
 			PreparedStatement statement;
-			statement = connection.prepareStatement("select * from utente where id_utente = ?");
-			statement.setLong(1, utente.getId_utente());
+			statement = connection.prepareStatement("select * from utente where email = ?");
+			statement.setString(1, utente.getEmail());
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
 				utente = new Utente();
-				utente.setId_utente(result.getLong("id"));
+				utente.setEmail(result.getString("email"));
 				utente.setNome(result.getString("nome"));
 				utente.setCognome(result.getString("cognome"));
 				utente.setUsername(result.getString("username"));
@@ -146,8 +144,8 @@ public class UtenteDaoJDBC implements UtenteDao {
 		try {
 			PreparedStatement statement;
 			
-			statement = connection.prepareStatement("delete from utente where id_utente = ?");
-			statement.setLong(1, utente.getId_utente());
+			statement = connection.prepareStatement("delete from utente where email = ?");
+			statement.setString(1, utente.getEmail());
 			statement.executeQuery();
 			
 		} catch (SQLException e) {

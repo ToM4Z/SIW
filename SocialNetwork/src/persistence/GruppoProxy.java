@@ -24,13 +24,13 @@ public class GruppoProxy extends Gruppo {
 		
 		try {
 			PreparedStatement statement;
-			String query = "select * from utente where id_utente IN (select id_utente from iscrizione where gruppo = ?)";
+			String query = "select * from utente where email IN (select email_utente from iscrizione where gruppo = ?)";
 			statement = connection.prepareStatement(query);
 			statement.setString(1, this.getNome());
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {
 				Utente utente = new Utente();
-				utente.setId_utente(result.getLong("id"));
+				utente.setEmail(result.getString("email"));
 				utente.setNome(result.getString("nome"));
 				utente.setCognome(result.getString("cognome"));
 				utente.setUsername(result.getString("username"));

@@ -28,13 +28,13 @@ public class CommentoDaoJDBC implements CommentoDao {
 			commento.setId(id);
 			commento.setDataCreazione(Calendar.getInstance().getTime());
 
-			String insert = "insert into commento(id_commento, id_post, id_utente, "
+			String insert = "insert into commento(id_commento, id_post, email_utente, "
 					+ "contenuto, data_creazione) values (?,?,?,?,?)";
 
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1, commento.getId());
 			statement.setLong(2, commento.getPost().getId());
-			statement.setLong(3, commento.getCreatore().getId_utente());
+			statement.setString(3, commento.getCreatore().getEmail());
 			statement.setString(4, commento.getContenuto());
 			statement.setDate(5, new java.sql.Date(commento.getDataCreazione().getTime()));
 			statement.executeUpdate();
@@ -62,7 +62,7 @@ public class CommentoDaoJDBC implements CommentoDao {
 			if (result.next()) {
 				commento = new Commento();
 				commento.setId(result.getLong("id_commento"));
-				commento.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getLong("id_utente")));;
+				commento.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
 				commento.setContenuto(result.getString("contenuto"));
 				commento.setPost(new PostDaoJDBC(dataSource).findByPrimaryKey(result.getLong("post")));
 				commento.setDataCreazione(new java.util.Date(result.getDate("data_creazione").getTime()));
@@ -94,7 +94,7 @@ public class CommentoDaoJDBC implements CommentoDao {
 			while (result.next()) {
 				Commento commento = new Commento();
 				commento.setId(result.getLong("id_commento"));
-				commento.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getLong("id_utente")));;
+				commento.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
 				commento.setContenuto(result.getString("contenuto"));
 				commento.setPost(new PostDaoJDBC(dataSource).findByPrimaryKey(result.getLong("post")));
 				commento.setDataCreazione(new java.util.Date(result.getDate("data_creazione").getTime()));

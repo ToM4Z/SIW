@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Utente {
 	
-	private Long id_utente;
+	private String email;
 	private String nome;
 	private String cognome;
 	private String username;
@@ -14,7 +14,9 @@ public class Utente {
 	
 	public Utente(){}
 	
-	public Utente(String n, String c,String un,Date di, Date ddn){
+	public Utente(String e, String n, String c,String un,Date di, Date ddn){
+		
+		email = e;
 		nome = n;
 		cognome = c;
 		username = un;
@@ -22,12 +24,12 @@ public class Utente {
 		dataIscrizione = di;
 	}
 	
-	public Long getId_utente() {
-		return id_utente;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setId_utente(Long id) {
-		this.id_utente = id;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getNome() {

@@ -22,14 +22,14 @@ public class CanaleProxy extends Canale {
 		Set<Utente> utenti = new HashSet<>();
 		Connection connection = dataSource.getConnection();
 		try {
-			String query = "select * from utente where id_utente IN "
-							+ "(select id_utente from iscrizione where canale = ?)";
+			String query = "select * from utente where email IN "
+							+ "(select email_utente from iscrizione where canale = ?)";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, getNome());
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {
 				Utente utente = new Utente();
-				utente.setId_utente(result.getLong("id_utente"));
+				utente.setEmail(result.getString("email"));
 				utente.setNome(result.getString("nome"));
 				utente.setCognome(result.getString("cognome"));
 				utente.setUsername(result.getString("username"));
