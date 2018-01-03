@@ -9,7 +9,7 @@ public class Gruppo {
 	private String nome;
 	private Set<Utente> admins;
 	private Set<Utente> membri;
-	// private Set<Post> post;
+	private Set<Post> post;
 	private Date data_creazione;
 	private Canale canale;
 	
@@ -82,11 +82,11 @@ public class Gruppo {
 		this.admins = admin;
 	}
 
-	// public Set<Post> getPost() {
-	// return post;
-	// }
-	//
-	// public void setPost(Set<Post> post) {
-	// this.post = post;
-	// }
+	public Set<Post> getPost() {
+		return post;
+	}
+
+	public void setPost(Set<Post> post) {
+		this.post = post;
+	}
 }

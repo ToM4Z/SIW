@@ -1,13 +1,16 @@
 package persistence;
 
 import java.util.Calendar;
+import java.util.List;
 
 import model.Utente;
 import model.Canale;
 import model.Gruppo;
+import model.Post;
 import persistence.dao.UtenteDao;
 import persistence.dao.CanaleDao;
 import persistence.dao.GruppoDao;
+import persistence.dao.PostDao;
 
 public class MainJDBC {
 	
@@ -23,6 +26,7 @@ public class MainJDBC {
 		UtenteDao utentedao = factory.getUtenteDAO();
 		CanaleDao canaledao = factory.getCanaleDAO();
 		GruppoDao gruppodao = factory.getGruppoDAO();
+		PostDao postdao = factory.getPostDAO();
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(1996, 9, 24);		
@@ -53,6 +57,21 @@ public class MainJDBC {
 		utentedao.setPassword(u1, "pasticcio");
 		//canaledao.save(c1);
 		gruppodao.save(g1);
+		
+		Post a = new Post();
+		a.setCreatore(u1);
+		a.setCanale(c1);
+		a.setGruppo(g1);
+		a.setContenuto("primo post");
+		
+		postdao.save(a);
+		
+		List<Post> prova = utentedao.getPostsOfMyGroups(u1);
+		System.out.println(prova.size());
+		for (Post s : prova) {
+			System.out.println(s.getContenuto());
+		}
+		
 		
 		for(Canale c : canaledao.findAll()) {
 			System.out.println("Canale: "+c.getNome());

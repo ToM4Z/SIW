@@ -28,7 +28,7 @@ public class Login extends HttpServlet{
 				HttpSession session = req.getSession();
 				session.setAttribute("user", (Utente) user);
 				
-				req.getRequestDispatcher("home.jsp").forward(req, resp);
+				req.getRequestDispatcher("home").forward(req, resp);
 			}else {
 				resp.setContentType("text/html");
 				PrintWriter out = resp.getWriter();

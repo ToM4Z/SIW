@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import model.Canale;
+import model.Post;
 import model.Utente;
 import persistence.dao.UtenteDao;
 
@@ -190,6 +192,64 @@ class UtenteDaoJDBC implements UtenteDao {
 			userCred.setDataIscrizione(user.getDataIscrizione());
 		}
 		return userCred;
+	}
+	
+	public List<Post> getPostsOfMyGroups(Utente utente){
+		
+		Connection connection = this.dataSource.getConnection();
+		List<Post> allPost = new LinkedList<>();
+		try {
+			PreparedStatement statement;
+			statement = connection.prepareStatement("select * from post where gruppo in (select gruppo from iscrizione where email_utente = ?)");
+			statement.setString(1, utente.getEmail());
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				Post post = new PostProxy(dataSource);
+				post.setId(result.getLong("id_post"));
+				post.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
+				post.setContenuto(result.getString("contenuto"));
+				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
+				post.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), post.getCanale().getNome()));
+				post.setDataCreazione(new java.util.Date(result.getDate("data_creazione").getTime()));
+
+				allPost.add(post);
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		return allPost;
+	}
+	
+	public List<String> getMyChannelsName(Utente utente){
+	
+		Connection connection = this.dataSource.getConnection();
+		List<String> canali = new LinkedList<>();
+		try {
+			PreparedStatement statement = connection.prepareStatement("select distinct nome from canale where nome in" 
+					+"(select canale from iscrizione where email_utente = ?)");
+			statement.setString(1, utente.getEmail());
+			ResultSet result = statement.executeQuery();
+			while (result.next()) {
+				String name = result.getString("nome");
+				canali.add(name);
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		return canali;
 	}
 
 }
