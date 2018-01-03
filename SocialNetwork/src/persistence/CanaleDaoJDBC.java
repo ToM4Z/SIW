@@ -232,5 +232,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 			}
 		}
 	}
+	
+	
 
 }

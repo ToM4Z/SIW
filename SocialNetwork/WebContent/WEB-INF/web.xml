@@ -8,7 +8,6 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
   <servlet>
     <servlet-name>Register</servlet-name>
     <servlet-class>controller.Register</servlet-class>
@@ -16,8 +15,7 @@
   <servlet-mapping>
     <servlet-name>Register</servlet-name>
     <url-pattern>/register</url-pattern>
-  </servlet-mapping> 
-  
+  </servlet-mapping>
   <servlet>
     <servlet-name>Login</servlet-name>
     <servlet-class>controller.Login</servlet-class>
@@ -25,15 +23,21 @@
   <servlet-mapping>
     <servlet-name>Login</servlet-name>
     <url-pattern>/login</url-pattern>
-  </servlet-mapping> 
-  
-    <servlet>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>Home</servlet-name>
     <servlet-class>controller.Home</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Home</servlet-name>
     <url-pattern>/home</url-pattern>
-  </servlet-mapping> 
-  
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>CanaleServlet</servlet-name>
+    <servlet-class>controller.CanaleServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CanaleServlet</servlet-name>
+    <url-pattern>/canale</url-pattern>
+  </servlet-mapping>
 </web-app>
