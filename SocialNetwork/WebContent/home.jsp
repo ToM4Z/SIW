@@ -14,11 +14,10 @@
 		<script src="js/jquery-3.2.1.min.js"></script>
 	</head>
 <body>
-	
-	<c:if test="${sessionScope.user.nome == null}">
+	<c:if test="${empty sessionScope.user.nome}">
 		<% response.sendRedirect("index.jsp"); %>
 	</c:if>
-	<c:if test="${sessionScope.user != null}">
+	<c:if test="${not empty sessionScope.user.nome}">
  		<h1>Ciao ${sessionScope.user.nome}</h1>
 	</c:if>
 

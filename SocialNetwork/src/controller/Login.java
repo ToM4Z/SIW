@@ -1,54 +1,43 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStreamReader;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+import com.google.gson.Gson;
 
 import model.Utente;
 import persistence.DatabaseManager;
 import persistence.UtenteCredenziali;
+import persistence.dao.UtenteDao;
 
 public class Login extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String email = req.getParameter("email");
-		String password = req.getParameter("password");
-		
-		UtenteCredenziali user = DatabaseManager.getInstance().getDaoFactory().getUtenteDAO().findByPrimaryKeyCredential(email);
-		
-		if(user != null) {
-			if(password.equals(user.getPassword())) {
-				HttpSession session = req.getSession();
-				session.setAttribute("user", (Utente) user);
-				
-				req.getRequestDispatcher("home").forward(req, resp);
-			}else {
-				resp.setContentType("text/html");
-				PrintWriter out = resp.getWriter();
-				out.println("<html><body>");
-				out.println("<h1>Password errata!</h1>");
-				req.getRequestDispatcher("login.html").include(req, resp);
-				out.println("</body></html>");
-			}
-		}else {			
-			resp.setContentType("text/html");
-			PrintWriter out = resp.getWriter();
-			out.println("<html><body>");
-			out.println("<h1>Account con email "+email+" non esistente!</h1>");
-			req.getRequestDispatcher("login.html").include(req, resp);
-			out.println("</body></html>");
-		}
+	private class Credenziali{
+		private String email,password;
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doGet(req, resp);
-	}	
+		BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+        Credenziali cred = new Gson().fromJson(br.readLine(), Credenziali.class);
+                
+        UtenteDao utentedao = DatabaseManager.getInstance().getDaoFactory().getUtenteDAO();
+		UtenteCredenziali user = utentedao.findByPrimaryKeyCredential(cred.email);
+		
+		if(user!=null && cred.password.equals(user.getPassword())) {
+				req.getSession().setAttribute("user", (Utente) user);
+				resp.getWriter().write("true");
+				System.out.println("true");
+		}else {
+			resp.getWriter().write("false");
+			System.out.println("false");
+		}
+	}
 }
