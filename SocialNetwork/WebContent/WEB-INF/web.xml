@@ -54,4 +54,22 @@
     <url-pattern>/sendEmail</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>GruppoServlet</servlet-name>
+    <servlet-class>controller.GruppoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GruppoServlet</servlet-name>
+    <url-pattern>/gruppo</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>UtenteServlet</servlet-name>
+    <servlet-class>controller.UtenteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UtenteServlet</servlet-name>
+    <url-pattern>/utente</url-pattern>
+  </servlet-mapping>
+  
 </web-app>
