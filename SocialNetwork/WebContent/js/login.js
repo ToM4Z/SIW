@@ -20,7 +20,6 @@ function checkLogin(){
 	  xhr.setRequestHeader("connection","close");
 	  xhr.setRequestHeader("Content-Type", "application/json");
 	  xhr.onreadystatechange = function(){
-		  alert(xhr.responseText);
 		  if(xhr.responseText == "true")
 	    	  $("#changePage").trigger("click");
 	      else{

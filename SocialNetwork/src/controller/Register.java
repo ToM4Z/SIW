@@ -53,7 +53,7 @@ public class Register extends HttpServlet {
 			utentedao.save(user);
 			utentedao.setPassword(user,req.getParameter("password"));
 			
-			req.getRequestDispatcher("login.jsp").include(req, resp);
+			req.getRequestDispatcher("login.html").include(req, resp);
 		}
 	}
 }

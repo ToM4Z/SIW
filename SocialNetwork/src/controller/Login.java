@@ -34,10 +34,7 @@ public class Login extends HttpServlet{
 		if(user!=null && cred.password.equals(user.getPassword())) {
 				req.getSession().setAttribute("user", (Utente) user);
 				resp.getWriter().write("true");
-				System.out.println("true");
-		}else {
+		}else 
 			resp.getWriter().write("false");
-			System.out.println("false");
-		}
 	}
 }
