@@ -1,54 +1,113 @@
 <html>
-	<head lang="it">
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+<head lang="it">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>LoosyNet</title>
+<title>LoosyNet</title>
 
-		<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
-		<script src="js/jquery-3.2.1.min.js"></script>
-		<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 
-		<script src="js/register.js"></script>
-		<link href="css/login.css" rel="stylesheet" />
-		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-	</head>
-	<body>
-    <div class="container">
-      <div class="row row-centerd pos" id="pwd-container">
-      	<div class="col-md-3"></div>
-        <div class="col-md-6">
-          <section class="login-form">
-            <form method="post" action="register" role="login" onsubmit="return commitRegistration()">
-				<img src="images/logo.png" style="width:180px; margin-bottom: 0px;" class="img-responsive" alt="LoosyNet" />
-				<div id="emailError" style="margin-top: 10px; margin-bottom: -0.5px; display:none" class="alert alert-danger" role="alert">
-				  Email già registrata!
-				</div>
-				<div id="passwordError" style="margin-top: 10px; margin-bottom: -0.5px; display:none" class="alert alert-danger" role="alert">
-				  Le password non combaciano!
-				</div>
-				<table style="margin-bottom:-15px">
-                <tr>
-                  <td><input type="text" name="nome" placeholder="Nome" required class="form-control" /></td>
-                  <td><input type="text" name="cognome" placeholder="Cognome" required class="form-control" /></td>
-                </tr>
-              </table>
-              <table style="margin-bottom: -15px">
-                <tr>
-                  <td><input type="text" name="Nickname" placeholder="Nickname" required class="form-control"/></td>
-                  <td><input type="text" required onfocus="(this.type='date')" onblur="(this.type='text')"
-                          name="datadinascita"  class="form-control" placeholder="Data di nascita"></td>
-                </tr>
-              </table>
-              <input type="email" name="email" id="email" placeholder="Email" required class="form-control input-lg" onchange="javascript:checkEmailExist()"/>
-              <input type="password" name="password" class="form-control input-lg" id="password1" placeholder="Password" required />
-              <input type="password" class="form-control input-lg" id="password2" placeholder="Conferma Password" required onchange="javascript:samePassword()"/>
-              <button type="submit" class="btn btn-lg btn-primary btn-block">Registrati</button>
-            </form>
-          </section>
-    		</div>
-    		<div class="col-md-6"></div>
-      </div>
-    </div>
-	</body>
+<script src="js/register.js"></script>
+<link href="css/login.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+	<div class="container">
+		<div class="row row-centerd pos" id="pwd-container">
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+				<section id="sectionform1" class="login-form">
+					<form id="form1" method="post" action="javascript:commitRegistration()" role="login">
+						<img src="images/logo.png" style="width: 180px; margin-bottom: 0px;" class="img-responsive"	alt="LoosyNet" />
+						<div id="emailError" style="margin-top: 10px; margin-bottom: -0.5px; display: none" class="alert alert-danger" role="alert">
+							Email già registrata!
+						</div>
+						<div id="passwordError"	style="margin-top: 10px; margin-bottom: -0.5px; display: none" class="alert alert-danger" role="alert">
+							Le password non	combaciano!
+						</div>
+						<table style="margin-bottom: -15px">
+							<tr>
+								<td><input type="text" id="nome" placeholder="Nome"
+									required class="form-control" /></td>
+								<td><input type="text" id="cognome" placeholder="Cognome"
+									required class="form-control" /></td>
+							</tr>
+						</table>
+						<table style="margin-bottom: -15px">
+							<tr>
+								<td><input type="text" id="nickname"
+									placeholder="Nickname" required class="form-control" /></td>
+								<td><input type="text" required
+									onfocus="(this.type='date')" onblur="(this.type='text')"
+									id="datadinascita" class="form-control"
+									placeholder="Data di nascita"></td>
+							</tr>
+						</table>
+						<input type="email" id="email" placeholder="Email"
+							required class="form-control input-lg"
+							onchange="javascript:checkEmailExist()" /> 
+						<input type="password" class="form-control input-lg" id="password"
+							placeholder="Password" required onkeyup="javascript:samePassword()"/> 
+						<input type="password" class="form-control input-lg" id="password1"
+							placeholder="Conferma Password" required onkeyup="javascript:samePassword()" />
+						<button id="submit1" type="submit" class="btn btn-lg btn-primary btn-block">Registrati</button>
+					</form>
+				</section>
+				<section id="sectionform2" class="login-form" style="display: none">
+					<form id="form2" method="post" action="javascript:confirmCodeEmail()" role="login">
+						<img src="images/logo.png"
+							style="width: 180px; margin-bottom: 0px;" class="img-responsive"
+							alt="LoosyNet" />
+						<div id="mexEmail"
+							style="margin-top: 10px; margin-bottom: -0.5px;"
+							class="alert alert-info" role="alert">
+						</div>
+						<div id="codeError"
+							style="margin-top: 10px; margin-bottom: -0.5px; display: none"
+							class="alert alert-danger" role="alert">
+							Il codice inserito non è valido!
+						</div>
+						<input type="text" class="form-control input-lg" id="code"
+							placeholder="Codice" required />
+						<button type="submit" class="btn btn-lg btn-primary btn-block">Invia</button>
+						<div>
+							<a href="javascript:reTryCommitCodeEmail()">Reinvia l'email</a>
+						</div>
+					</form>
+				</section>
+				<section id="sectionform3" class="login-form" style="display: none">
+					<form id="form3" method="post" action="login.html" role="login">
+						<img src="images/logo.png"
+							style="width: 180px; margin-bottom: 0px;" class="img-responsive"
+							alt="LoosyNet" />
+						<div id="success"
+							style="margin-top: 10px; margin-bottom: -0.5px;"
+							class="alert alert-success" role="alert">
+							Registrazione completata con successo!
+						</div>
+						<button type="submit" class="btn btn-lg btn-primary btn-block">Torna al Login</button>
+					</form>
+				</section>
+				<section id="sectionform4" class="login-form" style="display: none">
+					<form id="form4" method="post" action="javascript:reTryCommitCodeEmail()" role="login">
+						<img src="images/logo.png"
+							style="width: 180px; margin-bottom: 0px;" class="img-responsive"
+							alt="LoosyNet" />
+						<div id="sendEmailError"
+							style="margin-top: 10px; margin-bottom: -0.5px;"
+							class="alert alert-danger" role="alert">
+							Ops...<br>
+							Ci deve essere un problema con i server..
+							Riprova più tardi
+						</div>
+						<button type="submit" class="btn btn-lg btn-primary btn-block">Riprova</button>
+					</form>
+				</section>
+			</div>
+			<div class="col-md-6"></div>
+		</div>
+	</div>
+</body>
 </html>
