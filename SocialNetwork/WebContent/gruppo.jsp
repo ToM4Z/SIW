@@ -2,6 +2,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:useBean id="user" class="model.Utente" scope="session" />
 <jsp:useBean id="canale" class="model.Canale" scope="request" />
+<jsp:useBean id="gruppo" class="model.Gruppo" scope="request" />
+<jsp:useBean id="post" class="model.Post" scope="request" />
 
 <html>
 <head>
@@ -22,20 +24,16 @@
 		%>
 	</c:if>
 	<c:if test="${sessionScope.user != null}">
-		<h2>${sessionScope.user.nome}</h2>
+		<h5>${sessionScope.user.nome}</h5>
 	</c:if>
 	
-	<h1>${canale.nome}</h1>
-	<h3>Descizione: ${canale.descrizione}</h3>
+	<h1>${gruppo.nome}</h1>
 	
-	<div id = gruppi>
-	<h3>Gruppi:</h3>
-	<c:forEach var = "gruppo" items = "${canale.gruppi}">
-		<h4><a href = gruppo?to=${gruppo.nome}&at=${canale.nome} >${gruppo.nome}</a></h4>
-		<small><small>${gruppo.data_creazione}</small></small>
-	
+	<c:forEach var = "post" items = "${gruppo.post}">
+		<h3><a href = utente?to=${post.creatore.email}> ${post.creatore.username}</a></h3>
+		<p>${post.contenuto}</p>
+		<small><small>${post.dataCreazione}</small></small>
 	</c:forEach>
-	</div>
 	
 </body>
 </html>

@@ -3,6 +3,7 @@ package persistence.dao;
 import java.util.List;
 
 import model.Canale;
+import model.Gruppo;
 
 public interface CanaleDao {	
 	public void save(Canale canale);

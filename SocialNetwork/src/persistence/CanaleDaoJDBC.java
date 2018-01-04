@@ -152,6 +152,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 		}
 		return canale;
 	}
+	
 
 	@Override
 	public List<Canale> findAll() {
