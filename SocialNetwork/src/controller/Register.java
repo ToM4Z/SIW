@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,23 +13,29 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.Utente;
 import persistence.DatabaseManager;
+import persistence.dao.UtenteDao;
 
 public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		if (DatabaseManager.getInstance().getDaoFactory().getUtenteDAO()
-				.findByPrimaryKey(req.getParameter("email")) != null) {
+		//controllo se l'email è già registrata nel db
+		if(checkEmail(req.getParameter("email")))
+			resp.getWriter().write("true");
+		else
+			resp.getWriter().write("false");
+	}
+	
+	private boolean checkEmail(String s) {
+		UtenteDao utentedao = DatabaseManager.getInstance().getDaoFactory().getUtenteDAO();
+		return utentedao.findByPrimaryKey(s) != null;
+	}
 
-			resp.setContentType("text/html");
-			PrintWriter out = resp.getWriter();
-			out.println("<html><body>");
-			out.println("<h1>Email già esistente!</h1>");
-			req.getRequestDispatcher("login.html").include(req, resp);
-			out.println("</body></html>");
-			
-		} else {
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		if(!checkEmail(req.getParameter("email"))){
 			Utente user = new Utente();
 			user.setEmail(req.getParameter("email"));
 			user.setNome(req.getParameter("nome"));
@@ -40,25 +45,15 @@ public class Register extends HttpServlet {
 			try {
 				user.setDataDiNascita(format.parse(req.getParameter("datadinascita")));
 			} catch (ParseException e) {
-				e.printStackTrace();
+				user.setDataDiNascita(null);
 			}
 			user.setDataIscrizione(Calendar.getInstance().getTime());
-
-			DatabaseManager.getInstance().getDaoFactory().getUtenteDAO().save(user);
-			DatabaseManager.getInstance().getDaoFactory().getUtenteDAO().setPassword(user,
-					req.getParameter("password"));
-
-			resp.setContentType("text/html");
-			PrintWriter out = resp.getWriter();
-			out.println("<html><body>");
-			out.println("<h1>Registrazione Completata!</h1>");
-			req.getRequestDispatcher("login.html").include(req, resp);
-			out.println("</body></html>");
+	
+			UtenteDao utentedao = DatabaseManager.getInstance().getDaoFactory().getUtenteDAO();
+			utentedao.save(user);
+			utentedao.setPassword(user,req.getParameter("password"));
+			
+			req.getRequestDispatcher("login.jsp").include(req, resp);
 		}
-	}
-
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doGet(req, resp);
 	}
 }

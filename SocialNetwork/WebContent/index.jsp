@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Social Network</title>
+<title>LoosyNet</title>
 </head>
 <body>
 	<c:if test="${sessionScope.username}">
