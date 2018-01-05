@@ -35,5 +35,8 @@
 		<small><small>${post.dataCreazione}</small></small>
 	</c:forEach>
 	
+	 <jsp:include page="chatGruppo.jsp" flush="true"/>
+	 
+	
 </body>
 </html>
