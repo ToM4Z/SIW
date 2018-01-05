@@ -63,13 +63,22 @@
     <url-pattern>/gruppo</url-pattern>
   </servlet-mapping>
   
-    <servlet>
+  <servlet>
     <servlet-name>UtenteServlet</servlet-name>
     <servlet-class>controller.UtenteServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>UtenteServlet</servlet-name>
     <url-pattern>/utente</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>ResetPassword</servlet-name>
+    <servlet-class>controller.ResetPassword</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResetPassword</servlet-name>
+    <url-pattern>/resetPassword</url-pattern>
   </servlet-mapping>
   
 </web-app>

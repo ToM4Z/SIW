@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.Canale;
 import model.Post;
 import model.Utente;
 import persistence.dao.UtenteDao;
