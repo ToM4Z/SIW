@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import model.Gruppo;
+import model.Messaggio;
 import model.Post;
 import model.Utente;
 
@@ -49,7 +50,8 @@ public class GruppoProxy extends Gruppo {
 			} catch (SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}
-		}	
+		}
+		
 		this.setMembri(utenti);
 		return super.getMembri(); 
 	}
@@ -84,7 +86,8 @@ public class GruppoProxy extends Gruppo {
 			} catch (SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}
-		}	
+		}
+		
 		this.setAdmins(admins);
 		return super.getAdmins(); 
 	}
@@ -120,7 +123,45 @@ public class GruppoProxy extends Gruppo {
 				throw new PersistenceException(e.getMessage());
 			}
 		}
-		return allPost;
+		
+		this.setPost(allPost);
+		return super.getPost();
 	}
+	
+	public Set<Messaggio> getChat(){
+		
+		Connection connection = this.dataSource.getConnection();
+		Set<Messaggio> allMessaggi = new HashSet<>();
+		try {
+			PreparedStatement statement;
+			statement = connection.prepareStatement("select * from messaggio where gruppo = ? and canale = ?");
+			statement.setString(1, this.getNome());
+			statement.setString(2, this.getCanale().getNome());
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				Messaggio messaggio = new Messaggio();
+				messaggio.setId(result.getLong("id_messaggio"));
+				messaggio.setMittente(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
+				messaggio.setContenuto(result.getString("contenuto"));
+				messaggio.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), result.getString("canale")));
+				messaggio.setData(new java.util.Date(result.getDate("data_creazione").getTime()));
+
+				allMessaggi.add(messaggio);
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		
+		this.setChat(allMessaggi);
+		return super.getChat();
+	}
+	
 
 }

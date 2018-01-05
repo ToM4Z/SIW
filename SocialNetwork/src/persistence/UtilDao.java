@@ -18,6 +18,7 @@ public class UtilDao {
 			String drop = "drop SEQUENCE if EXISTS sequenza_id;" 
 					+ "drop table if exists commento;"
 					+ "drop table if exists post;"
+					+ "drop table if exists messaggio;"
 					+ "drop table if exists gestione_gruppo;"
 					+ "drop table if exists iscrizione;"
 					+ "drop table if exists gruppo;"
@@ -69,7 +70,11 @@ public class UtilDao {
 						+" data_creazione date);"
 					
 					+"create table commento (id_commento bigint primary key, id_post bigint REFERENCES post(id_post),"
-                    	+ "email_utente varchar(255) REFERENCES utente(email), contenuto text, data_creazione date)"
+                    	+ "email_utente varchar(255) REFERENCES utente(email), contenuto text, data_creazione date);"
+					
+                    +"create table messaggio ( id_messaggio bigint primary key, email_mittente varchar(255) REFERENCES utente(email),"
+                    	+"contenuto text, canale varchar(255), gruppo varchar(255), FOREIGN KEY(gruppo, canale) REFERENCES gruppo(nome, canale),"
+                    	+"data_creazione date)"
 					
 					;
 			PreparedStatement statement = connection.prepareStatement(create);

@@ -3,6 +3,7 @@ package persistence;
 import persistence.dao.CanaleDao;
 import persistence.dao.CommentoDao;
 import persistence.dao.GruppoDao;
+import persistence.dao.MessaggioDao;
 import persistence.dao.PostDao;
 import persistence.dao.UtenteDao;
 
@@ -53,5 +54,13 @@ public class PostgresDAOFactory extends DAOFactory {
 		
 		return new CommentoDaoJDBC(dataSource);
 	}
+
+	@Override
+	public MessaggioDao getMessaggioDAO() {
+		
+		return new MessaggioDaoJDBC(dataSource);
+	}
+	
+	
 
 }

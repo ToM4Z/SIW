@@ -12,6 +12,7 @@ public class Gruppo {
 	private Set<Post> post;
 	private Date data_creazione;
 	private Canale canale;
+	private Set<Messaggio> chat;
 	
 	public Gruppo() {
 		admins = new HashSet<>();
@@ -89,4 +90,14 @@ public class Gruppo {
 	public void setPost(Set<Post> post) {
 		this.post = post;
 	}
+
+	public Set<Messaggio> getChat() {
+		return chat;
+	}
+
+	public void setChat(Set<Messaggio> chat) {
+		this.chat = chat;
+	}
+	
+	
 }

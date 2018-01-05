@@ -29,5 +29,7 @@ public abstract class DAOFactory {
 	public abstract PostDao getPostDAO();
 
 	public abstract CommentoDao getCommentoDAO();
+	
+	public abstract MessaggioDao getMessaggioDAO();
 
 }
