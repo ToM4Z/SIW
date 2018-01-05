@@ -27,14 +27,17 @@ public class SendEmail extends HttpServlet{
 		try{
 			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
 			CodeEmail code = new Gson().fromJson(br.readLine(), CodeEmail.class);
+			boolean reset = Boolean.parseBoolean(req.getParameter("reset"));
+			System.out.println(code.email+" "+code.codice+" "+reset);
 			
             String host ="smtp.gmail.com" ;
             String user = "loosynet@gmail.com";
             String pass = "passExam";
             String to = code.email;
             String from = "loosynet@gmail.com";
-            String subject = "Confirmation Account LoosyNet";
-            String messageText = "Insert the below code for confirm your account:\n\n"+code.codice;
+            String subject = reset ? "Reset Password Account LoosyNet" : "Confirmation Account LoosyNet";            
+            String messageText = reset ? "Insert the below code to reset your password:\n\n"+code.codice : 
+            						"Insert the below code to confirm your account:\n\n"+code.codice;
             boolean sessionDebug = false;
 
             Properties props = System.getProperties();
