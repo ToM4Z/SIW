@@ -3,7 +3,6 @@ package controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +17,6 @@ import persistence.dao.UtenteDao;
 
 public class Home extends HttpServlet{
 	private static final long serialVersionUID = 1L;
-
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -37,7 +31,8 @@ public class Home extends HttpServlet{
 		List<Canale> canali = dao.getMyChannels(utente);
 		req.setAttribute("canali", canali);
 		
-		req.getRequestDispatcher("home.jsp").forward(req, resp);
+		//req.getRequestDispatcher("home.jsp").forward(req, resp);
+		resp.sendRedirect("home.jsp");
 	}	
 }
 

@@ -28,7 +28,6 @@ public class SendEmail extends HttpServlet{
 			BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
 			CodeEmail code = new Gson().fromJson(br.readLine(), CodeEmail.class);
 			boolean reset = Boolean.parseBoolean(req.getParameter("reset"));
-			System.out.println(code.email+" "+code.codice+" "+reset);
 			
             String host ="smtp.gmail.com" ;
             String user = "loosynet@gmail.com";

@@ -10,17 +10,14 @@
 		<title>LoosyNet</title>
 
 		<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
-		<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 		<script src="js/jquery-3.2.1.min.js"></script>
+		<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 	</head>
 <body>
-	<c:if test="${empty sessionScope.user.nome}">
-		<% response.sendRedirect("index.jsp"); %>
+	<c:if test="${empty user.nome}">
+		<c:redirect url="login.html"/>
 	</c:if>
-	<c:if test="${not empty sessionScope.user.nome}">
- 		<h1>Ciao ${sessionScope.user.nome}</h1>
-	</c:if>
-
+	<jsp:include page="LoosyNetBar.jsp" />
 	
 	<div id = "homePost">
 		<c:forEach var="post" items="${posts}">
