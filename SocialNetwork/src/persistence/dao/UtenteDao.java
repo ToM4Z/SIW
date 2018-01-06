@@ -2,6 +2,7 @@ package persistence.dao;
 
 import java.util.List;
 
+import model.Canale;
 import model.Post;
 import model.Utente;
 import persistence.UtenteCredenziali;
@@ -16,5 +17,5 @@ public interface UtenteDao {
 	public void setPassword(Utente user, String password);
 	public UtenteCredenziali findByPrimaryKeyCredential(String email);     // Retrieve
 	public List<Post> getPostsOfMyGroups(Utente utente);
-	public List<String> getMyChannelsName(Utente utente);
+	public List<Canale> getMyChannels(Utente utente);
 }

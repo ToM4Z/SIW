@@ -30,13 +30,8 @@
 		</c:forEach>
 	</div>
 	
-	<div id = "canali">
-		<h3>I tuoi canali</h3>
-		<c:forEach var="nome" items="${canali}">
-			<h5><a href =canale?to=${nome}>${nome}</a></h5>
-		</c:forEach>
+	<jsp:include page="barraCanali.jsp" flush="true"/>
 	
-	</div>
 	
 </body>
 </html>

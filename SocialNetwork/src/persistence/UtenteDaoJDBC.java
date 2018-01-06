@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import model.Canale;
 import model.Post;
 import model.Utente;
 import persistence.dao.UtenteDao;
@@ -226,18 +227,22 @@ class UtenteDaoJDBC implements UtenteDao {
 		return allPost;
 	}
 	
-	public List<String> getMyChannelsName(Utente utente){
+	public List<Canale> getMyChannels(Utente utente){
 	
 		Connection connection = this.dataSource.getConnection();
-		List<String> canali = new LinkedList<>();
+		List<Canale> canali = new LinkedList<>();
 		try {
-			PreparedStatement statement = connection.prepareStatement("select distinct nome from canale where nome in" 
+			PreparedStatement statement = connection.prepareStatement("select * from canale where nome in" 
 					+"(select canale from iscrizione where email_utente = ?)");
 			statement.setString(1, utente.getEmail());
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {
-				String name = result.getString("nome");
-				canali.add(name);
+				Canale canale = new CanaleProxy(dataSource);
+				canale.setNome(result.getString("nome"));
+				canale.setDescrizione(result.getString("descrizione"));
+				canale.setData_creazione(result.getDate("data_creazione"));
+				canale.setAdmin(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_admin")));
+				canali.add(canale);
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
