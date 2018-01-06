@@ -17,19 +17,13 @@ public class UtenteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		String emailUtente = req.getParameter("to");
-		
-		UtenteDao dao =DatabaseManager.getInstance().getDaoFactory().getUtenteDAO();
-		Utente utente = dao.findByPrimaryKey(emailUtente);
-		
-		req.setAttribute("utente", utente);
-		
+		if(emailUtente!=null) {
+			UtenteDao dao =DatabaseManager.getInstance().getDaoFactory().getUtenteDAO();
+			Utente utente = dao.findByPrimaryKey(emailUtente);
+			
+			req.setAttribute("utente", utente);
+		}
 		req.getRequestDispatcher("utente.jsp").forward(req, resp);
-	}
-
-
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		doGet(req, resp);
 	}
 
 }

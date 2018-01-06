@@ -54,7 +54,7 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="home.jsp"><span class="glyphicon glyphicon-home"></span>
 							Home</a></li>
-					<li><a href="#"><span class="glyphicon glyphicon-user"></span>
+					<li><a href="utente"><span class="glyphicon glyphicon-user"></span>
 							${user.nome}</a></li>
 					<li><a href="#"><span class="glyphicon glyphicon-cog"></span>
 							Impostazioni</a></li>

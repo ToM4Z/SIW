@@ -15,19 +15,27 @@
 	</head>
 </head>
 <body>
-	<c:if test="${sessionScope.user.nome == null}">
+	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html"/>
 	</c:if>
-	<c:if test="${sessionScope.user != null}">
-		<h5>${sessionScope.user.nome}</h5>
+	
+	<jsp:include page="LoosyNetBar.jsp" />
+	<c:if test="${not empty utente.nome}">	
+		<h3><strong>Nome:</strong> ${utente.nome}</h3>
+		<h3><strong>Cognome:</strong> ${utente.cognome}</h3>
+		<h3><strong>Username:</strong> ${utente.username}</h3>
+		<h3><strong>Email:</strong> ${utente.email}</h3>
+		<h3><strong>Data di nascita:</strong> ${utente.dataDiNascita}</h3>	
+		<h3><strong>Data di iscrizione:</strong> ${utente.dataIscrizione}</h3>	
 	</c:if>
-	
-	<h3><strong>Nome:</strong> ${utente.nome}</h3>
-	<h3><strong>Cognome:</strong> ${utente.cognome}</h3>
-	<h3><strong>Username:</strong> ${utente.username}</h3>
-	<h3><strong>Email:</strong> ${utente.email}</h3>
-	<h3><strong>Data di nascita:</strong> ${utente.dataDiNascita}</h3>
-	
+	<c:if test="${empty utente.nome}">	
+		<h3><strong>Nome:</strong> ${user.nome}</h3>
+		<h3><strong>Cognome:</strong> ${user.cognome}</h3>
+		<h3><strong>Username:</strong> ${user.username}</h3>
+		<h3><strong>Email:</strong> ${user.email}</h3>
+		<h3><strong>Data di nascita:</strong> ${user.dataDiNascita}</h3>	
+		<h3><strong>Data di iscrizione:</strong> ${user.dataIscrizione}</h3>	
+	</c:if>
 	
 </body>
 </html>
