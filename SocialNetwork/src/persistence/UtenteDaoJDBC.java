@@ -187,6 +187,7 @@ class UtenteDaoJDBC implements UtenteDao {
 			userCred.setEmail(user.getEmail());
 			userCred.setNome(user.getNome());
 			userCred.setCognome(user.getCognome());
+			userCred.setUsername(user.getUsername());
 			userCred.setDataDiNascita(user.getDataDiNascita());
 			userCred.setDataIscrizione(user.getDataIscrizione());
 		}
