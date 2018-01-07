@@ -21,6 +21,9 @@
 			response.sendRedirect("index.jsp");
 		%>
 	</c:if>
+	
+	<jsp:include page="LoosyNetBar.jsp" />
+	
 	<c:if test="${sessionScope.user != null}">
 		<h2>${sessionScope.user.nome}</h2>
 	</c:if>

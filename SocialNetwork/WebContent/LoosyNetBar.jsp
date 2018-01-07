@@ -31,7 +31,7 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="home.jsp">LoosyNet</a>
+				<a class="navbar-brand" href="home">LoosyNet</a>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar"
 				style="overflow-x: hidden">
@@ -52,7 +52,7 @@
 					</li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="home.jsp"><span class="glyphicon glyphicon-home"></span>
+					<li><a href="home"><span class="glyphicon glyphicon-home"></span>
 							Home</a></li>
 					<li><a href="utente"><span class="glyphicon glyphicon-user"></span>
 							${user.nome}</a></li>

@@ -21,8 +21,8 @@
 	
 	<div id = "homePost">
 		<c:forEach var="post" items="${posts}">
-			<h4><a href = utente?to=${post.creatore.email}> ${post.creatore.username}</a> > 
-			<a href = canale?to=${post.canale.nome}>${post.canale.nome}</a> / 
+			<h4><a href = utente?to=${post.creatore.email}> ${post.creatore.username}</a>  
+			<a href = canale?to=${post.canale.nome}>${post.canale.nome}</a>  
 			<a href = gruppo?to=${post.gruppo.nome}&at=${post.canale.nome}>${post.gruppo.nome}</a></h4>
 			<p>${post.contenuto}</p>
 			<small><small>${post.dataCreazione}</small></small>

@@ -18,6 +18,11 @@ import persistence.dao.UtenteDao;
 public class Home extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+		
+		doPost(req, resp);
+	}
+	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
@@ -31,8 +36,8 @@ public class Home extends HttpServlet{
 		List<Canale> canali = dao.getMyChannels(utente);
 		req.setAttribute("canali", canali);
 		
-		//req.getRequestDispatcher("home.jsp").forward(req, resp);
-		resp.sendRedirect("home.jsp");
+		req.getRequestDispatcher("home.jsp").forward(req, resp);
+		//resp.sendRedirect("home.jsp");
 	}	
 }
 
