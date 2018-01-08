@@ -25,7 +25,8 @@ public class GruppoServlet extends HttpServlet {
 		String nomeGruppo = req.getParameter("to");
 		String nomeCanale = req.getParameter("at");
 		GruppoDao dao =DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
-		
+		//System.out.println("gruppo"+nomeGruppo);
+		//System.out.println("canale"+nomeCanale);
 		Gruppo gruppo = dao.findByPrimaryKey(nomeGruppo, nomeCanale);
 		req.setAttribute("gruppo", gruppo);
 		

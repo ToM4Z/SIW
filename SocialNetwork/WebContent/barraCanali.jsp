@@ -2,6 +2,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:useBean id="user" class="model.Utente" scope="session" />
 <jsp:useBean id="canale" class="model.Canale" scope="request" />
+<jsp:useBean id="gruppo" class="model.Gruppo" scope="request" />
 
 <html>
 	<head lang="it">
@@ -19,7 +20,9 @@
 	
 	<h3>I tuoi canali</h3>	
 	<ul id = "listaCanali">
+		<ul id = "listaGruppi">
 		
+		</ul>
 	</ul>
 </body>
 </html>
