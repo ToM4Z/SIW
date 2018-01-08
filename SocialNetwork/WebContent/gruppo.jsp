@@ -25,6 +25,7 @@
 	</c:if>
 	
 	<jsp:include page="LoosyNetBar.jsp" />
+	<jsp:include page="barraCanali.jsp" />
 	
 	<c:if test="${sessionScope.user != null}">
 		<h5>${sessionScope.user.nome}</h5>
