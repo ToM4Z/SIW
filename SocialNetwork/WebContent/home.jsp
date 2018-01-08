@@ -18,6 +18,7 @@
 		<c:redirect url="login.html"/>
 	</c:if>
 	<jsp:include page="LoosyNetBar.jsp" />
+	<jsp:include page="barraCanali.jsp" />
 	
 	<div id = "homePost">
 		<c:forEach var="post" items="${posts}">
@@ -27,10 +28,7 @@
 			<p>${post.contenuto}</p>
 			<small><small>${post.dataCreazione}</small></small>
 		</c:forEach>
-	</div>
-	
-	<jsp:include page="barraCanali.jsp" flush="true"/>
-	
+	</div>	
 	
 </body>
 </html>

@@ -33,8 +33,8 @@ public class Home extends HttpServlet{
 		List<Post> posts = dao.getPostsOfMyGroups(utente);
 		req.setAttribute("posts", posts);
 		
-		List<Canale> canali = dao.getMyChannels(utente);
-		req.setAttribute("canali", canali);
+//		List<Canale> canali = dao.getMyChannels(utente);
+//		req.setAttribute("canali", canali);
 		
 		req.getRequestDispatcher("home.jsp").forward(req, resp);
 		//resp.sendRedirect("home.jsp");

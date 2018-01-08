@@ -15,6 +15,6 @@ public class Index extends HttpServlet{
 		if(req.getSession().getAttribute("user") == null)
 			resp.sendRedirect("login.html");
 		else
-			resp.sendRedirect("home.jsp");
+			resp.sendRedirect("home");
 	}
 }
