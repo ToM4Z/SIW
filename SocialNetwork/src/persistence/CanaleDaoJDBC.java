@@ -94,27 +94,11 @@ public class CanaleDaoJDBC implements CanaleDao {
 	}
 
 	private void updateGruppi(Canale canale, Connection connection) throws SQLException {
-
 		GruppoDao gruppoDao = new GruppoDaoJDBC(dataSource);
 		for (Gruppo gruppo : canale.getGruppi()) {
 			if (gruppoDao.findByPrimaryKey(gruppo.getNome(),canale.getNome()) == null) {
 				gruppoDao.save(gruppo);
 			}
-			
-			/*String gruppoCanale = "select nome from gruppo where nome=? AND canale=?";
-			PreparedStatement statementGruppoCanale = connection.prepareStatement(gruppoCanale);
-			statementGruppoCanale.setString(1, gruppo.getNome());
-			statementGruppoCanale.setString(2, canale.getNome());
-			ResultSet result = statementGruppoCanale.executeQuery();
-			if (!result.next()) {
-				String iscrivi = "insert into gruppo (nome_gruppo, nome_canale) values (?,?,?)";
-				PreparedStatement statementIscrivi = connection.prepareStatement(iscrivi);
-				Long id = IdBroker.getId(connection);
-				statementIscrivi.setLong(1, id);
-				statementIscrivi.setString(2, gruppo.getNome());
-				statementIscrivi.setString(3, canale.getNome());
-				statementIscrivi.executeUpdate();
-			}*/
 		}
 	}
 
@@ -234,6 +218,129 @@ public class CanaleDaoJDBC implements CanaleDao {
 		}
 	}
 	
-	
+	@Override
+	public void addUserToBlackList(Canale canale, Utente utente) {
+		Connection connection = dataSource.getConnection();
+		try {
+			PreparedStatement statement = connection.prepareStatement("Select utente from blacklist where canale=? and utente=?");
+			statement.setString(1, canale.getNome());
+			statement.setString(2, utente.getEmail());
+			ResultSet result = statement.executeQuery();
+			if(result.next())
+				throw new PersistenceException("L'Utente "+utente.getEmail()+" è già nella blacklist del canale "+canale.getNome());
+			
+			String insert = "insert into blacklist(canale, utente) values (?,?)";
+			statement = connection.prepareStatement(insert);
+			statement.setString(1, canale.getNome());
+			statement.setString(2, utente.getEmail());
+			statement.executeUpdate();
 
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
+	
+	@Override
+	public void removeUserFromBlackList(Canale canale, Utente utente) {
+		Connection connection = dataSource.getConnection();
+		try {
+			String delete = "delete FROM blacklist WHERE canale = ? and nome = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setString(1, canale.getNome());
+			statement.setString(2, utente.getEmail());
+
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
+	
+	@Override
+	public void addUserToChannel(Canale canale, Utente utente) {
+		Connection connection = dataSource.getConnection();
+		try {
+			PreparedStatement statement = connection.prepareStatement("Select email_utente from iscrizione where canale=? and gruppo='home' and email_utente=?");
+			statement.setString(1, canale.getNome());
+			statement.setString(2, utente.getEmail());
+			ResultSet result = statement.executeQuery();
+			if(result.next())
+				throw new PersistenceException("L'Utente "+utente.getEmail()+" è già iscritto al canale "+canale.getNome());
+			
+			statement = connection.prepareStatement("Select utente from blacklist where canale=? and utente=?");
+			statement.setString(1, canale.getNome());
+			statement.setString(2, utente.getEmail());
+			result = statement.executeQuery();
+			if(result.next())
+				throw new PersistenceException("L'Utente "+utente.getEmail()+" non può iscriversi al canale "+canale.getNome());
+			
+			String insert = "insert into iscrizione(canale, gruppo, email_utente) values (?,?,?)";
+			statement = connection.prepareStatement(insert);
+			statement.setString(1, canale.getNome());
+			statement.setString(2, "home");
+			statement.setString(3, utente.getEmail());
+			statement.executeUpdate();
+
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
+	
+	@Override
+	public void removeUserFromChannel(Canale canale, Utente utente) {
+		Connection connection = dataSource.getConnection();
+		try {
+			String delete = "delete FROM iscrizione WHERE canale = ? and gruppo = 'home' email_utente = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setString(1, canale.getNome());
+			statement.setString(2, utente.getEmail());
+
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
 }

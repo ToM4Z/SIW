@@ -12,11 +12,13 @@ public class Canale {
 	private Utente admin;
 	private Set<Utente> membri;
 	private Set<Gruppo> gruppi;
+	private Set<Utente> blacklist;
 	//private Image image;
 
 	public Canale() {
 		membri = new HashSet<>();
 		gruppi = new HashSet<>();
+		blacklist = new HashSet<>();
 	}
 	
 	public Canale(String n, String d, Date dc, Utente ad) {
@@ -26,8 +28,17 @@ public class Canale {
 		admin=ad;
 		membri = new HashSet<>();
 		gruppi = new HashSet<>();
+		blacklist = new HashSet<>();
 	}
 	
+	public Set<Utente> getBlacklist() {
+		return blacklist;
+	}
+
+	public void setBlacklist(Set<Utente> blacklist) {
+		this.blacklist = blacklist;
+	}
+
 	public Date getData_creazione() {
 		return data_creazione;
 	}

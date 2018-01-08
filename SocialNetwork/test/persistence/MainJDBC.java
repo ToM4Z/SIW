@@ -30,7 +30,7 @@ public class MainJDBC {
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(1996, 9, 24);		
-		Utente u1 = new Utente("thomas@thomas.com","Thomas","Voce","ToMaZ",cal.getTime(),Calendar.getInstance().getTime());
+		Utente u1 = new Utente("thom_96@hotmail.it","Thomas","Voce","ToMaZ",cal.getTime(),Calendar.getInstance().getTime());
 		
 		Canale c1 = new Canale("UNICAL","per studenti unical",Calendar.getInstance().getTime(),u1);
 		c1.addMembro(u1);
@@ -40,10 +40,18 @@ public class MainJDBC {
 		g1.addMembro(u1);
 		
 		utentedao.save(u1);
-		utentedao.setPassword(u1, "ciccio");
+		utentedao.setPassword(u1, "a");
 		canaledao.save(c1);
 		gruppodao.save(g1);
 				
+		Post a = new Post();
+		a.setCreatore(u1);
+		a.setCanale(c1);
+		a.setGruppo(g1);
+		a.setContenuto("ca-ca-cazza di sicurezzooooo");
+		
+		postdao.save(a);
+		
 		u1 = new Utente("danielesalim@outlook.it","Daniele","Salimonti","ds.hitman",cal.getTime(),Calendar.getInstance().getTime());
 		
 		//c1 = new Canale("UNICAL2","2",Calendar.getInstance().getTime(),u1);
@@ -58,7 +66,7 @@ public class MainJDBC {
 		//canaledao.save(c1);
 		gruppodao.save(g1);
 		
-		Post a = new Post();
+		a = new Post();
 		a.setCreatore(u1);
 		a.setCanale(c1);
 		a.setGruppo(g1);

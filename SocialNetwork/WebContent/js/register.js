@@ -36,6 +36,7 @@ function commitRegistration(){
 	  var xhr = new XMLHttpRequest();
 	  xhr.open("post","sendEmail", true);
 	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
 	  xhr.setRequestHeader("Content-Type", "application/json");
 	  xhr.onreadystatechange = function(){
 		  if(xhr.responseText == "error"){

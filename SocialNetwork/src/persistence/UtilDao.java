@@ -20,11 +20,11 @@ public class UtilDao {
 					+ "drop table if exists post;"
 					+ "drop table if exists messaggio;"
 					+ "drop table if exists gestione_gruppo;"
+					+ "drop table if exists blacklist;"		
 					+ "drop table if exists iscrizione;"
 					+ "drop table if exists gruppo;"
 					+ "drop table if exists canale;"
-					+ "drop table if exists utente;"
-					
+					+ "drop table if exists utente;"		
 					
 					;
 			PreparedStatement statement = connection.prepareStatement(drop);
@@ -74,7 +74,10 @@ public class UtilDao {
 					
                     +"create table messaggio ( id_messaggio bigint primary key, email_mittente varchar(255) REFERENCES utente(email),"
                     	+"contenuto text, canale varchar(255), gruppo varchar(255), FOREIGN KEY(gruppo, canale) REFERENCES gruppo(nome, canale),"
-                    	+"data_creazione date)"
+                    	+"data_creazione date);"
+                	
+                	+ "create table blacklist (canale varchar(255) REFERENCES canale(nome), utente varchar(255) REFERENCES utente(email),"
+                		+ "PRIMARY KEY (canale,utente));"
 					
 					;
 			PreparedStatement statement = connection.prepareStatement(create);
@@ -118,6 +121,9 @@ public class UtilDao {
 			statement.executeUpdate();
 			
 			statement = connection.prepareStatement("delete FROM commento");
+			statement.executeUpdate();	
+			
+			statement = connection.prepareStatement("delete FROM blacklist");
 			statement.executeUpdate();	
 			
 			System.out.println("Reset database: Success");
