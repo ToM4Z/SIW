@@ -13,15 +13,18 @@ function getCanali(){
 	        	cont = 0;
 	        	$.each(lista, function(i, stringhe){
 	        		if (cont === 0){
-	        			$("#listaCanali").append("<li><a href=\"canale?to="+stringhe+"\">"+stringhe+"</a></li>");
 	        			canale = stringhe;
-	        			
-	        		}
-	        		else{
-	        			$("#listaCanali").append("<li><a href=\"gruppo?to="+stringhe+"&at="+canale+"\">"+stringhe+"</a></li>");
+	        			$("#listaCanali").append("<ul class=\"treeview\" id=\""+canale+"\">" +
+	        	                "<li><a href=\"canale?channel="+canale+"\">"+canale+"</a>"+
+	                        	"<ul>");
+	        		}else{
+	        			$("#listaCanali").find("ul#"+canale).find("ul").append("<li>" +
+	        									"<a class=\"nav-link\" href=\"gruppo?group="+stringhe+"&channel="+canale+"\">"
+	        									+stringhe+"</a></li>");
 	        		}
 	        		cont++;
 	        	});
+	        	$("#listaCanali").append("</ul></li></ul>");
 	        });
 	    }
 	};

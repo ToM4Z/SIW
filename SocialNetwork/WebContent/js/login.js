@@ -21,7 +21,8 @@ function checkLogin(){
 	  xhr.setRequestHeader("Content-Type", "application/json");
 	  xhr.onreadystatechange = function(){
 		  if(xhr.responseText == "true")
-	    	  $("#changePage").trigger("click");
+			  window.location.replace("home");
+	    	  //$("#changePage").trigger("click");
 	      else{
 	        $("#passwordError").slideDown();
 	        $("#passwordError").css("display:block");

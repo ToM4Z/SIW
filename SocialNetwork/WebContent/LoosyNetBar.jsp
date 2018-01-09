@@ -22,27 +22,38 @@
 }
 </style>
 
+<script>
+function collapseButton(){
+	if($("#myNavbar").css("display")=="none"){
+		$("#myNavbar").slideDown();
+	}else{
+		$("#myNavbar").slideUp();
+	}
+}
+</script>
+
 <body>
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-default navbar-static-top navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target="#myNavbar">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+					  aria-expanded="false" onclick="javascript:collapseButton()">
+					<span class="sr-only">Toggle navigation</span>
+        			<span class="icon-bar"></span> 
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="home">LoosyNet</a>
+				<a class="navbar-brand" href="home" style="margin-left:3%">LoosyNet</a>
 			</div>
-			<div class="collapse navbar-collapse" id="myNavbar"
-				style="overflow-x: hidden">
+			
+			<div class="collapse navbar-collapse" id="myNavbar"	style="overflow-x: hidden">
 
-				<ul class="nav navbar-nav">
+				<ul class="nav navbar-nav navbar-left">
 					<li>
-						<form class="navbar-form navbar-left" action="#">
-							<div class="input-group" style="margin-top: 2px">
-								<input type="text" id="search" class="form-control"
-									placeholder="Search">
-								<div class="input-group-btn" style="left: -20px !important">
+						<form class="navbar-form " action="#">
+							<div class="input-group" style="margin-top: 2px; margin-right:-30px;">
+								<input type="text" id="search" class="form-control"	placeholder="Search">
+								<div class="input-group-btn" style="left: -20px !important;">
 									<button class="btn btn-default" type="submit">
 										<i class="glyphicon glyphicon-search"></i>
 									</button>

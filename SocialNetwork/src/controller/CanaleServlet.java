@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Canale;
-import model.Gruppo;
 import persistence.DatabaseManager;
 import persistence.dao.CanaleDao;
 
@@ -20,7 +18,7 @@ public class CanaleServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		String nomeCanale = req.getParameter("to");
+		String nomeCanale = req.getParameter("channel");
 		CanaleDao dao =DatabaseManager.getInstance().getDaoFactory().getCanaleDAO();
 		
 		Canale canale = dao.findByPrimaryKey(nomeCanale);

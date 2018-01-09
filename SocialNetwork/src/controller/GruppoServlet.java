@@ -2,15 +2,12 @@ package controller;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Gruppo;
-import model.Post;
 import persistence.DatabaseManager;
-import persistence.dao.CanaleDao;
 import persistence.dao.GruppoDao;
 
 
@@ -22,8 +19,8 @@ public class GruppoServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		String nomeGruppo = req.getParameter("to");
-		String nomeCanale = req.getParameter("at");
+		String nomeGruppo = req.getParameter("group");
+		String nomeCanale = req.getParameter("channel");
 		GruppoDao dao =DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
 		//System.out.println("gruppo"+nomeGruppo);
 		//System.out.println("canale"+nomeCanale);
