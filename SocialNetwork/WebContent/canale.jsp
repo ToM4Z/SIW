@@ -25,13 +25,14 @@
 	<jsp:include page="LoosyNetBar.jsp" />
 	<jsp:include page="barraCanali.jsp" />
 	
+	
 	<c:if test="${sessionScope.user != null}">
 		<h2>${sessionScope.user.nome}</h2>
 	</c:if>
 	
 	<h1>${canale.nome}</h1>
 	<h3>Descizione: ${canale.descrizione}</h3>
-	
+	<h4><a href = creaGruppo?to=${canale.nome}>Crea Gruppo</a></h4>
 	<div id = gruppi>
 	<h3>Gruppi:</h3>
 	<c:forEach var = "gruppo" items = "${canale.gruppi}">

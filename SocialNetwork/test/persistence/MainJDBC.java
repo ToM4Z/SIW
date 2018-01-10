@@ -27,7 +27,8 @@ public class MainJDBC {
 		CanaleDao canaledao = factory.getCanaleDAO();
 		GruppoDao gruppodao = factory.getGruppoDAO();
 		PostDao postdao = factory.getPostDAO();
-
+		
+		
 		Calendar cal = Calendar.getInstance();
 		cal.set(1996, 9, 24);		
 		Utente u1 = new Utente("thom_96@hotmail.it","Thomas","Voce","ToMaZ",cal.getTime(),Calendar.getInstance().getTime());

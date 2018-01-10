@@ -33,6 +33,8 @@
 	
 	<h1>${gruppo.nome}</h1>
 	
+	
+	
 	<c:forEach var = "post" items = "${gruppo.post}">
 		<h3><a href = utente?to=${post.creatore.email}> ${post.creatore.username}</a></h3>
 		<p>${post.contenuto}</p>
