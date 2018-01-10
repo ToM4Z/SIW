@@ -29,17 +29,18 @@
 	<c:if test="${sessionScope.user != null}">
 		<h2>${sessionScope.user.nome}</h2>
 	</c:if>
-	
-	<h1>${canale.nome}</h1>
-	<h3>Descizione: ${canale.descrizione}</h3>
-	<h4><a href = creaGruppo?to=${canale.nome}>Crea Gruppo</a></h4>
-	<div id = gruppi>
-	<h3>Gruppi:</h3>
-	<c:forEach var = "gruppo" items = "${canale.gruppi}">
-		<h4><a href = gruppo?to=${gruppo.nome}&at=${canale.nome} >${gruppo.nome}</a></h4>
-		<small><small>${gruppo.data_creazione}</small></small>
-	
-	</c:forEach>
+	<div id="homePost" style="margin-top:60px; text-align: center;">
+		<h1>${canale.nome}</h1>
+		<h3>Descizione: ${canale.descrizione}</h3>
+		<h4><a href = creaGruppo?channel=${canale.nome}>Crea Gruppo</a></h4>
+		<div id = gruppi>
+		<h3>Gruppi:</h3>
+		<c:forEach var = "gruppo" items = "${canale.gruppi}">
+			<h4><a href = gruppo?group=${gruppo.nome}&channel=${canale.nome} >${gruppo.nome}</a></h4>
+			<small><small>${gruppo.data_creazione}</small></small>
+		
+		</c:forEach>
+		</div>
 	</div>
 	
 </body>

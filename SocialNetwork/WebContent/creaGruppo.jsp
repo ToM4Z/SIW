@@ -20,10 +20,14 @@
 <header>
 
  <c:if test="${gruppo.nome != null}">
- 	<c:redirect url = "gruppo?to=${gruppo.nome}&at=${gruppo.canale.nome}"/>
+ 	<c:redirect url = "gruppo?group=${gruppo.nome}&channel=${gruppo.canale.nome}"/>
  </c:if>
  <c:if test="${gruppo.nome == null}">
 	<h1>Crea nuovo gruppo</h1>
+ </c:if>
+ 
+ <c:if test = "${creazione == false }">
+ 	<h3>Gruppo già esistente, prova un altro nome</h3>
  </c:if>
 
 

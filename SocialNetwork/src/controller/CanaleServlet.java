@@ -21,9 +21,11 @@ public class CanaleServlet extends HttpServlet {
 		String nomeCanale = req.getParameter("channel");
 		CanaleDao dao =DatabaseManager.getInstance().getDaoFactory().getCanaleDAO();
 		
+		//System.out.println(nomeCanale);
 		Canale canale = dao.findByPrimaryKey(nomeCanale);
 		req.setAttribute("canale", canale);
 		
+		//System.out.println(canale.getNome());
 		
 		req.getRequestDispatcher("canale.jsp").forward(req, resp);
 		

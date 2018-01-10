@@ -23,6 +23,9 @@
 	<h1>Crea nuovo canale</h1>
  </c:if>
 
+<c:if test ="${creazione == false}">
+	<h3>Canale già esistente, prova un'altro nome</h3>
+</c:if>
 
  <c:if test="${canale.nome != null}">
  	

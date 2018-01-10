@@ -40,24 +40,30 @@ public class CreaCanale extends HttpServlet {
 		String nome = req.getParameter("nome");
 		String descrizione = req.getParameter("descrizione");
 		
+		if (canaleDao.findByPrimaryKey(nome) == null) {
 			
-		Canale canale = new Canale(nome, descrizione, Calendar.getInstance().getTime(), utente);
+			Canale canale = new Canale(nome, descrizione, Calendar.getInstance().getTime(), utente);
+			
+			
+			canaleDao.save(canale);
+			
+			Gruppo home = new Gruppo("Home", Calendar.getInstance().getTime(), canale);
+			
+			GruppoDao gruppoDao = DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
+			
+			home.addAdmin(utente);
+			home.addMembro(utente);
+			
+			gruppoDao.save(home);
+			
+			req.setAttribute("canale", canale);
+			req.setAttribute("creazione", true);
+		}
+		else {
+			req.setAttribute("creazione", false);
+		}
 		
-		
-		canaleDao.save(canale);
-		
-		Gruppo home = new Gruppo("Home", Calendar.getInstance().getTime(), canale);
-		
-		GruppoDao gruppoDao = DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
-		
-		home.addAdmin(utente);
-		home.addMembro(utente);
-		
-		gruppoDao.save(home);
-		
-		req.setAttribute("canale", canale);
-		
-		RequestDispatcher dispacher = req.getRequestDispatcher("canale.jsp");
+		RequestDispatcher dispacher = req.getRequestDispatcher("creaCanale.jsp");
 		dispacher.forward(req, resp);
 		
 			

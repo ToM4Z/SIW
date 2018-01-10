@@ -54,7 +54,7 @@ public class CreaPost extends HttpServlet {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
 		String linea = br.readLine();
-		System.out.println(linea);
+		//System.out.println(linea);
         CanaleGruppo cg = new Gson().fromJson(linea, CanaleGruppo.class);
 		
         Canale canale = canaleDao.findByPrimaryKey(cg.canale);
