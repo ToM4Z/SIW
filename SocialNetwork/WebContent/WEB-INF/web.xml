@@ -112,4 +112,13 @@
     <servlet-name>CreaGruppo</servlet-name>
     <url-pattern>/creaGruppo</url-pattern>
   </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>CreaPost</servlet-name>
+    <servlet-class>controller.CreaPost</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreaPost</servlet-name>
+    <url-pattern>/creaPost</url-pattern>
+  </servlet-mapping>
 </web-app>

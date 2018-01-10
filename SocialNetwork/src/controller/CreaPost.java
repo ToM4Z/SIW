@@ -1,6 +1,8 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
@@ -11,59 +13,58 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
+
 import model.Canale;
 import model.Gruppo;
+import model.Post;
 import model.Utente;
 import persistence.DatabaseManager;
 import persistence.dao.CanaleDao;
 import persistence.dao.GruppoDao;
+import persistence.dao.PostDao;
 
 
-
-public class CreaCanale extends HttpServlet {
+public class CreaPost extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    
+       
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		RequestDispatcher dispacher = req.getRequestDispatcher("creaCanale.jsp");
+		RequestDispatcher dispacher = req.getRequestDispatcher("creaPost.jsp");
 		dispacher.forward(req, resp);
+	}
+	
+	private class CanaleGruppo{
+		
+		private String canale;
+		private String gruppo;
+		private String contenuto;
+		
 	}
 
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		HttpSession session = req.getSession(true);
+		HttpSession session = req.getSession();
 		Utente utente = (Utente) session.getAttribute("user");
+		PostDao postDao = DatabaseManager.getInstance().getDaoFactory().getPostDAO();
 		CanaleDao canaleDao = DatabaseManager.getInstance().getDaoFactory().getCanaleDAO();
-		
-		String nome = req.getParameter("nome");
-		String descrizione = req.getParameter("descrizione");
-		
-			
-		Canale canale = new Canale(nome, descrizione, Calendar.getInstance().getTime(), utente);
-		
-		
-		canaleDao.save(canale);
-		
-		Gruppo home = new Gruppo("Home", Calendar.getInstance().getTime(), canale);
-		
 		GruppoDao gruppoDao = DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
 		
-		home.addAdmin(utente);
-		home.addMembro(utente);
+		BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+		String linea = br.readLine();
+		System.out.println(linea);
+        CanaleGruppo cg = new Gson().fromJson(linea, CanaleGruppo.class);
 		
-		gruppoDao.save(home);
+        Canale canale = canaleDao.findByPrimaryKey(cg.canale);
+        Gruppo gruppo = gruppoDao.findByPrimaryKey(cg.gruppo, cg.canale);
 		
-		req.setAttribute("canale", canale);
+		Post post = new Post(utente, cg.contenuto, canale, gruppo, Calendar.getInstance().getTime());
 		
-		RequestDispatcher dispacher = req.getRequestDispatcher("canale.jsp");
-		dispacher.forward(req, resp);
 		
-			
+		postDao.save(post);
 		
-			
+		resp.getWriter().write("true");
 	}
-	
-
 }

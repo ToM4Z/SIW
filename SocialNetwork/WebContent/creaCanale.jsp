@@ -26,7 +26,7 @@
 
  <c:if test="${canale.nome != null}">
  	
- 	<c:redirect url="canale?to=${canale.nome}"/>
+ 	<c:redirect url="canale?channel=${canale.nome}"/>
  </c:if>
  
 
