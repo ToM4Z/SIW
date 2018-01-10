@@ -41,10 +41,6 @@
 			<jsp:include page="chatGruppo.jsp" />
 		</div>
 	</div>
-	
-	
-	
-	
 	 
 	
 </body>

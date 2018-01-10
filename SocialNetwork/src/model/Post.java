@@ -16,10 +16,13 @@ public class Post {
 
 	public Post(){}
 	
-	Post(Utente cr, String co){
+	public Post(Utente cr, String co, Canale c, Gruppo g, Date data){
 		
 		creatore = cr;
 		contenuto = co;
+		canale = c;
+		gruppo = g;
+		dataCreazione = data;
 	}
 
 	public Utente getCreatore() {
