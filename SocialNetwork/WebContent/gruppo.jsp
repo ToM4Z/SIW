@@ -17,29 +17,34 @@
 		<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 	</head>
 </head>
-<body>
-	<c:if test="${sessionScope.user.nome == null}">
-		<%
-			response.sendRedirect("index.jsp");
-		%>
+<body style="overflow-x:hidden">
+	<c:if test="${empty user.nome}">
+		<c:redirect url="login.html" />
 	</c:if>
-	
 	<jsp:include page="LoosyNetBar.jsp" />
-	<jsp:include page="barraCanali.jsp" />
+	<div class="row">
+		<div class="col-bg-6 brd">
+			<jsp:include page="barraCanali.jsp" />
+		</div>
+		<div class="col-bg-6 brd">
+			<div id="homePost" style="margin-top:60px; text-align: center;">
+				<h1>${gruppo.nome}</h1>
 	
-	<c:if test="${sessionScope.user != null}">
-		<h5>${sessionScope.user.nome}</h5>
-	</c:if>
+				<c:forEach var = "post" items = "${gruppo.post}">
+					<h3><a href = utente?to=${post.creatore.email}> ${post.creatore.username}</a></h3>
+					<p>${post.contenuto}</p>
+					<small><small>${post.dataCreazione}</small></small>
+				</c:forEach>
+			</div>
+		</div>
+		<div class="col-bg-6 brd" style="margin-top:25px">
+			<jsp:include page="chatGruppo.jsp" />
+		</div>
+	</div>
 	
-	<h1>${gruppo.nome}</h1>
 	
-	<c:forEach var = "post" items = "${gruppo.post}">
-		<h3><a href = utente?to=${post.creatore.email}> ${post.creatore.username}</a></h3>
-		<p>${post.contenuto}</p>
-		<small><small>${post.dataCreazione}</small></small>
-	</c:forEach>
 	
-	 <jsp:include page="chatGruppo.jsp" flush="true"/>
+	
 	 
 	
 </body>
