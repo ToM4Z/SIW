@@ -13,7 +13,7 @@ public class Canale {
 	private Set<Utente> membri;
 	private Set<Gruppo> gruppi;
 	private Set<Utente> blacklist;
-	//private Image image;
+	private String image;
 
 	public Canale() {
 		membri = new HashSet<>();
@@ -102,4 +102,14 @@ public class Canale {
 	public void removeGruppo(Gruppo g){		
 		this.getGruppi().remove(g);
 	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
+	
 }

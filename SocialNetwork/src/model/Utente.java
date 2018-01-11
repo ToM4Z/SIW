@@ -10,7 +10,7 @@ public class Utente {
 	private String username;
 	private Date dataDiNascita;
 	private Date dataIscrizione;
-	//private Image image;
+	private String image;
 	
 	public Utente(){}
 	
@@ -71,5 +71,15 @@ public class Utente {
 	public void setDataIscrizione(Date dataIscrizione) {
 		this.dataIscrizione = dataIscrizione;
 	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
+	
 	
 }

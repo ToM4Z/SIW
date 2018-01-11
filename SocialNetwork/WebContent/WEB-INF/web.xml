@@ -112,8 +112,7 @@
     <servlet-name>CreaGruppo</servlet-name>
     <url-pattern>/creaGruppo</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <servlet-name>CreaPost</servlet-name>
     <servlet-class>controller.CreaPost</servlet-class>
   </servlet>
@@ -121,4 +120,30 @@
     <servlet-name>CreaPost</servlet-name>
     <url-pattern>/creaPost</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>UploadServlet</servlet-name>
+    <servlet-class>controller.UploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UploadServlet</servlet-name>
+    <url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>EliminaCanale</servlet-name>
+    <servlet-class>controller.EliminaCanale</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EliminaCanale</servlet-name>
+    <url-pattern>/eliminaCanale</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>EliminaPost</servlet-name>
+    <servlet-class>controller.EliminaPost</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EliminaPost</servlet-name>
+    <url-pattern>/eliminaPost</url-pattern>
+  </servlet-mapping>
+  
 </web-app>

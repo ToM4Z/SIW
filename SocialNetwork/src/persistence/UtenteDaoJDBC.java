@@ -216,6 +216,9 @@ class UtenteDaoJDBC implements UtenteDao {
 
 				allPost.add(post);
 			}
+			
+			//System.out.println("from db"+allPost.size());
+			
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		} finally {

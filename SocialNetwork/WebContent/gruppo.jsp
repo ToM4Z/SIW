@@ -15,6 +15,7 @@
 		<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
 		<script src="js/jquery-3.2.1.min.js"></script>
 		<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+		<script src="js/eliminaPost.js"></script>
 	</head>
 </head>
 
@@ -40,6 +41,24 @@ function creaPost(){
 
 </script>
 
+<script>
+
+function seiSicuroGruppo(){
+	
+	var canale = $("#nomeGruppo").text();
+	
+	if (confirm("Sei sicuro di voler cancellare il gruppo?") == true) {
+	    
+		document.location.href = "eliminaGruppo?group="+gruppo;
+		
+	} else {
+	    
+		//do nothing
+	} 
+}
+
+</script>
+
 <body style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
@@ -53,6 +72,7 @@ function creaPost(){
 			<div id="homePost" style="margin-top:60px; text-align: center;">
 				<h1 id="nomeGruppo">${gruppo.nome}</h1>
 				<h1 id="nomeCanale" style="display:none">${gruppo.canale.nome}</h1>
+				
 				<form action = "javascript:creaPost()">
 				<input id = "contenuto" type="text" name = "contenuto">
 				<input type = "submit" value = "Pubblica">
@@ -61,6 +81,9 @@ function creaPost(){
 	
 				<c:forEach var = "post" items = "${gruppo.post}">
 					<h3><a href = utente?to=${post.creatore.email}> ${post.creatore.username}</a></h3>
+					<c:if test = "${post.creatore.email == user.email}">
+						<h6 onclick="seiSicuro(${post.id})">Elimina post</h6>
+					</c:if>
 					<p>${post.contenuto}</p>
 					<small><small>${post.dataCreazione}</small></small>
 				</c:forEach>

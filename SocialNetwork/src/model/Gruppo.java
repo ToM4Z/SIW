@@ -13,6 +13,7 @@ public class Gruppo {
 	private Date data_creazione;
 	private Canale canale;
 	private Set<Messaggio> chat;
+	private String image;
 	
 	public Gruppo() {
 		admins = new HashSet<>();
@@ -98,6 +99,15 @@ public class Gruppo {
 	public void setChat(Set<Messaggio> chat) {
 		this.chat = chat;
 	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
 	
 	
 }

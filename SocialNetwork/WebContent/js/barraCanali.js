@@ -1,7 +1,6 @@
 
 function getCanali(){
 
-
 	var xmlhttp = new XMLHttpRequest();
 
 	xmlhttp.onreadystatechange = function() {
@@ -30,8 +29,5 @@ function getCanali(){
 	};
 	xmlhttp.open("GET", "barraCanali", true);
 	xmlhttp.send();
-	
-	
-
 	
 }

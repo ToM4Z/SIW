@@ -8,8 +8,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import model.Gruppo;
+import model.Messaggio;
+import model.Post;
 import model.Utente;
 import persistence.dao.GruppoDao;
+import persistence.dao.MessaggioDao;
+import persistence.dao.PostDao;
 import persistence.dao.UtenteDao;
 
 public class GruppoDaoJDBC implements GruppoDao {
@@ -34,11 +38,12 @@ public class GruppoDaoJDBC implements GruppoDao {
 				throw new PersistenceException("Gruppo "+gruppo.getNome()+" già presente nel canale "+gruppo.getCanale().getNome());
 			
 			//INSERISCO IL GRUPPO
-			String insert = "insert into gruppo(nome,data_creazione,canale) values (?,?,?)";
+			String insert = "insert into gruppo(nome, data_creazione, canale, image) values (?,?,?,?)";
 			statement = connection.prepareStatement(insert);
 			statement.setString(1, gruppo.getNome());
 			statement.setDate(2, new java.sql.Date(gruppo.getData_creazione().getTime()));
 			statement.setString(3, gruppo.getCanale().getNome());
+			statement.setString(4, gruppo.getImage());
 			statement.executeUpdate();
 
 			// salviamo anche tutti gli utenti del gruppo in CASCATA
@@ -87,7 +92,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 	}
 
 	private void removeAllUsersFromGroup(Gruppo gruppo, Connection connection) throws SQLException {
-		String delete = "delete from iscrizione WHERE gruppo = ?, canale = ?";
+		String delete = "delete from iscrizione WHERE gruppo = ? and canale = ?";
 		PreparedStatement statement = connection.prepareStatement(delete);
 		statement.setString(1, gruppo.getNome());
 		statement.setString(2, gruppo.getCanale().getNome());
@@ -152,6 +157,15 @@ public class GruppoDaoJDBC implements GruppoDao {
 	public void update(Gruppo gruppo) {
 		Connection connection = this.dataSource.getConnection();
 		try {
+			
+			String update = "update gruppo SET image = ? WHERE nome = ? and gruppo = ?";	
+			PreparedStatement statement = connection.prepareStatement(update);
+			statement.setString(1, gruppo.getImage());
+			statement.setString(1, gruppo.getNome());
+			statement.setString(3, gruppo.getCanale().getNome());
+
+			statement.executeUpdate();
+			
 			this.updateMembri(gruppo, connection);
 			//connection.commit();
 		} catch (SQLException e) {
@@ -176,14 +190,22 @@ public class GruppoDaoJDBC implements GruppoDao {
 	public void delete(Gruppo gruppo) {
 		Connection connection = this.dataSource.getConnection();
 		try {
+			
+			deleteAllPosts(gruppo, connection);
+			deleteChat(gruppo, connection);
+			
 			String delete = "delete FROM gruppo WHERE nome = ? and canale = ?";
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.setString(1, gruppo.getNome());
 			statement.setString(2, gruppo.getCanale().getNome());
 
 			connection.setAutoCommit(false);
+			
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			this.removeAllUsersFromGroup(gruppo, connection);
+			
+			System.out.println(gruppo.getNome());
+			System.out.println(gruppo.getCanale().getNome());
 
 			statement.executeUpdate();
 			connection.commit();
@@ -197,6 +219,24 @@ public class GruppoDaoJDBC implements GruppoDao {
 			}
 		}
 
+	}
+	
+	private void deleteAllPosts(Gruppo gruppo, Connection connection) throws SQLException{
+		
+		PostDao postDao = new PostDaoJDBC(dataSource);
+		for (Post post : gruppo.getPost()) {
+			postDao.delete(post);
+		}
+	}
+	
+	private void deleteChat(Gruppo gruppo, Connection connection) throws SQLException{
+		
+		MessaggioDao mexDao = new MessaggioDaoJDBC(dataSource);
+		
+		for (Messaggio mex : gruppo.getChat()) {
+			
+			mexDao.delete(mex);
+		}
 	}
 
 }

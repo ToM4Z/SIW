@@ -9,6 +9,7 @@ public class Messaggio {
 	Utente mittente;
 	Date data;
 	String contenuto;
+	String image;
 	
 	public Messaggio(){}
 	
@@ -58,6 +59,15 @@ public class Messaggio {
 	public void setContenuto(String contenuto) {
 		this.contenuto = contenuto;
 	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
 	
 	
 

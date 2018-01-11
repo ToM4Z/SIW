@@ -33,12 +33,13 @@ public class CanaleDaoJDBC implements CanaleDao {
 				throw new PersistenceException("Canale "+canale.getNome()+" già esistente");
 			
 			//INSERISCO IL CANALE
-			String insert = "insert into canale(nome, descrizione, data_creazione, email_admin) values (?,?,?,?)";
+			String insert = "insert into canale(nome, descrizione, data_creazione, email_admin, image) values (?,?,?,?,?)";
 			statement = connection.prepareStatement(insert);
 			statement.setString(1, canale.getNome());
 			statement.setString(2, canale.getDescrizione());
 			statement.setDate(3, new java.sql.Date(canale.getData_creazione().getTime()));
 			statement.setString(4, canale.getAdmin().getEmail());
+			statement.setString(5, canale.getImage());
 			statement.executeUpdate();
 
 			// salviamo anche tutti gli utenti del canale ed i gruppi in CASCATA
@@ -124,6 +125,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 				canale.setDescrizione(result.getString("descrizione"));
 				canale.setData_creazione(result.getDate("data_creazione"));
 				canale.setAdmin(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_admin")));
+				canale.setImage("image");
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -165,10 +167,11 @@ public class CanaleDaoJDBC implements CanaleDao {
 	public void update(Canale canale) {
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String update = "update canale SET descrizione = ? WHERE nome = ?";	//anche l'immagine
+			String update = "update canale SET descrizione = ? and image = ? WHERE nome = ?";	//anche l'immagine
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setString(1, canale.getDescrizione());
-			statement.setString(2, canale.getNome());
+			statement.setString(1, canale.getImage());
+			statement.setString(3, canale.getNome());
 
 			statement.executeUpdate();
 			this.updateMembri(canale, connection);
@@ -196,14 +199,17 @@ public class CanaleDaoJDBC implements CanaleDao {
 	public void delete(Canale canale) {
 		Connection connection = this.dataSource.getConnection();
 		try {
+			deleteGruppi(canale, connection);
+			removeAllUtentiFromCanale(canale, connection);
+			
 			String delete = "delete FROM canale WHERE nome = ? ";
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.setString(1, canale.getNome());
 			connection.setAutoCommit(false);
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			
-			deleteGruppi(canale, connection);
-			removeAllUtentiFromCanale(canale, connection);
+			
+			
 			statement.executeUpdate();
 			
 			connection.commit();

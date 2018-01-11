@@ -9,6 +9,7 @@ public class Commento {
 	private Utente creatore;
 	private Post post;
 	private Date dataCreazione;
+	private String image;
 	
 	public Commento(){}
 	
@@ -56,6 +57,14 @@ public class Commento {
 
 	public void setDataCreazione(Date dataCreazione) {
 		this.dataCreazione = dataCreazione;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 	

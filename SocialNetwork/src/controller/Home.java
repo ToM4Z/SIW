@@ -32,6 +32,8 @@ public class Home extends HttpServlet{
 		List<Post> posts = dao.getPostsOfMyGroups(utente);
 		req.setAttribute("posts", posts);
 		
+		//System.out.println(posts.size());
+		
 //		List<Canale> canali = dao.getMyChannels(utente);
 //		req.setAttribute("canali", canali);
 		

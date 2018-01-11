@@ -13,6 +13,25 @@
 		<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
 		<script src="js/jquery-3.2.1.min.js"></script>
 		<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+		
+		<script>
+		
+		function seisicuro(){
+			
+			var canale = $("#nomeCanale").text();
+			
+			if (confirm("Sei sicuro di voler cancellare il canale?") == true) {
+			    
+				document.location.href = "eliminaCanale?channel="+canale;
+				
+			} else {
+			    
+				//do nothing
+			} 
+		}
+		
+		</script>
+		
 	</head>
 </head>
 <body>
@@ -30,8 +49,11 @@
 		<h2>${sessionScope.user.nome}</h2>
 	</c:if>
 	<div id="homePost" style="margin-top:60px; text-align: center;">
-		<h1>${canale.nome}</h1>
+		<h1 id="nomeCanale">${canale.nome}</h1>
 		<h3>Descizione: ${canale.descrizione}</h3>
+		<c:if test="${sessionScope.user.nome == canale.admin.nome}">
+			<h4 onclick ="seisicuro()" >Elimina canale</h4>
+		</c:if>
 		<h4><a href = creaGruppo?channel=${canale.nome}>Crea Gruppo</a></h4>
 		<div id = gruppi>
 		<h3>Gruppi:</h3>
