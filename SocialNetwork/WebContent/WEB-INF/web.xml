@@ -136,8 +136,7 @@
     <servlet-name>EliminaCanale</servlet-name>
     <url-pattern>/eliminaCanale</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <servlet-name>EliminaPost</servlet-name>
     <servlet-class>controller.EliminaPost</servlet-class>
   </servlet>
@@ -145,5 +144,23 @@
     <servlet-name>EliminaPost</servlet-name>
     <url-pattern>/eliminaPost</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>EliminaGruppo</servlet-name>
+    <servlet-class>controller.EliminaGruppo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EliminaGruppo</servlet-name>
+    <url-pattern>/eliminaGruppo</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>IscrizioneCanale</servlet-name>
+    <servlet-class>controller.IscrizioneCanale</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>IscrizioneCanale</servlet-name>
+    <url-pattern>/iscrizioneCanale</url-pattern>
+  </servlet-mapping>
+  
   
 </web-app>

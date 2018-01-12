@@ -48,6 +48,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 
 			// salviamo anche tutti gli utenti del gruppo in CASCATA
 			this.updateMembri(gruppo, connection);
+			this.updateAdmins(gruppo, connection);
 		} catch (SQLException e) {
 			if (connection != null)
 				try {
@@ -90,6 +91,33 @@ public class GruppoDaoJDBC implements GruppoDao {
 			}
 		}
 	}
+	
+	private void updateAdmins(Gruppo gruppo, Connection connection) throws SQLException {
+
+		UtenteDao utenteDao = new UtenteDaoJDBC(dataSource);
+		for (Utente utente : gruppo.getAdmins()) {
+			if (utenteDao.findByPrimaryKey(utente.getEmail()) == null) {
+				utenteDao.save(utente);
+			}
+
+			String admin = "select * from gestione_gruppo where email_utente = ? AND gruppo = ? and canale = ?";
+			PreparedStatement statement = connection.prepareStatement(admin);
+			statement.setString(1, utente.getEmail());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, gruppo.getCanale().getNome());
+			ResultSet result = statement.executeQuery();
+			
+			if (!result.next()) {
+				String setAdmin = "insert into gestione_gruppo (email_utente, gruppo, canale) values (?,?,?)";
+				statement = connection.prepareStatement(setAdmin);
+				statement.setString(1, utente.getEmail());
+				statement.setString(2, gruppo.getNome());
+				statement.setString(3, gruppo.getCanale().getNome());
+				statement.executeUpdate();
+			}
+		}
+	}
+	
 
 	private void removeAllUsersFromGroup(Gruppo gruppo, Connection connection) throws SQLException {
 		String delete = "delete from iscrizione WHERE gruppo = ? and canale = ?";
@@ -97,6 +125,18 @@ public class GruppoDaoJDBC implements GruppoDao {
 		statement.setString(1, gruppo.getNome());
 		statement.setString(2, gruppo.getCanale().getNome());
 		statement.executeUpdate();
+	}
+	
+	private void removeAdmins(Gruppo gruppo, Connection connection) throws SQLException {
+		
+		for (Utente u : gruppo.getAdmins()) {
+			String delete = "delete from gestione_gruppo WHERE gruppo = ? and canale = ? and email_utente = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setString(1, gruppo.getNome());
+			statement.setString(2, gruppo.getCanale().getNome());
+			statement.setString(3, u.getEmail());
+			statement.executeUpdate();
+		}
 	}
 
 	// implementato con lazy load
@@ -167,6 +207,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 			statement.executeUpdate();
 			
 			this.updateMembri(gruppo, connection);
+			this.updateAdmins(gruppo, connection);
 			//connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {
@@ -191,8 +232,10 @@ public class GruppoDaoJDBC implements GruppoDao {
 		Connection connection = this.dataSource.getConnection();
 		try {
 			
-			deleteAllPosts(gruppo, connection);
-			deleteChat(gruppo, connection);
+			this.deleteAllPosts(gruppo, connection);
+			this.deleteChat(gruppo, connection);
+			this.removeAllUsersFromGroup(gruppo, connection);
+			this.removeAdmins(gruppo, connection);
 			
 			String delete = "delete FROM gruppo WHERE nome = ? and canale = ?";
 			PreparedStatement statement = connection.prepareStatement(delete);
@@ -202,7 +245,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 			connection.setAutoCommit(false);
 			
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-			this.removeAllUsersFromGroup(gruppo, connection);
+			
 			
 			System.out.println(gruppo.getNome());
 			System.out.println(gruppo.getCanale().getNome());

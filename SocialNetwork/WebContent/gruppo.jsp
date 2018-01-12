@@ -38,24 +38,25 @@ function creaPost(){
 	  }
 	  xhr.send(json);
 }
-
 </script>
 
 <script>
 
 function seiSicuroGruppo(){
 	
-	var canale = $("#nomeGruppo").text();
+	var gruppo = $("#nomeGruppo").text();
+	var canale = $("#nomeCanale").text();
 	
 	if (confirm("Sei sicuro di voler cancellare il gruppo?") == true) {
 	    
-		document.location.href = "eliminaGruppo?group="+gruppo;
+		document.location.href = "eliminaGruppo?group="+gruppo+"&channel="+canale;
 		
 	} else {
 	    
 		//do nothing
 	} 
 }
+
 
 </script>
 
@@ -72,6 +73,10 @@ function seiSicuroGruppo(){
 			<div id="homePost" style="margin-top:60px; text-align: center;">
 				<h1 id="nomeGruppo">${gruppo.nome}</h1>
 				<h1 id="nomeCanale" style="display:none">${gruppo.canale.nome}</h1>
+				
+				<c:if test = "${admin == true }">
+					<h5 onclick="seiSicuroGruppo()">Elimina gruppo</h5>
+				</c:if>
 				
 				<form action = "javascript:creaPost()">
 				<input id = "contenuto" type="text" name = "contenuto">
