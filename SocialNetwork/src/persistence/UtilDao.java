@@ -20,12 +20,14 @@ public class UtilDao {
 					+ "drop table if exists post;"
 					+ "drop table if exists messaggio;"
 					+ "drop table if exists gestione_gruppo;"
+					+ "drop table if exists utenti_attesa;"
 					+ "drop table if exists blacklist;"		
 					+ "drop table if exists iscrizione;"
 					+ "drop table if exists gruppo;"
 					+ "drop table if exists canale;"
-					+ "drop table if exists utente;"		
-					
+					+ "drop table if exists notifica;"
+					+ "drop table if exists utente;"
+										
 					;
 			PreparedStatement statement = connection.prepareStatement(drop);
 			statement.executeUpdate();
@@ -64,6 +66,10 @@ public class UtilDao {
 					+ "create table iscrizione (email_utente varchar(255) REFERENCES utente(email),"
 						+ " gruppo varchar(255), canale varchar(255), FOREIGN KEY(gruppo,canale) REFERENCES gruppo(nome,canale), "
 						+ "PRIMARY KEY(email_utente,gruppo,canale));"
+						
+					+ "create table utenti_attesa (email_utente varchar(255) REFERENCES utente(email),"
+						+ " gruppo varchar(255), canale varchar(255), FOREIGN KEY(gruppo,canale) REFERENCES gruppo(nome,canale), "
+						+ "PRIMARY KEY(email_utente,gruppo,canale));"
 					
 					+ "create table post (id_post bigint primary key, email_utente varchar(255) REFERENCES utente(email),"
 						+"contenuto text, canale varchar(255), gruppo varchar(255), FOREIGN KEY(gruppo,canale) REFERENCES gruppo(nome,canale),"
@@ -78,7 +84,9 @@ public class UtilDao {
                 	
                 	+ "create table blacklist (canale varchar(255) REFERENCES canale(nome), utente varchar(255) REFERENCES utente(email),"
                 		+ "PRIMARY KEY (canale,utente));"
-					
+                	
+                	+ "create table notifica ( id_notifica bigint primary key, email_utente varchar(255) REFERENCES utente(email), "
+                		+"contenuto text, data_creazione date, visualizzata varchar(10)); "
 					;
 			PreparedStatement statement = connection.prepareStatement(create);
 			statement.executeUpdate();
@@ -108,6 +116,9 @@ public class UtilDao {
 			statement = connection.prepareStatement("delete FROM iscrizione");
 			statement.executeUpdate();
 			
+			statement = connection.prepareStatement("delete FROM utenti_attesa");
+			statement.executeUpdate();
+			
 			statement = connection.prepareStatement("delete FROM gruppo");
 			statement.executeUpdate();
 			
@@ -124,6 +135,9 @@ public class UtilDao {
 			statement.executeUpdate();	
 			
 			statement = connection.prepareStatement("delete FROM blacklist");
+			statement.executeUpdate();	
+			
+			statement = connection.prepareStatement("delete FROM notifica");
 			statement.executeUpdate();	
 			
 			System.out.println("Reset database: Success");

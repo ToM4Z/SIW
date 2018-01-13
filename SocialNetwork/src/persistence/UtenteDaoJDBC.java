@@ -57,7 +57,7 @@ class UtenteDaoJDBC implements UtenteDao {
 			statement.setString(1, email);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
-				utente = new Utente();
+				utente = new UtenteProxy(dataSource);
 				utente.setEmail(result.getString("email"));
 				utente.setNome(result.getString("nome"));
 				utente.setCognome(result.getString("cognome"));
@@ -87,7 +87,7 @@ class UtenteDaoJDBC implements UtenteDao {
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
-				Utente utente = new Utente();
+				Utente utente = new UtenteProxy(dataSource);
 				utente.setEmail(result.getString("email"));
 				utente.setNome(result.getString("nome"));
 				utente.setCognome(result.getString("cognome"));
@@ -111,23 +111,25 @@ class UtenteDaoJDBC implements UtenteDao {
 
 	@Override
 	public void update(Utente utente) {
+
 		Connection connection = this.dataSource.getConnection();
 		try {
-			PreparedStatement statement;
-			statement = connection.prepareStatement("select * from utente where email = ?");
-			statement.setString(1, utente.getEmail());
-			ResultSet result = statement.executeQuery();
-			if (result.next()) {
-				utente = new Utente();
-				utente.setEmail(result.getString("email"));
-				utente.setNome(result.getString("nome"));
-				utente.setCognome(result.getString("cognome"));
-				utente.setUsername(result.getString("username"));
-				utente.setDataDiNascita(new java.util.Date(result.getDate("data_nascita").getTime()));
-				utente.setDataIscrizione(new java.util.Date(result.getDate("data_iscrizione").getTime()));
-			}
+			String update = "update utente SET username = ?"/* and image = ?*/ +" WHERE email_utente = ?";
+			PreparedStatement statement = connection.prepareStatement(update);
+			statement.setString(1, utente.getUsername());
+			//statement.setString(2, utente.getImage());
+			statement.setString(2, utente.getEmail());
+
+			statement.executeUpdate();
+			connection.commit();
 		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
+			if (connection != null) {
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+			}
 		} finally {
 			try {
 				connection.close();

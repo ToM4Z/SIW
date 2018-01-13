@@ -41,10 +41,11 @@ public class CanaleDaoJDBC implements CanaleDao {
 			statement.setString(4, canale.getAdmin().getEmail());
 			statement.setString(5, canale.getImage());
 			statement.executeUpdate();
-
+			
+			updateGruppi(canale, connection);
 			// salviamo anche tutti gli utenti del canale ed i gruppi in CASCATA
 			updateMembri(canale, connection);
-			updateGruppi(canale, connection);
+			
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {

@@ -23,6 +23,7 @@ public class MainJDBC {
 		
 		util.createDatabase();
 		
+		
 		UtenteDao utentedao = factory.getUtenteDAO();
 		CanaleDao canaledao = factory.getCanaleDAO();
 		GruppoDao gruppodao = factory.getGruppoDAO();
@@ -36,7 +37,7 @@ public class MainJDBC {
 		Canale c1 = new Canale("UNICAL","per studenti unical",Calendar.getInstance().getTime(),u1);
 		c1.addMembro(u1);
 		
-		Gruppo g1 = new Gruppo("home2",Calendar.getInstance().getTime(),c1);
+		Gruppo g1 = new Gruppo("home",Calendar.getInstance().getTime(),c1);
 		g1.addAdmin(u1);
 		g1.addMembro(u1);
 		
@@ -55,12 +56,18 @@ public class MainJDBC {
 		
 		u1 = new Utente("danielesalim@outlook.it","Daniele","Salimonti","ds.hitman",cal.getTime(),Calendar.getInstance().getTime());
 		
+		Utente u2 = new Utente("danielesali@outlook.it","Daniele","Salimonti","ds.hitman",cal.getTime(),Calendar.getInstance().getTime());
+		
 		//c1 = new Canale("UNICAL2","2",Calendar.getInstance().getTime(),u1);
 		c1.addMembro(u1);
 		
-		g1 = new Gruppo("home",Calendar.getInstance().getTime(),c1);
+		g1 = new Gruppo("home2",Calendar.getInstance().getTime(),c1);
 		g1.addAdmin(u1);
 		g1.addMembro(u1);
+		
+		c1.getBlacklist().add(u2);
+		
+		canaledao.addUserToBlackList(c1, u2);
 		
 		utentedao.save(u1);
 		utentedao.setPassword(u1, "pasticcio");

@@ -161,5 +161,39 @@ public class GruppoProxy extends Gruppo {
 		return super.getChat();
 	}
 	
+	public Set<Utente> getUtentiInAttesa() { 
+		Set<Utente> utenti = new HashSet<>();
+		Connection connection = this.dataSource.getConnection();
+		
+		try {
+			PreparedStatement statement;
+			String query = "select * from utente where email IN (select email_utente from utenti_attesa where gruppo = ?)";
+			statement = connection.prepareStatement(query);
+			statement.setString(1, this.getNome());
+			ResultSet result = statement.executeQuery();
+			while (result.next()) {
+				Utente utente = new Utente();
+				utente.setEmail(result.getString("email"));
+				utente.setNome(result.getString("nome"));
+				utente.setCognome(result.getString("cognome"));
+				utente.setUsername(result.getString("username"));
+				utente.setDataDiNascita(new java.util.Date(result.getDate("data_nascita").getTime()));
+				utente.setDataIscrizione(new java.util.Date(result.getDate("data_iscrizione").getTime()));
+				utenti.add(utente);
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		
+		this.setUtentiInAttesa(utenti);
+		return super.getUtentiInAttesa(); 
+	}
+	
 
 }

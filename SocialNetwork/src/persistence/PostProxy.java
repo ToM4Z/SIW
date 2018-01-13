@@ -32,7 +32,7 @@ public class PostProxy extends Post{
 			while (result.next()) {
 				Commento commento = new Commento();
 				commento.setId(result.getLong("id"));
-				commento.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_admin")));;
+				commento.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
 				commento.setContenuto(result.getString("contenuto"));
 				commento.setPost(new PostDaoJDBC(dataSource).findByPrimaryKey(result.getLong("post")));
 				commento.setDataCreazione(new java.util.Date(result.getDate("data_creazione").getTime()));

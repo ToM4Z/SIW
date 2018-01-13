@@ -9,6 +9,7 @@ public class Gruppo {
 	private String nome;
 	private Set<Utente> admins;
 	private Set<Utente> membri;
+	private Set<Utente> utentiInAttesa;
 	private Set<Post> post;
 	private Date data_creazione;
 	private Canale canale;
@@ -18,6 +19,7 @@ public class Gruppo {
 	public Gruppo() {
 		admins = new HashSet<>();
 		membri = new HashSet<>();
+		utentiInAttesa=new HashSet<>();
 	}
 	
 	public Gruppo(String nome,Date dc, Canale canale) {
@@ -26,6 +28,7 @@ public class Gruppo {
 		this.canale=canale;
 		admins = new HashSet<>();
 		membri = new HashSet<>();
+		utentiInAttesa=new HashSet<>();
 	}
 
 	public void addMembro(Utente u) {
@@ -107,7 +110,14 @@ public class Gruppo {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
+
+	public Set<Utente> getUtentiInAttesa() {
+		return utentiInAttesa;
+	}
+
+	public void setUtentiInAttesa(Set<Utente> inAttesa) {
+		this.utentiInAttesa = inAttesa;
+	}
 	
 	
 }

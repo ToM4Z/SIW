@@ -25,7 +25,7 @@ public class Home extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		HttpSession session = req.getSession(true);
+		HttpSession session = req.getSession();
 		Utente utente = (Utente) session.getAttribute("user");
 		
 		UtenteDao dao =DatabaseManager.getInstance().getDaoFactory().getUtenteDAO();

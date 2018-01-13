@@ -4,6 +4,7 @@ import persistence.dao.CanaleDao;
 import persistence.dao.CommentoDao;
 import persistence.dao.GruppoDao;
 import persistence.dao.MessaggioDao;
+import persistence.dao.NotificaDao;
 import persistence.dao.PostDao;
 import persistence.dao.UtenteDao;
 
@@ -59,6 +60,12 @@ public class PostgresDAOFactory extends DAOFactory {
 	public MessaggioDao getMessaggioDAO() {
 		
 		return new MessaggioDaoJDBC(dataSource);
+	}
+
+	@Override
+	public NotificaDao getNotificaDAO() {
+		
+		return new NotificaDaoJDBC(dataSource);
 	}
 	
 	

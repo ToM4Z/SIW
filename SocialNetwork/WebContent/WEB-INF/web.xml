@@ -121,14 +121,6 @@
     <url-pattern>/creaPost</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>UploadServlet</servlet-name>
-    <servlet-class>controller.UploadServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>UploadServlet</servlet-name>
-    <url-pattern>/upload</url-pattern>
-  </servlet-mapping>
-  <servlet>
     <servlet-name>EliminaCanale</servlet-name>
     <servlet-class>controller.EliminaCanale</servlet-class>
   </servlet>
@@ -152,8 +144,7 @@
     <servlet-name>EliminaGruppo</servlet-name>
     <url-pattern>/eliminaGruppo</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <servlet-name>IscrizioneCanale</servlet-name>
     <servlet-class>controller.IscrizioneCanale</servlet-class>
   </servlet>
@@ -161,6 +152,37 @@
     <servlet-name>IscrizioneCanale</servlet-name>
     <url-pattern>/iscrizioneCanale</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>InviaNotifica</servlet-name>
+    <servlet-class>controller.InviaNotifica</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InviaNotifica</servlet-name>
+    <url-pattern>/inviaNotifica</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>UtentiInAttesa</servlet-name>
+    <servlet-class>controller.UtentiInAttesa</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UtentiInAttesa</servlet-name>
+    <url-pattern>/utentiInAttesa</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>GestisciGruppo</servlet-name>
+    <servlet-class>controller.GestisciGruppo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GestisciGruppo</servlet-name>
+    <url-pattern>/gestisciGruppo</url-pattern>
+  </servlet-mapping>
   
-  
+    <servlet>
+    <servlet-name>NotificheServlet</servlet-name>
+    <servlet-class>controller.NotificheServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NotificheServlet</servlet-name>
+    <url-pattern>/notifiche</url-pattern>
+  </servlet-mapping>
 </web-app>

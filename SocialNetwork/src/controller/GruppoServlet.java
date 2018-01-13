@@ -29,20 +29,28 @@ public class GruppoServlet extends HttpServlet {
 		req.setAttribute("gruppo", gruppo);
 		
 		boolean admin = false;
+		boolean iscritto = false;
 		HttpSession session = req.getSession();
 		Utente utente = (Utente) session.getAttribute("user");
 		
 		
 		for(Utente u : gruppo.getAdmins()) {
 			
-			
 			if (u.getEmail().equals(utente.getEmail())){
 				admin = true;
 			}
 		}
 		
+		for (Utente u : gruppo.getMembri()) {
+			
+			if (u.getEmail().equals(utente.getEmail())) {
+				iscritto = true;
+			}
+		}
+		
 		
 		req.setAttribute("admin", admin);
+		req.setAttribute("iscritto", iscritto);
 		
 		req.getRequestDispatcher("gruppo.jsp").forward(req, resp);
 	}
