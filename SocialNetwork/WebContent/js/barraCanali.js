@@ -1,9 +1,6 @@
 
 function getCanali(){
-
-
 	var xmlhttp = new XMLHttpRequest();
-
 	xmlhttp.onreadystatechange = function() {
 	    if (this.readyState == 4 && this.status == 200) {
 	        var liste = JSON.parse(this.responseText);
@@ -29,9 +26,5 @@ function getCanali(){
 	    }
 	};
 	xmlhttp.open("GET", "barraCanali", true);
-	xmlhttp.send();
-	
-	
-
-	
+	xmlhttp.send();	
 }
