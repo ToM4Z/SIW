@@ -47,7 +47,7 @@ public class CreaCanale extends HttpServlet {
 			
 			canaleDao.save(canale);
 			
-			Gruppo home = new Gruppo("Home", Calendar.getInstance().getTime(), canale);
+			Gruppo home = new Gruppo("home", Calendar.getInstance().getTime(), canale);
 			
 			GruppoDao gruppoDao = DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
 			

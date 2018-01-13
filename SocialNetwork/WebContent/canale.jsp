@@ -54,7 +54,18 @@
 		<c:if test="${sessionScope.user.nome == canale.admin.nome}">
 			<h4 onclick ="seisicuro()" >Elimina canale</h4>
 		</c:if>
-		<h4><a href = creaGruppo?channel=${canale.nome}>Crea Gruppo</a></h4>
+		
+		
+		<c:choose>
+		  <c:when test="${iscritto == true}">
+		    <h4><a href = iscrizioneCanale?channel=${canale.nome}&iscritto=true>Cancellati dal canale</a></h4>
+		    <h4><a href = creaGruppo?channel=${canale.nome}>Crea Gruppo</a></h4>
+		  </c:when>
+		  <c:when test="${iscritto == false}">
+		    <h4><a href = iscrizioneCanale?channel=${canale.nome}&iscritto=false>Iscriviti al canale</a></h4>
+		  </c:when>
+		</c:choose>
+		
 		<div id = gruppi>
 		<h3>Gruppi:</h3>
 		<c:forEach var = "gruppo" items = "${canale.gruppi}">

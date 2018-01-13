@@ -23,7 +23,7 @@ public class CanaleProxy extends Canale {
 		Connection connection = dataSource.getConnection();
 		try {
 			String query = "select * from utente where email IN "
-							+ "(select email_utente from iscrizione where canale = ?)";
+							+ "(select email_utente from iscrizione where canale = ? and gruppo = 'home')";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, getNome());
 			ResultSet result = statement.executeQuery();

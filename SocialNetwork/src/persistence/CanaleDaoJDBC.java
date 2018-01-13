@@ -70,14 +70,14 @@ public class CanaleDaoJDBC implements CanaleDao {
 				utenteDao.save(utente);
 			}
 
-			String iscrittoCanale = "select * from iscrizione where email_utente = ? AND gruppo = ? AND canale = ?";
+			String iscrittoCanale = "select * from iscrizione where email_utente = ? and gruppo = ? and canale = ?";
 			PreparedStatement statement = connection.prepareStatement(iscrittoCanale);
 			statement.setString(1, utente.getEmail());
 			statement.setString(2, "home");
 			statement.setString(3, canale.getNome());
 			ResultSet result = statement.executeQuery();
-			if (result.next()) {
-				String iscrivi = "insert into iscrizione (id_utente, gruppo, canale) values (?,?,?)";
+			if (!result.next()) {
+				String iscrivi = "insert into iscrizione (email_utente, gruppo, canale) values (?,?,?)";
 				statement = connection.prepareStatement(iscrivi);
 				statement.setString(1, utente.getEmail());
 				statement.setString(2, "home");
@@ -167,16 +167,16 @@ public class CanaleDaoJDBC implements CanaleDao {
 	public void update(Canale canale) {
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String update = "update canale SET descrizione = ? and image = ? WHERE nome = ?";	//anche l'immagine
+			String update = "update canale SET descrizione = ?"+/* and image = ?*/ " WHERE nome = ?";	//anche l'immagine
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setString(1, canale.getDescrizione());
-			statement.setString(1, canale.getImage());
-			statement.setString(3, canale.getNome());
+			//statement.setString(2, canale.getImage());
+			statement.setString(2, canale.getNome());
 
 			statement.executeUpdate();
 			this.updateMembri(canale, connection);
 			this.updateGruppi(canale, connection);
-			connection.commit();
+			//connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
@@ -328,7 +328,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 	public void removeUserFromChannel(Canale canale, Utente utente) {
 		Connection connection = dataSource.getConnection();
 		try {
-			String delete = "delete FROM iscrizione WHERE canale = ? and gruppo = 'home' email_utente = ?";
+			String delete = "delete FROM iscrizione WHERE canale = ? and gruppo = 'home' and email_utente = ?";
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.setString(1, canale.getNome());
 			statement.setString(2, utente.getEmail());
