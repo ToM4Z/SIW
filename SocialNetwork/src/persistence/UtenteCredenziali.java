@@ -47,7 +47,7 @@ public class UtenteCredenziali extends Utente{
 			statement = connection.prepareStatement("select * from notifica where email_utente = ?");
 			statement.setString(1, this.getEmail());
 			ResultSet result = statement.executeQuery();
-
+			
 			while (result.next()) {
 				Notifica notifica = new Notifica();
 				notifica.setId(result.getLong("id_notifica"));

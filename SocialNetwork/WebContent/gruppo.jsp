@@ -6,7 +6,6 @@
 <jsp:useBean id="post" class="model.Post" scope="request" />
 
 <html>
-<head>
 <head lang="it">
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,8 +15,6 @@
 		<script src="js/jquery-3.2.1.min.js"></script>
 		<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 		<script src="js/eliminaPost.js"></script>
-	</head>
-</head>
 
 <script>
 function creaPost(){
@@ -38,9 +35,6 @@ function creaPost(){
 	  }
 	  xhr.send(json);
 }
-</script>
-
-<script>
 
 function seiSicuroGruppo(){
 	
@@ -57,10 +51,14 @@ function seiSicuroGruppo(){
 	} 
 }
 
-
+function load(){
+	$("input.onload").each(function(){
+		$(this).trigger("click");
+	});
+};
 </script>
-
-<body style="overflow-x:hidden">
+</head>
+<body onload="javascript:load()"style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
 	</c:if>
@@ -68,6 +66,9 @@ function seiSicuroGruppo(){
 	<div class="row">
 		<div class="col-bg-6 brd">
 			<jsp:include page="barraCanali.jsp" />
+		</div>		
+		<div class="col-bg-6 brd">
+			<jsp:include page="chatGruppo.jsp" />
 		</div>
 		<div class="col-bg-6 brd">
 			<div id="homePost" style="margin-top:60px; text-align: center;">
@@ -82,7 +83,7 @@ function seiSicuroGruppo(){
 				<c:choose>
 					<c:when test="${iscritto == true }">
 						<h4>
-							<a href=iscrizioneGruppo?channel=${gruppo.canale.nome}&group={gruppo.nome}&iscritto=true>Cancellati dal gruppo</a>
+							<a href=iscrizioneGruppo?channel=${gruppo.canale.nome}&group=${gruppo.nome}&iscritto=true>Cancellati dal gruppo</a>
 						</h4>
 
 					</c:when>
@@ -108,9 +109,6 @@ function seiSicuroGruppo(){
 					<small><small>${post.dataCreazione}</small></small>
 				</c:forEach>
 			</div>
-		</div>
-		<div class="col-bg-6 brd" style="margin-top:25px">
-			<jsp:include page="chatGruppo.jsp" />
 		</div>
 	</div>
 	 

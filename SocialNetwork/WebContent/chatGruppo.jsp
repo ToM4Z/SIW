@@ -22,12 +22,21 @@ hr {
     border-width: 1px;
 } 
 </style>
-
+<script>
+function getMessaggi(){
+	
+}
+</script>
 </head>
 <body>
+	<div style="display:none">
+	<form action="javascript:getMessaggi()">
+		<input type="submit" class="onload">
+	</form>
+	</div>
 
 	<div class="panel panel-default"
-		style="position: fixed; width: 25%; height: 100%; right: 0%; margin-top: -90px; margin-bottom: -20px">
+		style="position: fixed; width: 25%; height: 100%; right: 0%; margin-top: 40px; margin-bottom: -20px">
 		<div class="panel-heading" style="text-align: center">
 			<h3>Chat ${gruppo.nome}</h3>
 		</div>

@@ -13,8 +13,15 @@
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script src="js/eliminaPost.js"></script>
+<script>
+function load(){
+	$("input.onload").each(function(){
+		$(this).trigger("click");
+	});
+};
+</script>
 </head>
-<body style="overflow-x:hidden">
+<body onload="javascript:load()" style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
 	</c:if>
@@ -22,6 +29,9 @@
 	<div class="row">
 		<div class="col-bg-6 brd">
 			<jsp:include page="barraCanali.jsp" />
+		</div>
+		<div class="col-bg-6 brd">
+			<jsp:include page="chatGruppo.jsp" />
 		</div>
 		<div class="col-bg-6 brd">
 			<div id="homePost" style="margin-top:60px; text-align: center;">
@@ -49,10 +59,6 @@
 		</div>
 		
 		
-		
-		<div class="col-bg-6 brd">
-			<jsp:include page="chatGruppo.jsp" />
-		</div>
 	</div>
 </body>
 </html>

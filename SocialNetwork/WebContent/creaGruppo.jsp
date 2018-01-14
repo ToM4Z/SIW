@@ -10,41 +10,46 @@
 <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-
-<!--   
-<LINK rel="stylesheet" href="css/common.css" type="text/css">
- -->
-
+<script>
+function load(){
+	$("input.onload").each(function(){
+		$(this).trigger("click");
+	});
+};
+</script>
 </head>
-<body>
-<header>
-
- <c:if test="${gruppo.nome != null}">
- 	<c:redirect url = "gruppo?group=${gruppo.nome}&channel=${gruppo.canale.nome}"/>
- </c:if>
- <c:if test="${gruppo.nome == null}">
-	<h1>Crea nuovo gruppo</h1>
- </c:if>
- 
- <c:if test = "${creazione == false }">
- 	<h3>Gruppo già esistente, prova un altro nome</h3>
- </c:if>
-
-
-</header>
-
-<section class="moduloRegistrazione" class="row">
-<div class="col-lg-3">
-	<form method="post" action="creaGruppo"> 
-		<div class="form-group"><label for="nome">Nome:</label><input name="nome" type="text" class="form-control" /></div>  
-				
-		<div class="form-group">
-			<input name="inviaDati" type="submit" value="creaGruppo"  class="btn btn-success"/>
-		</div>		
-	</form>
-</div>
-</section>
-
-
+<body onload="javascript:load()" style="overflow-x:hidden">
+	<c:if test="${empty user.nome}">
+		<c:redirect url="login.html" />
+	</c:if>
+	<c:if test="${not empty gruppo.nome}">
+	 	<c:redirect url = "gruppo?group=${gruppo.nome}&channel=${gruppo.canale.nome}"/>
+	 </c:if>
+	<jsp:include page="LoosyNetBar.jsp" />
+	<div class="row">
+		<div class="col-bg-6 brd">
+			<jsp:include page="barraCanali.jsp" />
+		</div>
+		<div class="col-bg-6 brd">
+			<jsp:include page="chatGruppo.jsp" />
+		</div>
+		<div class="col-bg-6 brd">
+			<div id="homePost" style="margin-top:60px; text-align: center;">
+				 <c:if test="${gruppo.nome == null}">
+					<h1>Crea nuovo gruppo</h1>
+				 </c:if>
+				 
+				 <c:if test = "${creazione == false }">
+				 	<h3>Gruppo già esistente, prova un altro nome</h3>
+				 </c:if>
+				<form method="post" action="creaGruppo"> 
+					<br>
+					<label for="nome">Nome:</label><input name="nome" type="text" class="form-control" style="position:relative; left:30%; width:30%"/>
+					<br>  
+					<input name="inviaDati" type="submit" value="creaGruppo"  class="btn btn-success"/>
+				</form>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

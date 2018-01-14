@@ -65,11 +65,11 @@ public class MainJDBC {
 		c1.addGruppo(g1);
 		
 		c1.getBlacklist().add(u2);
-		
+
+		utentedao.save(u2);
+		utentedao.setPassword(u2, "pasticcio");
 		canaledao.addUserToBlackList(c1, u2);
 		
-		utentedao.save(u1);
-		utentedao.setPassword(u1, "pasticcio");
 		gruppodao.save(g1);
 		
 		a = new Post();

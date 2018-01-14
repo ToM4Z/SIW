@@ -1,13 +1,18 @@
 package controller;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
+
+import model.Notifica;
 import model.Utente;
 
 
@@ -20,10 +25,12 @@ public class NotificheServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		Utente utente = (Utente) session.getAttribute("user");
 		
-		System.out.println("in notifiche servlet size: "+utente.getNotifiche().size());
-		req.setAttribute("notifiche", utente.getNotifiche());
+		Set<Notifica> notifiche = utente.getNotifiche();		
+		Set<String> list = new HashSet<>();
+		for(Notifica n: notifiche)
+			list.add(n.getContenuto());
 		
-		req.getRequestDispatcher("notifiche.jsp").forward(req, resp);
+	    resp.getWriter().write(new Gson().toJson(list));
 	}
 
 	
