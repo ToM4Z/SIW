@@ -51,14 +51,37 @@ function seiSicuroGruppo(){
 	} 
 }
 
+function inviaNotificaRichiesta(){
+	
+	  var gruppo = $("#nomeGruppo").text();
+	  var canale = $("#nomeCanale").text();
+	  var tipo = "richiestaIscrizione";
+	  var json = JSON.stringify({"nomeGruppo": gruppo,"nomeCanale" : canale, "tipo" : tipo});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","inviaNotifica", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  xhr.onreadystatechange = function(){
+		  if(xhr.responseText == "true"){
+		  	  alert("richiesta inviata");
+	  		}else{
+	  			
+	      }
+	  }
+	  xhr.send(json);
+	  
+}
+
 function load(){
 	$("input.onload").each(function(){
 		$(this).trigger("click");
 	});
 };
+
 </script>
 </head>
-<body onload="javascript:load()"style="overflow-x:hidden">
+<body onload="javascript:load()" style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
 	</c:if>
@@ -78,18 +101,23 @@ function load(){
 				<c:if test = "${admin == true }">
 					<h5 onclick="seiSicuroGruppo()">Elimina gruppo</h5>
 					<h5><a href = utentiInAttesa?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Visualizza utenti in attesa</a></h5>
+					<h5><a href = gestioneAdmin?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci admin</a></h5>
 				</c:if>
 
 				<c:choose>
 					<c:when test="${iscritto == true }">
 						<h4>
+<<<<<<< HEAD
 							<a href=iscrizioneGruppo?channel=${gruppo.canale.nome}&group=${gruppo.nome}&iscritto=true>Cancellati dal gruppo</a>
+=======
+							<a href=gestisciGruppo?channel=${gruppo.canale.nome}&group=${gruppo.nome}&esito=cancellazione>Cancellati dal gruppo</a>
+>>>>>>> branch 'master' of https://github.com/ToM4Z/SIW
 						</h4>
 
 					</c:when>
 					<c:when test="${iscritto == false }">
-						<h4>
-							<a href=inviaNotifica?group=${gruppo.nome}&channel=${gruppo.canale.nome}&tipo=richiestaIscrizione>Richiedi iscrizione al gruppo</a>   
+						<h4 onclick = "javascript:inviaNotificaRichiesta()">
+							Richiedi iscrizione al gruppo  
 						</h4>
 					</c:when>
 				</c:choose>
@@ -103,7 +131,7 @@ function load(){
 				<c:forEach var = "post" items = "${gruppo.post}">
 					<h3><a href = utente?to=${post.creatore.email}> ${post.creatore.username}</a></h3>
 					<c:if test = "${post.creatore.email == user.email}">
-						<h6 onclick="seiSicuro(${post.id})">Elimina post</h6>
+						<h6 onclick="javascript:seiSicuro(${post.id})">Elimina post</h6>
 					</c:if>
 					<p>${post.contenuto}</p>
 					<small><small>${post.dataCreazione}</small></small>

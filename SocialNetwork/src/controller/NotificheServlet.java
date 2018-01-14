@@ -29,7 +29,6 @@ public class NotificheServlet extends HttpServlet {
 		Set<String> list = new HashSet<>();
 		for(Notifica n: notifiche)
 			list.add(n.getContenuto());
-		
 	    resp.getWriter().write(new Gson().toJson(list));
 	}
 

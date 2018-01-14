@@ -388,21 +388,20 @@ public class GruppoDaoJDBC implements GruppoDao {
 	public void addUserToAdmin(Gruppo gruppo, Utente utente) {
 		Connection connection = dataSource.getConnection();
 		try {
-			PreparedStatement statement = connection.prepareStatement("Select email_utente from gestion_gruppo where canale=? and gruppo=? and email_utente=?");
+			PreparedStatement statement = connection.prepareStatement("Select email_utente from gestione_gruppo where canale=? and gruppo=? and email_utente=?");
 			statement.setString(1, gruppo.getCanale().getNome());
 			statement.setString(2, gruppo.getNome());
 			statement.setString(3, utente.getEmail());
 			ResultSet result = statement.executeQuery();
-			if(result.next())
-				throw new PersistenceException("L'Utente "+utente.getEmail()+" è già admin del gruppo "+gruppo.getNome());
+			if(!result.next()) {
 			
-			
-			String insert = "insert into gestione_gruppo(canale, gruppo, email_utente) values (?,?,?)";
-			statement = connection.prepareStatement(insert);
-			statement.setString(1, gruppo.getCanale().getNome());
-			statement.setString(2, gruppo.getNome());
-			statement.setString(3, utente.getEmail());
-			statement.executeUpdate();
+				String insert = "insert into gestione_gruppo(canale, gruppo, email_utente) values (?,?,?)";
+				statement = connection.prepareStatement(insert);
+				statement.setString(1, gruppo.getCanale().getNome());
+				statement.setString(2, gruppo.getNome());
+				statement.setString(3, utente.getEmail());
+				statement.executeUpdate();
+			}
 
 		} catch (SQLException e) {
 			if (connection != null)
