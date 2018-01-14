@@ -36,9 +36,10 @@ public class MainJDBC {
 		Canale c1 = new Canale("UNICAL","per studenti unical",Calendar.getInstance().getTime(),u1);
 		c1.addMembro(u1);
 		
-		Gruppo g1 = new Gruppo("home2",Calendar.getInstance().getTime(),c1);
+		Gruppo g1 = new Gruppo("home",Calendar.getInstance().getTime(),c1);
 		g1.addAdmin(u1);
 		g1.addMembro(u1);
+		c1.addGruppo(g1);
 		
 		utentedao.save(u1);
 		utentedao.setPassword(u1, "a");
@@ -54,17 +55,15 @@ public class MainJDBC {
 		postdao.save(a);
 		
 		u1 = new Utente("danielesalim@outlook.it","Daniele","Salimonti","ds.hitman",cal.getTime(),Calendar.getInstance().getTime());
-		
-		//c1 = new Canale("UNICAL2","2",Calendar.getInstance().getTime(),u1);
 		c1.addMembro(u1);
 		
-		g1 = new Gruppo("home",Calendar.getInstance().getTime(),c1);
+		g1 = new Gruppo("home2",Calendar.getInstance().getTime(),c1);
 		g1.addAdmin(u1);
 		g1.addMembro(u1);
+		c1.addGruppo(g1);
 		
 		utentedao.save(u1);
 		utentedao.setPassword(u1, "pasticcio");
-		//canaledao.save(c1);
 		gruppodao.save(g1);
 		
 		a = new Post();
@@ -76,12 +75,12 @@ public class MainJDBC {
 		postdao.save(a);
 		
 		List<Post> prova = utentedao.getPostsOfMyGroups(u1);
-		System.out.println(prova.size());
+		
 		for (Post s : prova) {
 			System.out.println(s.getContenuto());
 		}
 		
-		
+		System.out.println("\n");
 		for(Canale c : canaledao.findAll()) {
 			System.out.println("Canale: "+c.getNome());
 			System.out.println("Descrizione: "+c.getDescrizione());

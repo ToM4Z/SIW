@@ -43,8 +43,8 @@ public class CanaleDaoJDBC implements CanaleDao {
 			statement.executeUpdate();
 
 			// salviamo anche tutti gli utenti del canale ed i gruppi in CASCATA
-			updateMembri(canale, connection);
 			updateGruppi(canale, connection);
+			updateMembri(canale, connection);
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
