@@ -103,6 +103,7 @@ function inviaNotificaRichiesta(){
 				<c:if test = "${admin == true }">
 					<h5 onclick="seiSicuroGruppo()">Elimina gruppo</h5>
 					<h5><a href = utentiInAttesa?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Visualizza utenti in attesa</a></h5>
+					<h5><a href = gestioneAdmin?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci admin</a></h5>
 				</c:if>
 
 				<c:choose>
@@ -128,7 +129,7 @@ function inviaNotificaRichiesta(){
 				<c:forEach var = "post" items = "${gruppo.post}">
 					<h3><a href = utente?to=${post.creatore.email}> ${post.creatore.username}</a></h3>
 					<c:if test = "${post.creatore.email == user.email}">
-						<h6 onclick="seiSicuro(${post.id})">Elimina post</h6>
+						<h6 onclick="javascript:seiSicuro(${post.id})">Elimina post</h6>
 					</c:if>
 					<p>${post.contenuto}</p>
 					<small><small>${post.dataCreazione}</small></small>

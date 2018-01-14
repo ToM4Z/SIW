@@ -176,8 +176,7 @@
     <servlet-name>GestisciGruppo</servlet-name>
     <url-pattern>/gestisciGruppo</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <servlet-name>NotificheServlet</servlet-name>
     <servlet-class>controller.NotificheServlet</servlet-class>
   </servlet>
@@ -185,4 +184,14 @@
     <servlet-name>NotificheServlet</servlet-name>
     <url-pattern>/notifiche</url-pattern>
   </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>GestioneAdmin</servlet-name>
+    <servlet-class>controller.GestioneAdmin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GestioneAdmin</servlet-name>
+    <url-pattern>/gestioneAdmin</url-pattern>
+  </servlet-mapping>
+  
 </web-app>
