@@ -29,7 +29,7 @@ public class CommentoDaoJDBC implements CommentoDao {
 			commento.setDataCreazione(Calendar.getInstance().getTime());
 
 			String insert = "insert into commento(id_commento, id_post, email_utente, "
-					+ "contenuto, data_creazione) values (?,?,?,?,?)";
+					+ "contenuto, data_creazione, image) values (?,?,?,?,?,?)";
 
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1, commento.getId());
@@ -37,6 +37,7 @@ public class CommentoDaoJDBC implements CommentoDao {
 			statement.setString(3, commento.getCreatore().getEmail());
 			statement.setString(4, commento.getContenuto());
 			statement.setDate(5, new java.sql.Date(commento.getDataCreazione().getTime()));
+			statement.setString(6, commento.getImage());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -118,10 +119,11 @@ public class CommentoDaoJDBC implements CommentoDao {
 		
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String update = "update commento SET contenuto = ? WHERE id_commento = ?";
+			String update = "update commento SET contenuto = ? and image = ? WHERE id_commento = ?";
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setString(1, commento.getContenuto());
-			statement.setLong(2, commento.getId());
+			statement.setString(1, commento.getImage());
+			statement.setLong(3, commento.getId());
 
 			statement.executeUpdate();
 			connection.commit();

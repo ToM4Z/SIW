@@ -49,13 +49,13 @@ public class UtilDao {
 		try {
 			String create = "create SEQUENCE sequenza_id;"
 					+ "create table utente (email varchar(255) primary key, nome varchar(255), cognome varchar(255), "
-						+ "username varchar(255), \"password\" varchar(255), data_nascita date, data_iscrizione date);"
+						+ "username varchar(255), \"password\" varchar(255), data_nascita date, data_iscrizione date, image text);"
 					
 					+ "create table canale (nome varchar(255) primary key, descrizione text, "
-						+ "data_creazione date, email_admin varchar(255) REFERENCES utente(email));"
+						+ "data_creazione date, email_admin varchar(255) REFERENCES utente(email), image text);"
 					
 					+ "create table gruppo (nome varchar(255), data_creazione date, "
-						+ "canale varchar(255) REFERENCES canale(nome), PRIMARY KEY (nome,canale));"
+						+ "canale varchar(255) REFERENCES canale(nome), PRIMARY KEY (nome,canale), image text);"
 					
 					+ "create table gestione_gruppo (email_utente varchar(255) REFERENCES utente(email)," 
 						+ " gruppo varchar(255), canale varchar(255), "
@@ -67,14 +67,14 @@ public class UtilDao {
 					
 					+ "create table post (id_post bigint primary key, email_utente varchar(255) REFERENCES utente(email),"
 						+"contenuto text, canale varchar(255), gruppo varchar(255), FOREIGN KEY(gruppo,canale) REFERENCES gruppo(nome,canale),"
-						+" data_creazione date);"
+						+" data_creazione date, image text);"
 					
 					+"create table commento (id_commento bigint primary key, id_post bigint REFERENCES post(id_post),"
-                    	+ "email_utente varchar(255) REFERENCES utente(email), contenuto text, data_creazione date);"
+                    	+ "email_utente varchar(255) REFERENCES utente(email), contenuto text, data_creazione date, image text);"
 					
                     +"create table messaggio ( id_messaggio bigint primary key, email_mittente varchar(255) REFERENCES utente(email),"
                     	+"contenuto text, canale varchar(255), gruppo varchar(255), FOREIGN KEY(gruppo, canale) REFERENCES gruppo(nome, canale),"
-                    	+"data_creazione date);"
+                    	+"data_creazione date, image text);"
                 	
                 	+ "create table blacklist (canale varchar(255) REFERENCES canale(nome), utente varchar(255) REFERENCES utente(email),"
                 		+ "PRIMARY KEY (canale,utente));"

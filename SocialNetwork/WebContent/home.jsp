@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script src="js/eliminaPost.js"></script>
 </head>
 <body style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
@@ -28,13 +29,27 @@
 					<h4>
 						<a href=utente?to=${post.creatore.email}>
 							${post.creatore.username}</a> > <a href=canale?to=${post.canale.nome}>${post.canale.nome}</a>
-						/ <a href=gruppo?to=${post.gruppo.nome}&at=${post.canale.nome}>${post.gruppo.nome}</a>
+						/ <a href=gruppo?group=${post.gruppo.nome}&channel=${post.canale.nome}>${post.gruppo.nome}</a>
 					</h4>
+		
+					<c:if test = "${post.creatore.email == user.email}">
+						<h6 onclick = "seiSicuro(${post.id})">Elimina post</h6>
+					</c:if>
+					
 					<p>${post.contenuto}</p>
 					<small><small>${post.dataCreazione}</small></small>
 				</c:forEach>
+			<!--  <form action="upload" method="post" enctype="multipart/form-data">
+    			<input type="text" name="description" />
+    			<input type="file" name="file" />
+    			 <input type="submit" />
+			</form>
+			<img src="/upload">-->
 			</div>
 		</div>
+		
+		
+		
 		<div class="col-bg-6 brd">
 			<jsp:include page="chatGruppo.jsp" />
 		</div>

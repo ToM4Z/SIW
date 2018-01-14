@@ -33,17 +33,18 @@ public class CanaleDaoJDBC implements CanaleDao {
 				throw new PersistenceException("Canale "+canale.getNome()+" già esistente");
 			
 			//INSERISCO IL CANALE
-			String insert = "insert into canale(nome, descrizione, data_creazione, email_admin) values (?,?,?,?)";
+			String insert = "insert into canale(nome, descrizione, data_creazione, email_admin, image) values (?,?,?,?,?)";
 			statement = connection.prepareStatement(insert);
 			statement.setString(1, canale.getNome());
 			statement.setString(2, canale.getDescrizione());
 			statement.setDate(3, new java.sql.Date(canale.getData_creazione().getTime()));
 			statement.setString(4, canale.getAdmin().getEmail());
+			statement.setString(5, canale.getImage());
 			statement.executeUpdate();
 
 			// salviamo anche tutti gli utenti del canale ed i gruppi in CASCATA
-			updateMembri(canale, connection);
 			updateGruppi(canale, connection);
+			updateMembri(canale, connection);
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
@@ -69,14 +70,14 @@ public class CanaleDaoJDBC implements CanaleDao {
 				utenteDao.save(utente);
 			}
 
-			String iscrittoCanale = "select * from iscrizione where email_utente = ? AND gruppo = ? AND canale = ?";
+			String iscrittoCanale = "select * from iscrizione where email_utente = ? and gruppo = ? and canale = ?";
 			PreparedStatement statement = connection.prepareStatement(iscrittoCanale);
 			statement.setString(1, utente.getEmail());
 			statement.setString(2, "home");
 			statement.setString(3, canale.getNome());
 			ResultSet result = statement.executeQuery();
-			if (result.next()) {
-				String iscrivi = "insert into iscrizione (id_utente, gruppo, canale) values (?,?,?)";
+			if (!result.next()) {
+				String iscrivi = "insert into iscrizione (email_utente, gruppo, canale) values (?,?,?)";
 				statement = connection.prepareStatement(iscrivi);
 				statement.setString(1, utente.getEmail());
 				statement.setString(2, "home");
@@ -124,6 +125,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 				canale.setDescrizione(result.getString("descrizione"));
 				canale.setData_creazione(result.getDate("data_creazione"));
 				canale.setAdmin(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_admin")));
+				canale.setImage("image");
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -165,15 +167,16 @@ public class CanaleDaoJDBC implements CanaleDao {
 	public void update(Canale canale) {
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String update = "update canale SET descrizione = ? WHERE nome = ?";	//anche l'immagine
+			String update = "update canale SET descrizione = ?"+/* and image = ?*/ " WHERE nome = ?";	//anche l'immagine
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setString(1, canale.getDescrizione());
+			//statement.setString(2, canale.getImage());
 			statement.setString(2, canale.getNome());
 
 			statement.executeUpdate();
 			this.updateMembri(canale, connection);
 			this.updateGruppi(canale, connection);
-			connection.commit();
+			//connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
@@ -196,14 +199,17 @@ public class CanaleDaoJDBC implements CanaleDao {
 	public void delete(Canale canale) {
 		Connection connection = this.dataSource.getConnection();
 		try {
+			deleteGruppi(canale, connection);
+			removeAllUtentiFromCanale(canale, connection);
+			
 			String delete = "delete FROM canale WHERE nome = ? ";
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.setString(1, canale.getNome());
 			connection.setAutoCommit(false);
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			
-			deleteGruppi(canale, connection);
-			removeAllUtentiFromCanale(canale, connection);
+			
+			
 			statement.executeUpdate();
 			
 			connection.commit();
@@ -322,7 +328,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 	public void removeUserFromChannel(Canale canale, Utente utente) {
 		Connection connection = dataSource.getConnection();
 		try {
-			String delete = "delete FROM iscrizione WHERE canale = ? and gruppo = 'home' email_utente = ?";
+			String delete = "delete FROM iscrizione WHERE canale = ? and gruppo = 'home' and email_utente = ?";
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.setString(1, canale.getNome());
 			statement.setString(2, utente.getEmail());

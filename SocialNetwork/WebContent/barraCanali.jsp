@@ -15,11 +15,15 @@
 <script src="js/barraCanali.js"></script>
 <link rel="stylesheet" href="css/tree.css">
 </head>
+
 <body onload="javascript:getCanali()">
 	<div class="panel panel-default"
 		style="position:fixed; float: left; width: 25%; height: 100%; margin-top: 40px; margin-bottom: -20px">
+		
 		<div class="panel-heading" style="text-align: center"><h3>Canali</h3></div>
-		<div class="panel-body" id="listaCanali"></div>
+		
+		<div class="panel-body" id="listaCanali"><h4><a href = "creaCanale">Crea Canale</a></h4></div>
 	</div>
+
 </body>
 </html>

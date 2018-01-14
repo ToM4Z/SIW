@@ -8,8 +8,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import model.Gruppo;
+import model.Messaggio;
+import model.Post;
 import model.Utente;
 import persistence.dao.GruppoDao;
+import persistence.dao.MessaggioDao;
+import persistence.dao.PostDao;
 import persistence.dao.UtenteDao;
 
 public class GruppoDaoJDBC implements GruppoDao {
@@ -30,19 +34,19 @@ public class GruppoDaoJDBC implements GruppoDao {
 			statement.setString(1, gruppo.getNome());
 			statement.setString(2, gruppo.getCanale().getNome());
 			ResultSet result = statement.executeQuery();
-			if(result.next())
-				throw new PersistenceException("Gruppo "+gruppo.getNome()+" già presente nel canale "+gruppo.getCanale().getNome());
-			
-			//INSERISCO IL GRUPPO
-			String insert = "insert into gruppo(nome,data_creazione,canale) values (?,?,?)";
-			statement = connection.prepareStatement(insert);
-			statement.setString(1, gruppo.getNome());
-			statement.setDate(2, new java.sql.Date(gruppo.getData_creazione().getTime()));
-			statement.setString(3, gruppo.getCanale().getNome());
-			statement.executeUpdate();
-
+			if(!result.next()){				
+				//INSERISCO IL GRUPPO
+				String insert = "insert into gruppo(nome, data_creazione, canale, image) values (?,?,?,?)";
+				statement = connection.prepareStatement(insert);
+				statement.setString(1, gruppo.getNome());
+				statement.setDate(2, new java.sql.Date(gruppo.getData_creazione().getTime()));
+				statement.setString(3, gruppo.getCanale().getNome());
+				statement.setString(4, gruppo.getImage());
+				statement.executeUpdate();
+			}
 			// salviamo anche tutti gli utenti del gruppo in CASCATA
 			this.updateMembri(gruppo, connection);
+			this.updateAdmins(gruppo, connection);
 		} catch (SQLException e) {
 			if (connection != null)
 				try {
@@ -85,13 +89,52 @@ public class GruppoDaoJDBC implements GruppoDao {
 			}
 		}
 	}
+	
+	private void updateAdmins(Gruppo gruppo, Connection connection) throws SQLException {
+
+		UtenteDao utenteDao = new UtenteDaoJDBC(dataSource);
+		for (Utente utente : gruppo.getAdmins()) {
+			if (utenteDao.findByPrimaryKey(utente.getEmail()) == null) {
+				utenteDao.save(utente);
+			}
+
+			String admin = "select * from gestione_gruppo where email_utente = ? AND gruppo = ? and canale = ?";
+			PreparedStatement statement = connection.prepareStatement(admin);
+			statement.setString(1, utente.getEmail());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, gruppo.getCanale().getNome());
+			ResultSet result = statement.executeQuery();
+			
+			if (!result.next()) {
+				String setAdmin = "insert into gestione_gruppo (email_utente, gruppo, canale) values (?,?,?)";
+				statement = connection.prepareStatement(setAdmin);
+				statement.setString(1, utente.getEmail());
+				statement.setString(2, gruppo.getNome());
+				statement.setString(3, gruppo.getCanale().getNome());
+				statement.executeUpdate();
+			}
+		}
+	}
+	
 
 	private void removeAllUsersFromGroup(Gruppo gruppo, Connection connection) throws SQLException {
-		String delete = "delete from iscrizione WHERE gruppo = ?, canale = ?";
+		String delete = "delete from iscrizione WHERE gruppo = ? and canale = ?";
 		PreparedStatement statement = connection.prepareStatement(delete);
 		statement.setString(1, gruppo.getNome());
 		statement.setString(2, gruppo.getCanale().getNome());
 		statement.executeUpdate();
+	}
+	
+	private void removeAdmins(Gruppo gruppo, Connection connection) throws SQLException {
+		
+		for (Utente u : gruppo.getAdmins()) {
+			String delete = "delete from gestione_gruppo WHERE gruppo = ? and canale = ? and email_utente = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setString(1, gruppo.getNome());
+			statement.setString(2, gruppo.getCanale().getNome());
+			statement.setString(3, u.getEmail());
+			statement.executeUpdate();
+		}
 	}
 
 	// implementato con lazy load
@@ -152,7 +195,17 @@ public class GruppoDaoJDBC implements GruppoDao {
 	public void update(Gruppo gruppo) {
 		Connection connection = this.dataSource.getConnection();
 		try {
+			
+			String update = "update gruppo SET image = ? WHERE nome = ? and gruppo = ?";	
+			PreparedStatement statement = connection.prepareStatement(update);
+			statement.setString(1, gruppo.getImage());
+			statement.setString(1, gruppo.getNome());
+			statement.setString(3, gruppo.getCanale().getNome());
+
+			statement.executeUpdate();
+			
 			this.updateMembri(gruppo, connection);
+			this.updateAdmins(gruppo, connection);
 			//connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {
@@ -176,14 +229,24 @@ public class GruppoDaoJDBC implements GruppoDao {
 	public void delete(Gruppo gruppo) {
 		Connection connection = this.dataSource.getConnection();
 		try {
+			
+			this.deleteAllPosts(gruppo, connection);
+			this.deleteChat(gruppo, connection);
+			this.removeAllUsersFromGroup(gruppo, connection);
+			this.removeAdmins(gruppo, connection);
+			
 			String delete = "delete FROM gruppo WHERE nome = ? and canale = ?";
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.setString(1, gruppo.getNome());
 			statement.setString(2, gruppo.getCanale().getNome());
 
 			connection.setAutoCommit(false);
+			
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-			this.removeAllUsersFromGroup(gruppo, connection);
+			
+			
+			System.out.println(gruppo.getNome());
+			System.out.println(gruppo.getCanale().getNome());
 
 			statement.executeUpdate();
 			connection.commit();
@@ -197,6 +260,24 @@ public class GruppoDaoJDBC implements GruppoDao {
 			}
 		}
 
+	}
+	
+	private void deleteAllPosts(Gruppo gruppo, Connection connection) throws SQLException{
+		
+		PostDao postDao = new PostDaoJDBC(dataSource);
+		for (Post post : gruppo.getPost()) {
+			postDao.delete(post);
+		}
+	}
+	
+	private void deleteChat(Gruppo gruppo, Connection connection) throws SQLException{
+		
+		MessaggioDao mexDao = new MessaggioDaoJDBC(dataSource);
+		
+		for (Messaggio mex : gruppo.getChat()) {
+			
+			mexDao.delete(mex);
+		}
 	}
 
 }

@@ -12,14 +12,18 @@ public class Post {
 	private Gruppo gruppo;
 	private Canale canale;
 	private Date dataCreazione;
+	private String image;
 	
 
 	public Post(){}
 	
-	Post(Utente cr, String co){
+	public Post(Utente cr, String co, Canale c, Gruppo g, Date data){
 		
 		creatore = cr;
 		contenuto = co;
+		canale = c;
+		gruppo = g;
+		dataCreazione = data;
 	}
 
 	public Utente getCreatore() {
@@ -86,6 +90,14 @@ public class Post {
 
 	public void setDataCreazione(Date dataCreazione) {
 		this.dataCreazione = dataCreazione;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 	

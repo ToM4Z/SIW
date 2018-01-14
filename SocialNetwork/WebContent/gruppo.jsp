@@ -15,8 +15,51 @@
 		<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
 		<script src="js/jquery-3.2.1.min.js"></script>
 		<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+		<script src="js/eliminaPost.js"></script>
 	</head>
 </head>
+
+<script>
+function creaPost(){
+	
+	  var gruppo = $("#nomeGruppo").text();
+	  var canale = $("#nomeCanale").text();
+	  var json = JSON.stringify({"gruppo": gruppo,"canale" : canale, "contenuto": $("#contenuto").val()});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","creaPost", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  xhr.onreadystatechange = function(){
+		  if(xhr.responseText == "true"){
+		  	  window.location.replace("gruppo?group="+gruppo+"&channel="+canale);
+	  		}else{
+	      }
+	  }
+	  xhr.send(json);
+}
+</script>
+
+<script>
+
+function seiSicuroGruppo(){
+	
+	var gruppo = $("#nomeGruppo").text();
+	var canale = $("#nomeCanale").text();
+	
+	if (confirm("Sei sicuro di voler cancellare il gruppo?") == true) {
+	    
+		document.location.href = "eliminaGruppo?group="+gruppo+"&channel="+canale;
+		
+	} else {
+	    
+		//do nothing
+	} 
+}
+
+
+</script>
+
 <body style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
@@ -28,10 +71,24 @@
 		</div>
 		<div class="col-bg-6 brd">
 			<div id="homePost" style="margin-top:60px; text-align: center;">
-				<h1>${gruppo.nome}</h1>
+				<h1 id="nomeGruppo">${gruppo.nome}</h1>
+				<h1 id="nomeCanale" style="display:none">${gruppo.canale.nome}</h1>
+				
+				<c:if test = "${admin == true }">
+					<h5 onclick="seiSicuroGruppo()">Elimina gruppo</h5>
+				</c:if>
+				
+				<form action = "javascript:creaPost()">
+				<input id = "contenuto" type="text" name = "contenuto">
+				<input type = "submit" value = "Pubblica">
+				
+				</form>
 	
 				<c:forEach var = "post" items = "${gruppo.post}">
 					<h3><a href = utente?to=${post.creatore.email}> ${post.creatore.username}</a></h3>
+					<c:if test = "${post.creatore.email == user.email}">
+						<h6 onclick="seiSicuro(${post.id})">Elimina post</h6>
+					</c:if>
 					<p>${post.contenuto}</p>
 					<small><small>${post.dataCreazione}</small></small>
 				</c:forEach>
@@ -41,10 +98,6 @@
 			<jsp:include page="chatGruppo.jsp" />
 		</div>
 	</div>
-	
-	
-	
-	
 	 
 	
 </body>

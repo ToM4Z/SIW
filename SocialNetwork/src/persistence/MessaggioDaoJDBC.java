@@ -28,7 +28,7 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 			messaggio.setData(Calendar.getInstance().getTime());
 
 			String insert = "insert into messaggio(id_messaggio, email_mittente, contenuto, "
-					+ "canale, gruppo, data_creazione) values (?,?,?,?,?,?)";
+					+ "canale, gruppo, data_creazione, image) values (?,?,?,?,?,?,?)";
 
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1, messaggio.getId());
@@ -37,6 +37,7 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 			statement.setString(4, messaggio.getGruppo().getCanale().getNome());
 			statement.setString(5, messaggio.getGruppo().getNome());
 			statement.setDate(6, new java.sql.Date(messaggio.getData().getTime()));
+			statement.setString(7, messaggio.getImage());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -67,7 +68,7 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 				messaggio.setContenuto(result.getString("contenuto"));
 				messaggio.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), result.getString("canale")));
 				messaggio.setData(new java.util.Date(result.getDate("data_creazione").getTime()));
-				
+				messaggio.setImage(result.getString("image"));
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -98,6 +99,7 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 				messaggio.setContenuto(result.getString("contenuto"));
 				messaggio.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), result.getString("canale")));
 				messaggio.setData(new java.util.Date(result.getDate("data_creazione").getTime()));
+				messaggio.setImage(result.getString("image"));
 
 				allMessaggi.add(messaggio);
 			}
@@ -118,10 +120,11 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 		
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String update = "update messaggio SET contenuto = ? WHERE id_messaggio = ?";
+			String update = "update messaggio SET contenuto = ? and image = ? WHERE id_messaggio = ?";
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setString(1, messaggio.getContenuto());
-			statement.setLong(2, messaggio.getId());
+			statement.setString(2, messaggio.getImage());
+			statement.setLong(3, messaggio.getId());
 
 			statement.executeUpdate();
 			connection.commit();
