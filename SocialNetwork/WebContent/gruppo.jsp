@@ -107,11 +107,7 @@ function load(){
 				<c:choose>
 					<c:when test="${iscritto == true }">
 						<h4>
-<<<<<<< HEAD
-							<a href=iscrizioneGruppo?channel=${gruppo.canale.nome}&group=${gruppo.nome}&iscritto=true>Cancellati dal gruppo</a>
-=======
 							<a href=gestisciGruppo?channel=${gruppo.canale.nome}&group=${gruppo.nome}&esito=cancellazione>Cancellati dal gruppo</a>
->>>>>>> branch 'master' of https://github.com/ToM4Z/SIW
 						</h4>
 
 					</c:when>
