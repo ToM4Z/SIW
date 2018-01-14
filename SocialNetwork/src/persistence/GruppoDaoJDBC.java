@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.Canale;
 import model.Gruppo;
 import model.Messaggio;
 import model.Post;
@@ -35,19 +34,16 @@ public class GruppoDaoJDBC implements GruppoDao {
 			statement.setString(1, gruppo.getNome());
 			statement.setString(2, gruppo.getCanale().getNome());
 			ResultSet result = statement.executeQuery();
-			if(!result.next()) {
-				//throw new PersistenceException("Gruppo "+gruppo.getNome()+" già presente nel canale "+gruppo.getCanale().getNome());*/
-			
-			//INSERISCO IL GRUPPO
-			String insert = "insert into gruppo(nome, data_creazione, canale, image) values (?,?,?,?)";
-			statement = connection.prepareStatement(insert);
-			statement.setString(1, gruppo.getNome());
-			statement.setDate(2, new java.sql.Date(gruppo.getData_creazione().getTime()));
-			statement.setString(3, gruppo.getCanale().getNome());
-			statement.setString(4, gruppo.getImage());
-			statement.executeUpdate();
+			if(!result.next()){				
+				//INSERISCO IL GRUPPO
+				String insert = "insert into gruppo(nome, data_creazione, canale, image) values (?,?,?,?)";
+				statement = connection.prepareStatement(insert);
+				statement.setString(1, gruppo.getNome());
+				statement.setDate(2, new java.sql.Date(gruppo.getData_creazione().getTime()));
+				statement.setString(3, gruppo.getCanale().getNome());
+				statement.setString(4, gruppo.getImage());
+				statement.executeUpdate();
 			}
-
 			// salviamo anche tutti gli utenti del gruppo in CASCATA
 			this.updateMembri(gruppo, connection);
 			this.updateAdmins(gruppo, connection);
