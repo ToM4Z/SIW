@@ -20,7 +20,7 @@ public class NotificheServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		Utente utente = (Utente) session.getAttribute("user");
 		
-		System.out.println("in notifiche servlet size: "+utente.getNotifiche().size());
+		//System.out.println("in notifiche servlet size: "+utente.getNotifiche().size());
 		req.setAttribute("notifiche", utente.getNotifiche());
 		
 		req.getRequestDispatcher("notifiche.jsp").forward(req, resp);

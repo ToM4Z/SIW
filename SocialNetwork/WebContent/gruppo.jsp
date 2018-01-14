@@ -60,6 +60,32 @@ function seiSicuroGruppo(){
 
 </script>
 
+<script>
+
+function inviaNotificaRichiesta(){
+	
+	  var gruppo = $("#nomeGruppo").text();
+	  var canale = $("#nomeCanale").text();
+	  var tipo = "richiestaIscrizione";
+	  var json = JSON.stringify({"nomeGruppo": gruppo,"nomeCanale" : canale, "tipo" : tipo});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","inviaNotifica", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  xhr.onreadystatechange = function(){
+		  if(xhr.responseText == "true"){
+		  	  alert("richiesta inviata");
+	  		}else{
+	  			
+	      }
+	  }
+	  xhr.send(json);
+	  
+}
+
+</script>
+
 <body style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
@@ -82,13 +108,13 @@ function seiSicuroGruppo(){
 				<c:choose>
 					<c:when test="${iscritto == true }">
 						<h4>
-							<a href=iscrizioneGruppo?channel=${gruppo.canale.nome}&group={gruppo.nome}&iscritto=true>Cancellati dal gruppo</a>
+							<a href=gestisciGruppo?channel=${gruppo.canale.nome}&group=${gruppo.nome}&esito=cancellazione>Cancellati dal gruppo</a>
 						</h4>
 
 					</c:when>
 					<c:when test="${iscritto == false }">
-						<h4>
-							<a href=inviaNotifica?group=${gruppo.nome}&channel=${gruppo.canale.nome}&tipo=richiestaIscrizione>Richiedi iscrizione al gruppo</a>   
+						<h4 onclick = "javascript:inviaNotificaRichiesta()">
+							Richiedi iscrizione al gruppo  
 						</h4>
 					</c:when>
 				</c:choose>
