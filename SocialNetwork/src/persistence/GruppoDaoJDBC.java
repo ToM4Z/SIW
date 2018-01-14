@@ -47,6 +47,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 			// salviamo anche tutti gli utenti del gruppo in CASCATA
 			this.updateMembri(gruppo, connection);
 			this.updateAdmins(gruppo, connection);
+			this.updateUtentiInAttesa(gruppo, connection);
 		} catch (SQLException e) {
 			if (connection != null)
 				try {
@@ -81,6 +82,32 @@ public class GruppoDaoJDBC implements GruppoDao {
 			
 			if (!result.next()) {
 				String iscrivi = "insert into iscrizione (email_utente, gruppo, canale) values (?,?,?)";
+				statement = connection.prepareStatement(iscrivi);
+				statement.setString(1, utente.getEmail());
+				statement.setString(2, gruppo.getNome());
+				statement.setString(3, gruppo.getCanale().getNome());
+				statement.executeUpdate();
+			}
+		}
+	}
+	
+	private void updateUtentiInAttesa(Gruppo gruppo, Connection connection) throws SQLException{
+		
+		UtenteDao utenteDao = new UtenteDaoJDBC(dataSource);
+		for (Utente utente : gruppo.getUtentiInAttesa()) {
+			if (utenteDao.findByPrimaryKey(utente.getEmail()) == null) {
+				utenteDao.save(utente);
+			}
+
+			String iscritto = "select * from utenti_attesa where email_utente = ? AND gruppo = ? and canale = ?";
+			PreparedStatement statement = connection.prepareStatement(iscritto);
+			statement.setString(1, utente.getEmail());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, gruppo.getCanale().getNome());
+			ResultSet result = statement.executeQuery();
+			
+			if (!result.next()) {
+				String iscrivi = "insert into utenti_attesa (email_utente, gruppo, canale) values (?,?,?)";
 				statement = connection.prepareStatement(iscrivi);
 				statement.setString(1, utente.getEmail());
 				statement.setString(2, gruppo.getNome());
@@ -129,6 +156,18 @@ public class GruppoDaoJDBC implements GruppoDao {
 		
 		for (Utente u : gruppo.getAdmins()) {
 			String delete = "delete from gestione_gruppo WHERE gruppo = ? and canale = ? and email_utente = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setString(1, gruppo.getNome());
+			statement.setString(2, gruppo.getCanale().getNome());
+			statement.setString(3, u.getEmail());
+			statement.executeUpdate();
+		}
+	}
+	
+	private void removeUtentiInAttesa(Gruppo gruppo, Connection connection) throws SQLException {
+		
+		for (Utente u : gruppo.getUtentiInAttesa()) {
+			String delete = "delete from utenti_attesa WHERE gruppo = ? and canale = ? and email_utente = ?";
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.setString(1, gruppo.getNome());
 			statement.setString(2, gruppo.getCanale().getNome());
@@ -206,6 +245,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 			
 			this.updateMembri(gruppo, connection);
 			this.updateAdmins(gruppo, connection);
+			this.updateUtentiInAttesa(gruppo, connection);
 			//connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {
@@ -234,6 +274,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 			this.deleteChat(gruppo, connection);
 			this.removeAllUsersFromGroup(gruppo, connection);
 			this.removeAdmins(gruppo, connection);
+			this.removeUtentiInAttesa(gruppo, connection);
 			
 			String delete = "delete FROM gruppo WHERE nome = ? and canale = ?";
 			PreparedStatement statement = connection.prepareStatement(delete);
@@ -277,6 +318,197 @@ public class GruppoDaoJDBC implements GruppoDao {
 		for (Messaggio mex : gruppo.getChat()) {
 			
 			mexDao.delete(mex);
+		}
+	}
+	
+	@Override
+	public void addUserToGroup(Gruppo gruppo, Utente utente) {
+		Connection connection = dataSource.getConnection();
+		try {
+			PreparedStatement statement = connection.prepareStatement("Select email_utente from iscrizione where canale=? and gruppo=? and email_utente=?");
+			statement.setString(1, gruppo.getCanale().getNome());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, utente.getEmail());
+			ResultSet result = statement.executeQuery();
+			if(result.next())
+				throw new PersistenceException("L'Utente "+utente.getEmail()+" è già iscritto al gruppo "+gruppo.getNome());
+			
+			
+			String insert = "insert into iscrizione(canale, gruppo, email_utente) values (?,?,?)";
+			statement = connection.prepareStatement(insert);
+			statement.setString(1, gruppo.getCanale().getNome());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, utente.getEmail());
+			statement.executeUpdate();
+
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
+	
+	@Override
+	public void removeUserFromGroup(Gruppo gruppo, Utente utente) {
+		Connection connection = dataSource.getConnection();
+		try {
+			String delete = "delete FROM iscrizione WHERE canale = ? and gruppo = ? and email_utente = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setString(1, gruppo.getCanale().getNome());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, utente.getEmail());
+
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
+	
+	@Override
+	public void addUserToAdmin(Gruppo gruppo, Utente utente) {
+		Connection connection = dataSource.getConnection();
+		try {
+			PreparedStatement statement = connection.prepareStatement("Select email_utente from gestion_gruppo where canale=? and gruppo=? and email_utente=?");
+			statement.setString(1, gruppo.getCanale().getNome());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, utente.getEmail());
+			ResultSet result = statement.executeQuery();
+			if(result.next())
+				throw new PersistenceException("L'Utente "+utente.getEmail()+" è già admin del gruppo "+gruppo.getNome());
+			
+			
+			String insert = "insert into gestione_gruppo(canale, gruppo, email_utente) values (?,?,?)";
+			statement = connection.prepareStatement(insert);
+			statement.setString(1, gruppo.getCanale().getNome());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, utente.getEmail());
+			statement.executeUpdate();
+
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
+	
+	@Override
+	public void removeUserFromAdmin(Gruppo gruppo, Utente utente) {
+		Connection connection = dataSource.getConnection();
+		try {
+			String delete = "delete FROM gestione_gruppo WHERE canale = ? and gruppo = ? and email_utente = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setString(1, gruppo.getCanale().getNome());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, utente.getEmail());
+
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
+	
+	@Override
+	public void addUserToAttesa(Gruppo gruppo, Utente utente) {
+		Connection connection = dataSource.getConnection();
+		try {
+			PreparedStatement statement = connection.prepareStatement("Select email_utente from utenti_attesa where canale=? and gruppo=? and email_utente=?");
+			statement.setString(1, gruppo.getCanale().getNome());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, utente.getEmail());
+			ResultSet result = statement.executeQuery();
+			if(!result.next()) {
+				//throw new PersistenceException("L'Utente "+utente.getEmail()+" è già in attesa del gruppo "+gruppo.getNome());
+			
+			
+			String insert = "insert into utenti_attesa(canale, gruppo, email_utente) values (?,?,?)";
+			statement = connection.prepareStatement(insert);
+			statement.setString(1, gruppo.getCanale().getNome());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, utente.getEmail());
+			statement.executeUpdate();
+			}
+			System.out.println("aggiunto in attesa nel db al gruppo "+gruppo.getNome());
+
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
+	
+	@Override
+	public void removeUserFromAttesa(Gruppo gruppo, Utente utente) {
+		Connection connection = dataSource.getConnection();
+		try {
+			String delete = "delete FROM utenti_attesa WHERE canale = ? and gruppo = ? and email_utente = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setString(1, gruppo.getCanale().getNome());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, utente.getEmail());
+
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
 		}
 	}
 

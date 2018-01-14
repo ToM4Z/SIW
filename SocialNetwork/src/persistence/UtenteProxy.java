@@ -10,32 +10,13 @@ import java.util.Set;
 import model.Notifica;
 import model.Utente;
 
-public class UtenteCredenziali extends Utente{
-	private DataSource dataSource;
-
-	public UtenteCredenziali(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
+public class UtenteProxy extends Utente{
 	
-	public String getPassword(){						
-		Connection connection = dataSource.getConnection();
-		try {
-			PreparedStatement statement= connection.prepareStatement("select \"password\" from utente where email = ?");
-			statement.setString(1, getEmail());
-			ResultSet result = statement.executeQuery();
-			if (result.next()) {
-				return result.getString("password");
-			}
-		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
-		}	
-		return null;
+	DataSource dataSource;
+	
+	UtenteProxy(DataSource ds){
+		
+		dataSource = ds;
 	}
 	
 	public Set<Notifica> getNotifiche() { 

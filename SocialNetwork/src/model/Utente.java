@@ -1,6 +1,8 @@
 package model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Utente {
 	
@@ -11,8 +13,13 @@ public class Utente {
 	private Date dataDiNascita;
 	private Date dataIscrizione;
 	private String image;
+	private Set<Notifica> notifiche; 
 	
-	public Utente(){}
+	
+	public Utente(){
+		
+		notifiche = new HashSet<>();
+	}
 	
 	public Utente(String e, String n, String c,String un,Date di, Date ddn){
 		
@@ -22,6 +29,7 @@ public class Utente {
 		username = un;
 		dataDiNascita = ddn;
 		dataIscrizione = di;
+		notifiche = new HashSet<>();
 	}
 	
 	public String getEmail() {
@@ -78,6 +86,14 @@ public class Utente {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public Set<Notifica> getNotifiche() {
+		return notifiche;
+	}
+
+	public void setNotifiche(Set<Notifica> notifiche) {
+		this.notifiche = notifiche;
 	}
 	
 	

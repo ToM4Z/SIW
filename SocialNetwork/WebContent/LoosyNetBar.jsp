@@ -67,8 +67,8 @@ function collapseButton(){
 							Home</a></li>
 					<li><a href="utente"><span class="glyphicon glyphicon-user"></span>
 							${user.nome}</a></li>
-					<li><a href="#"><span class="glyphicon glyphicon-cog"></span>
-							Impostazioni</a></li>
+					<li><a href="notifiche"><span class="glyphicon glyphicon-cog"></span>
+							Notifiche</a></li>
 					<li><a href="logout"><span class="glyphicon glyphicon-log-out"></span>
 							Esci</a></li>
 				</ul>

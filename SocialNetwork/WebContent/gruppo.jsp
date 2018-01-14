@@ -76,8 +76,23 @@ function seiSicuroGruppo(){
 				
 				<c:if test = "${admin == true }">
 					<h5 onclick="seiSicuroGruppo()">Elimina gruppo</h5>
+					<h5><a href = utentiInAttesa?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Visualizza utenti in attesa</a></h5>
 				</c:if>
-				
+
+				<c:choose>
+					<c:when test="${iscritto == true }">
+						<h4>
+							<a href=iscrizioneGruppo?channel=${gruppo.canale.nome}&group={gruppo.nome}&iscritto=true>Cancellati dal gruppo</a>
+						</h4>
+
+					</c:when>
+					<c:when test="${iscritto == false }">
+						<h4>
+							<a href=inviaNotifica?group=${gruppo.nome}&channel=${gruppo.canale.nome}&tipo=richiestaIscrizione>Richiedi iscrizione al gruppo</a>   
+						</h4>
+					</c:when>
+				</c:choose>
+
 				<form action = "javascript:creaPost()">
 				<input id = "contenuto" type="text" name = "contenuto">
 				<input type = "submit" value = "Pubblica">

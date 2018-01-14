@@ -51,20 +51,22 @@
 	<div id="homePost" style="margin-top:60px; text-align: center;">
 		<h1 id="nomeCanale">${canale.nome}</h1>
 		<h3>Descizione: ${canale.descrizione}</h3>
-		<c:if test="${sessionScope.user.nome == canale.admin.nome}">
+		<c:if test="${sessionScope.user.email == canale.admin.email}">
+			<h4><a href = creaGruppo?channel=${canale.nome}>Crea Gruppo</a></h4>
 			<h4 onclick ="seisicuro()" >Elimina canale</h4>
 		</c:if>
 		
-		
+		<c:if test="${sessionScope.user.email != canale.admin.email}">
 		<c:choose>
-		  <c:when test="${iscritto == true}">
+		  <c:when test="${iscritto == true && blacklist == false}">
 		    <h4><a href = iscrizioneCanale?channel=${canale.nome}&iscritto=true>Cancellati dal canale</a></h4>
 		    <h4><a href = creaGruppo?channel=${canale.nome}>Crea Gruppo</a></h4>
 		  </c:when>
-		  <c:when test="${iscritto == false}">
+		  <c:when test="${iscritto == false && blacklist == false}">
 		    <h4><a href = iscrizioneCanale?channel=${canale.nome}&iscritto=false>Iscriviti al canale</a></h4>
 		  </c:when>
 		</c:choose>
+		</c:if>
 		
 		<div id = gruppi>
 		<h3>Gruppi:</h3>

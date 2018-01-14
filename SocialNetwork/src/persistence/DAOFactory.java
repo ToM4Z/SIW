@@ -31,5 +31,7 @@ public abstract class DAOFactory {
 	public abstract CommentoDao getCommentoDAO();
 	
 	public abstract MessaggioDao getMessaggioDAO();
+	
+	public abstract NotificaDao getNotificaDAO();
 
 }
