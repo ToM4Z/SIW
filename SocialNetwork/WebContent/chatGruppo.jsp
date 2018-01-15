@@ -23,8 +23,22 @@ hr {
 } 
 </style>
 <script>
+
+var loop = true;
 function getMessaggi(){
-	
+	/*setInterval(function(){
+		$.ajax({
+			type:"GET",
+			url:"notifiche",
+			success: function(data){
+				if(data!='0'){
+					var liste = JSON.parse(data);
+					$("#numNotifiche").append(liste.length);
+					$("#listaNotifiche").append(liste);
+				}
+			}
+		});
+	}, 1000);*/
 }
 </script>
 </head>
