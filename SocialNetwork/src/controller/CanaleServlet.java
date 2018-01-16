@@ -41,7 +41,7 @@ public class CanaleServlet extends HttpServlet {
 		
 		for (Utente u : canale.getBlacklist()) {
 			
-			if (u.getEmail().equals(utente)) {
+			if (u.getEmail().equals(utente.getEmail())) {
 				
 				blacklist = true;
 			}

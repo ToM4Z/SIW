@@ -140,7 +140,7 @@ public class GruppoProxy extends Gruppo {
 			while (result.next()) {
 				Messaggio messaggio = new Messaggio();
 				messaggio.setId(result.getLong("id_messaggio"));
-				messaggio.setMittente(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
+				messaggio.setMittente(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_mittente")));;
 				messaggio.setContenuto(result.getString("contenuto"));
 				messaggio.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), result.getString("canale")));
 				messaggio.setData(new java.util.Date(result.getDate("data_creazione").getTime()));

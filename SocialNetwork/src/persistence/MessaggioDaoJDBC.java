@@ -29,7 +29,8 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 
 			String insert = "insert into messaggio(id_messaggio, email_mittente, contenuto, "
 					+ "canale, gruppo, data_creazione, image) values (?,?,?,?,?,?,?)";
-
+			
+			System.out.println(messaggio.getGruppo().getNome());
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1, messaggio.getId());
 			statement.setString(2, messaggio.getMittente().getEmail());

@@ -20,7 +20,7 @@ public class UtenteCredenziali extends Utente{
 	public String getPassword(){						
 		Connection connection = dataSource.getConnection();
 		try {
-			PreparedStatement statement= connection.prepareStatement("select \"password\" from utente where email = ?");
+			PreparedStatement statement= connection.prepareStatement("select password from utente where email = ?");
 			statement.setString(1, getEmail());
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {

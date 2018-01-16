@@ -38,7 +38,7 @@ function load(){
 				<c:forEach var="post" items="${posts}">
 					<h4>
 						<a href=utente?to=${post.creatore.email}>
-							${post.creatore.username}</a> > <a href=canale?to=${post.canale.nome}>${post.canale.nome}</a>
+							${post.creatore.username}</a> > <a href=canale?channel=${post.canale.nome}>${post.canale.nome}</a>
 						/ <a href=gruppo?group=${post.gruppo.nome}&channel=${post.canale.nome}>${post.gruppo.nome}</a>
 					</h4>
 		

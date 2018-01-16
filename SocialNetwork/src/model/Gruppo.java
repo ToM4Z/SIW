@@ -20,6 +20,7 @@ public class Gruppo {
 		admins = new HashSet<>();
 		membri = new HashSet<>();
 		utentiInAttesa=new HashSet<>();
+		chat = new HashSet<>();
 	}
 	
 	public Gruppo(String nome,Date dc, Canale canale) {
@@ -29,6 +30,7 @@ public class Gruppo {
 		admins = new HashSet<>();
 		membri = new HashSet<>();
 		utentiInAttesa=new HashSet<>();
+		chat = new HashSet<>();
 	}
 
 	public void addMembro(Utente u) {
@@ -119,5 +121,9 @@ public class Gruppo {
 		this.utentiInAttesa = inAttesa;
 	}
 	
+	public void addMessaggio (Messaggio m) {
+		
+		chat.add(m);
+	}
 	
 }

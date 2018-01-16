@@ -48,6 +48,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 			this.updateMembri(gruppo, connection);
 			this.updateAdmins(gruppo, connection);
 			this.updateUtentiInAttesa(gruppo, connection);
+			this.updateChat(gruppo, connection);
 		} catch (SQLException e) {
 			if (connection != null)
 				try {
@@ -143,6 +144,35 @@ public class GruppoDaoJDBC implements GruppoDao {
 		}
 	}
 	
+	
+	
+	private void updateChat(Gruppo gruppo, Connection connection) throws SQLException {
+
+		MessaggioDao messaggioDao = new MessaggioDaoJDBC(dataSource);
+		for (Messaggio messaggio : gruppo.getChat()) {
+			if (messaggioDao.findByPrimaryKey(messaggio.getId()) == null) {
+				messaggioDao.save(messaggio);
+			}
+
+			String mex = "select * from messaggio where id_messaggio = ? AND gruppo = ? and canale = ?";
+			PreparedStatement statement = connection.prepareStatement(mex);
+			statement.setLong(1, messaggio.getId());
+			statement.setString(2, gruppo.getNome());
+			statement.setString(3, gruppo.getCanale().getNome());
+			ResultSet result = statement.executeQuery();
+			
+			if (!result.next()) {
+				String setMex = "insert into messaggio (email_mittente, gruppo, canale) values (?,?,?)";
+				statement = connection.prepareStatement(setMex);
+				statement.setLong(1, messaggio.getId());
+				statement.setString(2, gruppo.getNome());
+				statement.setString(3, gruppo.getCanale().getNome());
+				statement.executeUpdate();
+			}
+		}
+	}
+	
+	
 
 	private void removeAllUsersFromGroup(Gruppo gruppo, Connection connection) throws SQLException {
 		String delete = "delete from iscrizione WHERE gruppo = ? and canale = ?";
@@ -234,18 +264,19 @@ public class GruppoDaoJDBC implements GruppoDao {
 	public void update(Gruppo gruppo) {
 		Connection connection = this.dataSource.getConnection();
 		try {
-			
+			/*
 			String update = "update gruppo SET image = ? WHERE nome = ? and gruppo = ?";	
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setString(1, gruppo.getImage());
-			statement.setString(1, gruppo.getNome());
+			statement.setString(2, gruppo.getNome());
 			statement.setString(3, gruppo.getCanale().getNome());
 
 			statement.executeUpdate();
-			
+			*/
 			this.updateMembri(gruppo, connection);
 			this.updateAdmins(gruppo, connection);
 			this.updateUtentiInAttesa(gruppo, connection);
+			this.updateChat(gruppo, connection);
 			//connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {
@@ -510,5 +541,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 			}
 		}
 	}
+	
+		
 
 }

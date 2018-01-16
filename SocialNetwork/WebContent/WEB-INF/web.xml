@@ -184,8 +184,7 @@
     <servlet-name>NotificheServlet</servlet-name>
     <url-pattern>/notifiche</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <servlet-name>GestioneAdmin</servlet-name>
     <servlet-class>controller.GestioneAdmin</servlet-class>
   </servlet>
@@ -194,4 +193,12 @@
     <url-pattern>/gestioneAdmin</url-pattern>
   </servlet-mapping>
   
+    <servlet>
+    <servlet-name>ChatServlet</servlet-name>
+    <servlet-class>controller.ChatServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChatServlet</servlet-name>
+    <url-pattern>/chat</url-pattern>
+  </servlet-mapping>
 </web-app>

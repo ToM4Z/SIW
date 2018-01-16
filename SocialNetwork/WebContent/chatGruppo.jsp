@@ -24,30 +24,55 @@ hr {
 </style>
 <script>
 
-var loop = true;
+function sendMessage(){
+	
+	  alert("send");
+	  var gruppo = $("#nomeGruppo").text();
+	  var canale = $("#nomeCanale").text();
+	  var json = JSON.stringify({"gruppo": gruppo,"canale" : canale, "contenuto": $("#messaggio").val()});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","chat", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  
+	  xhr.send(json);
+}
+
+var continua;
+
 function getMessaggi(){
-	/*setInterval(function(){
+	
+	continua = setInterval(function(){
+		
+		var gruppo = $("#nomeGruppo").text();
+		var canale = $("#nomeCanale").text();
+
 		$.ajax({
 			type:"GET",
-			url:"notifiche",
+			url:"chat?group="+gruppo+"&channel="+canale,
 			success: function(data){
 				if(data!='0'){
 					var liste = JSON.parse(data);
-					$("#numNotifiche").append(liste.length);
-					$("#listaNotifiche").append(liste);
+					$("#chat").append(liste);
 				}
 			}
 		});
-	}, 1000);*/
+	}, 1000);
 }
+
+function stop(){
+	
+	clearInterval(continua);
+}
+
 </script>
 </head>
 <body>
-	<div style="display:none">
-	<form action="javascript:getMessaggi()">
-		<input type="submit" class="onload">
-	</form>
-	</div>
+	
+	
+	<h1 id="nomeGruppo" style="display:none">${gruppo.nome}</h1>
+	<h1 id="nomeCanale" style="display:none">${gruppo.canale.nome}</h1>
 
 	<div class="panel panel-default"
 		style="position: fixed; width: 25%; height: 100%; right: 0%; margin-top: 40px; margin-bottom: -20px">
@@ -57,24 +82,36 @@ function getMessaggi(){
 		<div class="panel-body">
 			<c:if test="${gruppo.nome != null}">
 
+				<script type="text/javascript">
+					getMessaggi()
+				</script>
 
-				<c:forEach var="messaggio" items="${gruppo.chat}">
-					<p>
-						${messaggio.mittente} : ${messaggio.contenuto} <small>${messaggio.data}</small>
-					</p>
-				</c:forEach>
+					<div id="chat" style="position: absolute">
+						<ul></ul>
+					</div>
+					
 			</c:if>
 			<c:if test="${gruppo.nome == null}">
-				<h2 style="text-align: center">Apri un gruppo per visualizzare la chat</h2>
+				<h2 style="text-align: center">Apri un gruppo per visualizzare
+					la chat</h2>
+					
+					<script>
+					stop()
+					</script>
+					
 			</c:if>
-			<div style="position: fixed; bottom: 10px; width: 30%">		
-			<hr>	
-				<form action="#">
-					<input type="text" class="form-control" placeholder="Inserisci testo" style="float:left; margin-left:-7px; width: 70%">
-					<a href="submit" class="btn btn-info btn-bg" style="height:32px">
-	          			<span class="glyphicon glyphicon-send" style="right:2px;top:2px"></span>
-	        		</a>
-        		</form>
+			<div style="position: fixed; bottom: 10px; width: 30%">
+				<hr>
+				<form action="javascript:sendMessage()">
+					<input id="messaggio" type="text" class="form-control"
+						placeholder="Inserisci testo"
+						style="float: left; margin-left: -7px; width: 70%"
+						name="messaggio"> 
+						<input type="submit"
+						class="btn btn-info btn-bg" style="height: 32px"> <span
+						class="glyphicon glyphicon-send" style="right: 2px; top: 2px"></span>
+					
+				</form>
 			</div>
 		</div>
 	</div>
