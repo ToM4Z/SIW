@@ -21,48 +21,130 @@ hr {
     border-style: inset;
     border-width: 1px;
 } 
+.mex {
+	background-color:#e3f7fc;
+	color:#555;
+  border:.1em solid;
+	border-color: #8ed9f6;
+  border-radius:10px;
+  font-family:Tahoma,Geneva,Arial,sans-serif;
+  font-size:1.1em;
+  padding:10px 10px 10px 10px;
+  margin:10px;
+  cursor: default;
+}
+.mex-left{
+  float:left;
+  margin-right: 100px;
+  margin-left: -40px;
+}
+.mex-right{
+  float:right;
+  margin-left: 100px;
+}
+.mex-header {
+    font-family:Tahoma,Geneva,Arial,sans-serif;
+    font-size:1.0em;
+    font-weight: bold;
+    cursor: default;
+    position:relative;
+}
+.mex-header-right {
+    float:right;
+}
+.mex-header-left {
+    float:left;
+}
+.mex-footer{
+    font-family:Tahoma,Geneva,Arial,sans-serif;
+    font-size:0.7em;
+    font-weight: bold;
+    cursor: default;
+    position:relative;
+    margin-top:20px;
+}
+.mex-footer-right {
+    float:right;
+}
+.mex-footer-left {
+    float:left;
+}
 </style>
 <script>
 
 function sendMessage(){
 	
-	  alert("send");
-	  var gruppo = $("#nomeGruppo").text();
-	  var canale = $("#nomeCanale").text();
-	  var json = JSON.stringify({"gruppo": gruppo,"canale" : canale, "contenuto": $("#messaggio").val()});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","chat", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  
-	  xhr.send(json);
+	$.ajax({
+			type:"POST",
+			url:"sendMessage",
+			datatype: "json",
+			data: {gruppo : $("#nomeGruppo").text(), canale : $("#nomeCanale").text(), testo : $("#messaggio").val()},
+			success: function(data){
+				if(data == "error"){
+					alert("error");
+				}
+			}
+	});
+	$("#messaggio").val("");
 }
 
 var continua;
+function loadMessaggi(){
+	$.ajax({
+		type:"POST",
+		url:"receiveMessage",
+		datatype: "json",
+		data: {first: 'true', gruppo : $("#nomeGruppo").text(), canale : $("#nomeCanale").text()},
+		success: function(data){
+			if(data != "empty" && data != "error"){
+				var liste = JSON.parse(data);
+				$("#listchat").append(liste);
+				$("#chat").animate({scrollTop:$("#chat").get(0).scrollHeight}, 'slow');
+				getMessaggi();
+			}else if(data == "error"){
+				alert("error");
+			}
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			alert("lost connection"); 
+			stop();
+		}
+	});
+}
 
 function getMessaggi(){
 	
 	continua = setInterval(function(){
-		
-		var gruppo = $("#nomeGruppo").text();
-		var canale = $("#nomeCanale").text();
-
 		$.ajax({
-			type:"GET",
-			url:"chat?group="+gruppo+"&channel="+canale,
+			type:"POST",
+			url:"receiveMessage",
+			datatype: "json",
+			data: {first: 'false', gruppo : $("#nomeGruppo").text(), canale : $("#nomeCanale").text()},
 			success: function(data){
-				if(data!='0'){
+				if(data != "empty" && data != "error"){
 					var liste = JSON.parse(data);
 					$("#chat").append(liste);
+					$("#chat").animate({scrollTop:$("#chat").get(0).scrollHeight}, 'slow');
+				}else if(data == "error"){
+					alert("error");
 				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				stop();
 			}
 		});
 	}, 1000);
 }
 
-function stop(){
-	
+window.onbeforeunload = function(event) {
+    stop();
+    $.ajax({
+    	type: "GET",
+		url:"receiveMessage"
+    });
+}
+
+function stop(){	
 	clearInterval(continua);
 }
 
@@ -83,34 +165,37 @@ function stop(){
 			<c:if test="${gruppo.nome != null}">
 
 				<script type="text/javascript">
-					getMessaggi()
+					loadMessaggi();
 				</script>
 
-					<div id="chat" style="position: absolute">
-						<ul></ul>
-					</div>
+			<div id="chat" style="position: relative; margin-top:-15px; margin-right:-15px; 
+							height:72% ;overflow-y:scroll; overflow-x:hidden;">
+				<ul id="listchat" style="list-style-type: none;
+						margin-left:auto; 
+						margin-right:auto;">
+				
+				</ul>
+			</div>
 					
 			</c:if>
 			<c:if test="${gruppo.nome == null}">
 				<h2 style="text-align: center">Apri un gruppo per visualizzare
 					la chat</h2>
-					
-					<script>
-					stop()
-					</script>
-					
+										
 			</c:if>
-			<div style="position: fixed; bottom: 10px; width: 30%">
+			<div style="position: fixed; bottom: 10px; width: 30%;">
 				<hr>
 				<form action="javascript:sendMessage()">
+					<c:if test="${not empty gruppo.nome}">
 					<input id="messaggio" type="text" class="form-control"
 						placeholder="Inserisci testo"
 						style="float: left; margin-left: -7px; width: 70%"
 						name="messaggio"> 
-						<input type="submit"
-						class="btn btn-info btn-bg" style="height: 32px"> <span
-						class="glyphicon glyphicon-send" style="right: 2px; top: 2px"></span>
-					
+					<span>
+					<input type="submit" class="btn btn-info btn-bg" style="left:5px;width:32px;height: 32px" value=""> 
+					<span class="glyphicon glyphicon-send" style="position:relative; left: -28px; top: 2px"></span>
+					</span>
+					</c:if>
 				</form>
 			</div>
 		</div>

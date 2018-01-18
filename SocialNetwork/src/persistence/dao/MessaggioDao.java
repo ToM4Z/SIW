@@ -11,4 +11,7 @@ public interface MessaggioDao {
 	public List<Messaggio> findAll();
 	public void update(Messaggio messaggio);
 	public void delete(Messaggio messaggio);
+	
+	public List<Messaggio> getAfter(Messaggio m);
+	public List<Messaggio> getOther50(Messaggio m);
 }

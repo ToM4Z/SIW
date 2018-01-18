@@ -4,12 +4,12 @@ import java.util.Date;
 
 public class Messaggio {
 	
-	Long id;
-	Gruppo gruppo;
-	Utente mittente;
-	Date data;
-	String contenuto;
-	String image;
+	private Long id;
+	private Gruppo gruppo;
+	private Utente mittente;
+	private Date data;
+	private String contenuto;
+	private String image;
 	
 	public Messaggio(){}
 	

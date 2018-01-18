@@ -6,6 +6,7 @@ import java.util.List;
 import model.Utente;
 import model.Canale;
 import model.Gruppo;
+import model.Messaggio;
 import model.Post;
 import persistence.dao.UtenteDao;
 import persistence.dao.CanaleDao;
@@ -98,5 +99,6 @@ public class MainJDBC {
 				System.out.println(u.getEmail()+": "+u.getCognome()+" "+u.getNome());
 			}
 		}
+		
 	}
 }

@@ -13,7 +13,7 @@ import persistence.dao.MessaggioDao;
 
 public class MessaggioDaoJDBC implements MessaggioDao{
 	
-	DataSource dataSource;
+	private DataSource dataSource;
 	
 	public MessaggioDaoJDBC(DataSource ds){		
 		dataSource = ds;
@@ -172,7 +172,78 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 		}
 
 	}
-		
-	
 
+	@Override
+	public List<Messaggio> getAfter(Messaggio m) {
+		Connection connection = this.dataSource.getConnection();
+		List<Messaggio> allMessaggi = new LinkedList<>();
+		try {
+			String query = "select * from messaggio where gruppo = ? and canale = ? and id_messaggio > ?";
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, m.getGruppo().getNome());
+			statement.setString(2, m.getGruppo().getCanale().getNome());
+			statement.setLong(3,m.getId());
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				Messaggio messaggio = new Messaggio();
+				messaggio.setId(result.getLong("id_messaggio"));
+				messaggio.setMittente(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_mittente")));;
+				messaggio.setContenuto(result.getString("contenuto"));
+				messaggio.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), result.getString("canale")));
+				messaggio.setData(new java.util.Date(result.getDate("data_creazione").getTime()));
+				messaggio.setImage(result.getString("image"));
+
+				allMessaggi.add(messaggio);
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		return allMessaggi;
+	}
+	
+	@Override
+	public List<Messaggio> getOther50(Messaggio m) {
+		Connection connection = this.dataSource.getConnection();
+		List<Messaggio> allMessaggi = new LinkedList<>();
+		try {
+			String query = "select * from messaggio where gruppo = ? and canale = ?"
+							+ ( m.getId() != null ? " and id_messaggio < ?" : "" )
+							+ " LIMIT 50";
+			
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, m.getGruppo().getNome());
+			statement.setString(2, m.getGruppo().getCanale().getNome());
+			if(m.getId() != null)
+				statement.setLong(3,m.getId());
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				Messaggio messaggio = new Messaggio();
+				messaggio.setId(result.getLong("id_messaggio"));
+				messaggio.setMittente(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_mittente")));;
+				messaggio.setContenuto(result.getString("contenuto"));
+				messaggio.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), result.getString("canale")));
+				messaggio.setData(new java.util.Date(result.getDate("data_creazione").getTime()));
+				messaggio.setImage(result.getString("image"));
+
+				allMessaggi.add(messaggio);
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		return allMessaggi;
+	}
 }
