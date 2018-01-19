@@ -102,6 +102,99 @@ function load(){
 };
 
 </script>
+<style>
+.post{
+	background-color: #E8E8E8;
+	color: #555;
+	border: .1em solid;
+	border-color: #5E5E5E;
+	border-radius: 10px;
+	font-family: Tahoma, Geneva, Arial, sans-serif;
+	font-size: 1.1em;
+	padding: 10px;
+	margin: 20px;
+	cursor: default;
+	position: relative;
+  	left:  calc(40vw - 5%);
+    width: calc(40vw - 10%);
+}
+.post-header{
+  padding-left: 10px;
+	cursor: default;
+  display: inline;
+}
+.post-header-left{
+  float:left;
+}
+.post-header a{
+  font-family: Tahoma, Geneva, Arial, sans-serif;
+	font-size: 1.1em;
+  color:#555;
+}
+.post-header-right{
+  float: right;
+}
+.post-body{
+  padding-top: 10px;
+}
+.post-footer{
+    margin-bottom: -30px;
+}
+.contenuto{
+  font-size: 1.2em;
+}
+
+@media screen and (max-width : 767px) {
+	#barraCanali, #chatGruppo{
+		display:none;
+		float:none !important;
+		width:100% !important;
+	}
+	#writeMex{
+		width: 100% !important;
+		bottom: 10px;
+	}
+	#switchPanel{
+		display:block !important;
+	}
+	.post{
+		left:10%;
+		width:70%;
+	}
+}
+
+#switchPanel{
+	position:fixed;
+	top:60px;
+	left:10px;
+	display:none;
+}
+</style>
+<script>
+var page = 2;
+function shiftLeft(){
+	if(page===2){
+		$("#homePost").hide();
+		$("#barraCanali").show();
+		--page;
+	}else if(page===3){
+		$("#chatGruppo").hide();
+		$("#homePost").show();
+		--page;
+	}
+}
+function shiftRight(){
+	if(page===1){
+		$("#barraCanali").hide();
+		$("#homePost").show();
+		++page;
+	}else if(page===2){
+		$("#homePost").hide();
+		$("#chatGruppo").show();
+		++page;
+	}
+}
+</script>
 </head>
 <body onload="javascript:load()" style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
@@ -116,7 +209,12 @@ function load(){
 			<jsp:include page="chatGruppo.jsp" />
 		</div>
 		<div class="col-bg-6 brd">
+			<div id="switchPanel">
+					<span class="glyphicon glyphicon-chevron-left" style="font-size:2em;" onclick="javascript:shiftLeft()"></span>
+					<span class="glyphicon glyphicon-chevron-right" style="font-size:2em;left:500%;" onclick="javascript:shiftRight()"></span>
+				</div>
 			<div id="homePost" style="margin-top:60px; text-align: center;">
+				
 				<h1 id="nomeGruppo">${gruppo.nome}</h1>
 				<h1 id="nomeCanale" style="display:none">${gruppo.canale.nome}</h1>
 				
@@ -141,28 +239,53 @@ function load(){
 				</c:choose>
 
 				<form action = "javascript:creaPost()">
-				<input id = "contenuto" type="text" name = "contenuto" >
-				<input type = "submit" value = "Pubblica">
-				
+					<input id="contenuto" type="text" name="contenuto" >
+					<input type = "submit" value = "Pubblica">
 				</form>
 	
 				<c:forEach var = "post" items = "${gruppo.post}">
-					<h3><a href = utente?to=${post.creatore.email}> ${post.creatore.username}</a></h3>
-					<c:if test = "${post.creatore.email == user.email || admin==true}">
-						<h6 onclick="javascript:seiSicuro(${post.id})">Elimina post</h6>
-					</c:if>
-					<p>${post.contenuto}</p>
-					<small><small>${post.dataCreazione}</small></small>
-				  <h5><a href = commenti?idPost=${post.id}>mostra commenti</a></h5>
-					<form action = "javascript:addCommento(${post.id})" >
-				<input id = "${post.id }" type="text" name = "${post.id }">
-				<input type = "submit" value = "commenta">
-				</form>
-				</c:forEach>
+				  <div class="row">
+				  <div class="post">
+				    <div class="post-header">
+				    <div class="post-header-left">
+				        <a href = "utente?to=${post.creatore.email}">${post.creatore.username}</a>
+				    </div>
+				    <div class="post-header-right">
+				      <c:if test = "${post.creatore.email == user.email}">
+				        <a onclick="javascript:seiSicuro(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
+				      </c:if>
+				      <c:if test = "${post.creatore.email == user.email || admin==true}">
+				        <a onclick="javascript:seiSicuro(${post.id})"><span class="glyphicon glyphicon-trash"></span></a>
+				      </c:if>
+				    </div>
+				    <div class="post-body">
+				      <hr style="margin:-0.5px; margin-bottom:7px; border-color:black">
+				      <p class="contenuto">${post.contenuto}</p>
+				    </div>
+				    <div class="post-footer">
+				      <p class="date"><small>${post.dataCreazione}</small></p>
+				      <hr style="margin-top:-2px; margin-bottom:6px; border-color:black">
+				      <div style="display:inline" class="row">
+				         <span class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">10</span>
+				        <span class="glyphicon glyphicon-thumbs-down" style="font-size:1.5em;padding-right:10%">10</span>
+				      </div>
+				      <hr style="margin-top:4px; margin-bottom:5px; border-color:black">
+				        <a href = "commenti?idPost=${post.id}" style="font-size:1em">mostra commenti</a>
+				        <div style="display:inline">
+				      <form action = "javascript:addCommento(${post.id})">
+				        <input id="${post.id }" type="text" class="form-control"
+											placeholder="Commenta"
+											name = "${post.id }">
+				        <button type="button" class="btn btn-default" style="position:absolute;right:7;bottom:16px;height:33px"><span class="glyphicon glyphicon-send" style="font-size:1.2em;margin:-2px"></span></button>
+				      </form>
+				    </div>
+				    </div>
+				  </div>
+				</div>
+				</div>			
+				</c:forEach>	
 			</div>
 		</div>
-	</div>
-	 
-	
+	</div>	
 </body>
 </html>

@@ -160,7 +160,7 @@ function stop(){
 	<h1 id="nomeGruppo" style="display: none">${gruppo.nome}</h1>
 	<h1 id="nomeCanale" style="display: none">${gruppo.canale.nome}</h1>
 
-	<div class="panel panel-default"
+	<div id="chatGruppo" class="panel panel-default"
 		style="position: fixed; width: 25%; height: 100%; right: 0%; margin-top: 40px; margin-bottom: -20px">
 		<div class="panel-heading" style="text-align: center">
 			<h3>Chat ${gruppo.nome}</h3>
@@ -182,7 +182,7 @@ function stop(){
 				<h2 style="text-align: center">Apri un gruppo per visualizzare la chat</h2>
 			</c:if>
 
-			<div style="position: fixed; bottom: 10px; width: 30%;">
+			<div id="writeMex" style="position: fixed; bottom: 10px; width: 30%;">
 				<hr>
 				<form action="javascript:sendMessage()">
 					<c:if test="${not empty gruppo.nome}">
