@@ -118,6 +118,7 @@ function confirmCodeEmail(){
 
 function reTryCommitCodeEmail(){
     $("#sectionform3").hide();
+    $("#sectionform4").hide();
 	$("#submit1").trigger("click");
 }
 

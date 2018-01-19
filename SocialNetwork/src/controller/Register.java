@@ -56,7 +56,12 @@ public class Register extends HttpServlet {
 				try {
 					user.setDataDiNascita(format.parse(cred.datadinascita));
 				} catch (ParseException e) {
-					user.setDataDiNascita(null);
+					try {
+						format = new SimpleDateFormat("MM/dd/yyyy");
+						user.setDataDiNascita(format.parse(cred.datadinascita));
+					}catch(ParseException e1) {
+						user.setDataDiNascita(null);
+					}
 				}
 				user.setDataIscrizione(Calendar.getInstance().getTime());
 

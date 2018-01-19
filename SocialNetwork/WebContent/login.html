@@ -39,6 +39,7 @@
 	        	  $("#name").val(response.first_name);
 	        	  $("#surname").val(response.last_name);
 	        	  $("#birthday").val(response.birthday);
+	        	  alert(response.birthday);
 	        	  $("#submitLoginFB").trigger("click");
 	          }
 		  });
@@ -85,7 +86,7 @@
 							placeholder="Password" required />
 						<button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
 					<div>
-						<fb:login-button  scope="public_profile,email" onlogin="checkLoginState();"><h3>Entra o Registrati con Facebook</h3></fb:login-button>
+						<fb:login-button  scope="public_profile,email,user_birthday" onlogin="checkLoginState();"><h3>Entra o Registrati con Facebook</h3></fb:login-button>
 						<br>
 						<a href="register.jsp">Non hai un account? Registrati subito!</a><br>
 						<a href="resetPassword.html">Hai dimenticato la password?</a>
