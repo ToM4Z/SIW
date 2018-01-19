@@ -73,14 +73,14 @@ public class UtilDao {
 					
 					+ "create table post (id_post bigint primary key, email_utente varchar(255) REFERENCES utente(email),"
 						+"contenuto text, canale varchar(255), gruppo varchar(255), FOREIGN KEY(gruppo,canale) REFERENCES gruppo(nome,canale),"
-						+" data_creazione date, image text);"
+						+" data_creazione timestamp, image text);"
 					
 					+"create table commento (id_commento bigint primary key, id_post bigint REFERENCES post(id_post),"
-                    	+ "email_utente varchar(255) REFERENCES utente(email), contenuto text, data_creazione date, image text);"
+                    	+ "email_utente varchar(255) REFERENCES utente(email), contenuto text, data_creazione timestamp, image text);"
 					
                     +"create table messaggio ( id_messaggio bigint primary key, email_mittente varchar(255) REFERENCES utente(email),"
                     	+"contenuto text, canale varchar(255), gruppo varchar(255), FOREIGN KEY(gruppo, canale) REFERENCES gruppo(nome, canale),"
-                    	+"data_creazione date, image text);"
+                    	+"data_creazione timestamp, image text);"
                 	
                 	+ "create table blacklist (canale varchar(255) REFERENCES canale(nome), utente varchar(255) REFERENCES utente(email),"
                 		+ "PRIMARY KEY (canale,utente));"

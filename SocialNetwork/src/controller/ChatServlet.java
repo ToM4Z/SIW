@@ -32,6 +32,7 @@ public class ChatServlet extends HttpServlet {
 		
 		String nomeCanale = req.getParameter("channel");
 		String nomeGruppo = req.getParameter("group");
+		String time = req.getParameter("time");
 		
 		GruppoDao gruppoDao = DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
 		
@@ -39,12 +40,26 @@ public class ChatServlet extends HttpServlet {
 		
 		List<String> list = new LinkedList<>();
 		
-		for (Messaggio m : gruppo.getChat()) {
-			
-			String mex = m.getMittente().getUsername()+" : "+m.getContenuto();
-			list.add(mex);
+		if (time.equals("first")) {
+		
+			for (Messaggio m : gruppo.getChat()) {
+				
+				String mex = m.getMittente().getUsername()+" : "+m.getContenuto();
+				list.add(mex);
+			}
+			resp.getWriter().write(new Gson().toJson(list));
+			System.out.println("qui");
 		}
-		resp.getWriter().write(new Gson().toJson(list));
+		
+		else{
+			
+			if (!gruppo.getChat().isEmpty()) {
+				String message;
+				Messaggio m = gruppo.getChat().get(gruppo.getChat().size()-1);
+				message = m.getMittente().getUsername()+" : "+m.getContenuto();
+				resp.getWriter().write(new Gson().toJson(message));
+			}
+		}
 	}
 	
 	private class GetMessage{

@@ -22,6 +22,7 @@ function creaPost(){
 	  var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
 	  var json = JSON.stringify({"gruppo": gruppo,"canale" : canale, "contenuto": $("#contenuto").val()});
+	  alert($("#contenuto").val());
 	  var xhr = new XMLHttpRequest();
 	  xhr.open("post","creaPost", true);
 	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
@@ -30,6 +31,27 @@ function creaPost(){
 	  xhr.onreadystatechange = function(){
 		  if(xhr.responseText == "true"){
 		  	  window.location.replace("gruppo?group="+gruppo+"&channel="+canale);
+	  		}else{
+	      }
+	  }
+	  xhr.send(json);
+}
+
+
+function addCommento(idPost){
+	
+	  alert("addando");
+	  var gruppo = $("#nomeGruppo").text();
+	  var canale = $("#nomeCanale").text();
+	  var json = JSON.stringify({"gruppo": gruppo,"canale" : canale, "idPost":idPost, "commento": $("#"+idPost).val()});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","commento", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  xhr.onreadystatechange = function(){
+		  if(xhr.responseText == "true"){
+		  	  alert("commento aggiunto")
 	  		}else{
 	      }
 	  }
@@ -119,18 +141,23 @@ function load(){
 				</c:choose>
 
 				<form action = "javascript:creaPost()">
-				<input id = "contenuto" type="text" name = "contenuto">
+				<input id = "contenuto" type="text" name = "contenuto" >
 				<input type = "submit" value = "Pubblica">
 				
 				</form>
 	
 				<c:forEach var = "post" items = "${gruppo.post}">
 					<h3><a href = utente?to=${post.creatore.email}> ${post.creatore.username}</a></h3>
-					<c:if test = "${post.creatore.email == user.email}">
+					<c:if test = "${post.creatore.email == user.email || admin==true}">
 						<h6 onclick="javascript:seiSicuro(${post.id})">Elimina post</h6>
 					</c:if>
 					<p>${post.contenuto}</p>
 					<small><small>${post.dataCreazione}</small></small>
+				  <h5><a href = commenti?idPost=${post.id}>mostra commenti</a></h5>
+					<form action = "javascript:addCommento(${post.id})" >
+				<input id = "${post.id }" type="text" name = "${post.id }">
+				<input type = "submit" value = "commenta">
+				</form>
 				</c:forEach>
 			</div>
 		</div>

@@ -192,8 +192,7 @@
     <servlet-name>GestioneAdmin</servlet-name>
     <url-pattern>/gestioneAdmin</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <servlet-name>ChatServlet</servlet-name>
     <servlet-class>controller.ChatServlet</servlet-class>
   </servlet>
@@ -201,4 +200,38 @@
     <servlet-name>ChatServlet</servlet-name>
     <url-pattern>/chat</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>CreaCommento</servlet-name>
+    <servlet-class>controller.CreaCommento</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreaCommento</servlet-name>
+    <url-pattern>/commento</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>Commenti</servlet-name>
+    <servlet-class>controller.Commenti</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Commenti</servlet-name>
+    <url-pattern>/commenti</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>EliminaCommento</servlet-name>
+    <servlet-class>controller.EliminaCommento</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EliminaCommento</servlet-name>
+    <url-pattern>/eliminaCommenti</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>GestioneBlacklist</servlet-name>
+    <servlet-class>controller.GestioneBlacklist</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GestioneBlacklist</servlet-name>
+    <url-pattern>/gestioneBlacklist</url-pattern>
+  </servlet-mapping>
+  
 </web-app>

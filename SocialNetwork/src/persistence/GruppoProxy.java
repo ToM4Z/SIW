@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import model.Gruppo;
@@ -126,10 +128,10 @@ public class GruppoProxy extends Gruppo {
 		return super.getPost();
 	}
 	
-	public Set<Messaggio> getChat(){
+	public List<Messaggio> getChat(){
 		
 		Connection connection = this.dataSource.getConnection();
-		Set<Messaggio> allMessaggi = new HashSet<>();
+		List<Messaggio> allMessaggi = new LinkedList<>();
 		try {
 			PreparedStatement statement;
 			statement = connection.prepareStatement("select * from messaggio where gruppo = ? and canale = ?");

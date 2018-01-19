@@ -40,17 +40,33 @@ function sendMessage(){
 }
 
 var continua;
+var time;
 
 function getMessaggi(){
 	
+	var gruppo = $("#nomeGruppo").text();
+	var canale = $("#nomeCanale").text();
+	
+	time = "first";
+	
+	$.ajax({
+		type:"GET",
+		url:"chat?group="+gruppo+"&channel="+canale+"&time="+time,
+		success: function(data){
+			if(data!='0'){
+				var liste = JSON.parse(data);
+				$("#chat").append(liste);
+			}
+		}
+	});
+	
+	time = "nofirst";
+	
 	continua = setInterval(function(){
 		
-		var gruppo = $("#nomeGruppo").text();
-		var canale = $("#nomeCanale").text();
-
 		$.ajax({
 			type:"GET",
-			url:"chat?group="+gruppo+"&channel="+canale,
+			url:"chat?group="+gruppo+"&channel="+canale+"&time="+time,
 			success: function(data){
 				if(data!='0'){
 					var liste = JSON.parse(data);
@@ -58,12 +74,14 @@ function getMessaggi(){
 				}
 			}
 		});
-	}, 1000);
+		
+	}, 500);
 }
 
 function stop(){
 	
 	clearInterval(continua);
+	time = "first";
 }
 
 </script>

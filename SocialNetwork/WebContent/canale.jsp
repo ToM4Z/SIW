@@ -57,6 +57,7 @@
 						<a href=creaGruppo?channel=${canale.nome}>Crea Gruppo</a>
 					</h4>
 					<h4 onclick="seisicuro()">Elimina canale</h4>
+					<h4><a href = gestioneBlacklist?channel=${canale.nome}>Gestisci BlackList</a></h4>
 				</c:if>
 
 				<c:if test="${sessionScope.user.email != canale.admin.email}">
