@@ -15,14 +15,14 @@ public class Gruppo {
 	private Set<Post> post;
 	private Date data_creazione;
 	private Canale canale;
-	private List<Messaggio> chat;
+	private Set<Messaggio> chat;
 	private String image;
 	
 	public Gruppo() {
 		admins = new HashSet<>();
 		membri = new HashSet<>();
 		utentiInAttesa=new HashSet<>();
-		chat = new LinkedList<>();
+		chat = new HashSet<>();
 	}
 	
 	public Gruppo(String nome,Date dc, Canale canale) {
@@ -32,7 +32,7 @@ public class Gruppo {
 		admins = new HashSet<>();
 		membri = new HashSet<>();
 		utentiInAttesa=new HashSet<>();
-		chat = new LinkedList<>();
+		chat = new HashSet<>();
 	}
 
 	public void addMembro(Utente u) {
@@ -99,11 +99,11 @@ public class Gruppo {
 		this.post = post;
 	}
 
-	public List<Messaggio> getChat() {
+	public Set<Messaggio> getChat() {
 		return chat;
 	}
 
-	public void setChat(List<Messaggio> chat) {
+	public void setChat(Set<Messaggio> chat) {
 		this.chat = chat;
 	}
 

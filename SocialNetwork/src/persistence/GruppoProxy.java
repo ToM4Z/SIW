@@ -128,10 +128,10 @@ public class GruppoProxy extends Gruppo {
 		return super.getPost();
 	}
 	
-	public List<Messaggio> getChat(){
+	public Set<Messaggio> getChat(){
 		
 		Connection connection = this.dataSource.getConnection();
-		List<Messaggio> allMessaggi = new LinkedList<>();
+		Set<Messaggio> allMessaggi = new HashSet<>();
 		try {
 			PreparedStatement statement;
 			statement = connection.prepareStatement("select * from messaggio where gruppo = ? and canale = ?");
