@@ -165,7 +165,7 @@ public class PostDaoJDBC implements PostDao {
 
 			connection.setAutoCommit(false);
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-			this.removeAllCommentsFromPost(post, connection);;
+			this.removeAllCommentsFromPost(post, connection);
 
 			statement.executeUpdate();
 			connection.commit();

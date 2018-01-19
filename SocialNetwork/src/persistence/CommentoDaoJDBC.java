@@ -65,7 +65,7 @@ public class CommentoDaoJDBC implements CommentoDao {
 				commento.setId(result.getLong("id_commento"));
 				commento.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
 				commento.setContenuto(result.getString("contenuto"));
-				commento.setPost(new PostDaoJDBC(dataSource).findByPrimaryKey(result.getLong("post")));
+				commento.setPost(new PostDaoJDBC(dataSource).findByPrimaryKey(result.getLong("id_post")));
 				commento.setDataCreazione(new java.util.Date(result.getDate("data_creazione").getTime()));
 				
 			}
@@ -154,7 +154,12 @@ public class CommentoDaoJDBC implements CommentoDao {
 			
 			statement = connection.prepareStatement("delete from commento where id_commento = ?");
 			statement.setLong(1, commento.getId());
-			statement.executeQuery();
+			
+			connection.setAutoCommit(false);
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			
+			statement.executeUpdate();
+			connection.commit();
 			
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());

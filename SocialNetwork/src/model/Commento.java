@@ -13,10 +13,11 @@ public class Commento {
 	
 	public Commento(){}
 	
-	public Commento(String co, Utente cr){
+	public Commento(String co, Utente cr, Post p){
 		
 		contenuto = co;
 		creatore = cr;
+		post = p;
 	}
 	
 	public Long getId() {
@@ -66,9 +67,6 @@ public class Commento {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
-	
-	
-	
+
 
 }
