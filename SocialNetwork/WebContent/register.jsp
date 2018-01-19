@@ -1,3 +1,6 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <html>
 <head lang="it">
 <meta charset="utf-8">
@@ -9,11 +12,126 @@
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 
-<script src="js/register.js"></script>
 <link href="css/login.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
-<body>
+<script>
+function checkFB(){
+	if("${param.emailFB}" != ""){
+		$("#email").val("${param.emailFB}");
+		console.log("${param.emailFB}");
+		$("#nome").val("${param.name}");
+		console.log("${param.name}");
+		$("#cognome").val("${param.surname}");
+		console.log("${param.surname}");
+		$("#datadinascita").val("${param.birthday}");
+		console.log("${param.birthday}");
+	}
+}
+
+
+function samePassword(){
+  if($("#password").val() != $("#password1").val()){
+    $("#passwordError").slideDown();
+    $("#passwordError").css("display:block");
+  }else{
+    $("#passwordError").slideUp();
+    $("#passwordError").css("display:none");
+  }
+}
+
+function checkEmailExist(){
+  $.get("register?email="+$("#email").val(), function(responseText) {
+      if(responseText == "true"){
+        $("#emailError").slideDown();
+        $("#emailError").css("display:block");
+      }else{
+        $("#emailError").slideUp();
+        $("#emailError").css("display:none");
+      }
+  });
+}
+
+var codice;
+
+function commitRegistration(){
+	if($("#emailError").css("display") == "none" && $("#passwordError").css("display") == "none"){
+		if("${param.emailFB}" != ""){
+			registra();
+		}else{
+		$("#mexEmail").text("E' stata inviata una email di conferma a "+$("#email").val()+"\nInserisci il codice");
+		  codice = makeid();
+
+	    $("#sectionform1").hide();
+	    $("#sectionform2").show();
+
+	  var json = JSON.stringify({"email" : $("#email").val(),"codice" : codice});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","sendEmail", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  xhr.onreadystatechange = function(){
+		  if(xhr.responseText == "error"){
+			$("#sectionform2").hide();
+	        $("#sectionform4").show();
+	      }
+	  }
+	  xhr.send(json);
+	}
+  }
+}
+
+function registra(){
+	$("#sectionform1").hide();
+    $("#sectionform3").show();
+	
+	 var json = JSON.stringify({"email" : $("#email").val(),"nome" : $("#nome").val(),"cognome" : $("#cognome").val(),
+         "datadinascita" : $("#datadinascita").val(),"nickname" : $("#nickname").val(),
+         "password" : $("#password").val()});
+	var xhr = new XMLHttpRequest();
+	xhr.open("post","register", true);
+	xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.onreadystatechange = function(){
+		if(xhr.responseText === "error"){
+			$("#sectionform1").hide();
+			$("#sectionform2").hide();
+	        $("#sectionform3").hide();
+			$("#sectionform4").show();
+		}
+	}
+	xhr.send(json);
+}
+
+function confirmCodeEmail(){
+	if(codice == $("#code").val()){
+		$("#sectionform2").hide();
+        $("#sectionform3").show();
+
+        registra();
+	}else{
+		$("#codeError").slideDown();
+		$("#codeError").css("display:block");
+	}
+}
+
+function reTryCommitCodeEmail(){
+    $("#sectionform3").hide();
+	$("#submit1").trigger("click");
+}
+
+function makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i < 5; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+  }
+
+
+</script>
+<body onload="javascript:checkFB()">
 	<div class="container">
 		<div class="row row-centerd pos" id="pwd-container">
 			<div class="col-md-3"></div>
@@ -22,7 +140,7 @@
 					<form id="form1" method="post" action="javascript:commitRegistration()" role="login">
 						<img src="images/logo.png" style="width: 180px; margin-bottom: 0px;" class="img-responsive"	alt="LoosyNet" />
 						<div id="emailError" style="margin-top: 10px; margin-bottom: -0.5px; display: none" class="alert alert-danger" role="alert">
-							Email già registrata!
+							Email già  registrata!
 						</div>
 						<div id="passwordError"	style="margin-top: 10px; margin-bottom: -0.5px; display: none" class="alert alert-danger" role="alert">
 							Le password non	combaciano!

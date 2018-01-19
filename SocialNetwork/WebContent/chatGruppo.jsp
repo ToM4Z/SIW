@@ -133,7 +133,7 @@ function getMessaggi(){
 				stop();
 			}
 		});
-	}, 1000);
+	}, 250);
 }
 
 window.onbeforeunload = function(event) {

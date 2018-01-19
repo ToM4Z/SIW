@@ -12,8 +12,56 @@
 <script src="js/login.js"></script>
 <link href="css/login.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script>
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '165758527482837',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.11'
+    });      
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+  
+  function statusChangeCallback(response){
+	  if(response.status === 'connected'){
+		  FB.api('/me?fields=email,first_name,last_name,birthday', function(response){
+	          if(response && !response.error){
+	        	  $("#emailFB").val(response.email);
+	        	  $("#name").val(response.first_name);
+	        	  $("#surname").val(response.last_name);
+	        	  $("#birthday").val(response.birthday);
+	        	  $("#submitLoginFB").trigger("click");
+	          }
+		  });
+	  }else
+		  console.log('not logged');
+  }
+  
+  function checkLoginState() {
+	    FB.getLoginStatus(function(response) {
+	      statusChangeCallback(response);
+	    });
+  }
+</script>
 </head>
 <body>
+	<form style="display:none" action="loginFB" method="post">
+	<input type="text" name="emailFB" id="emailFB">
+	<input type="text" name="name" id="name">
+	<input type="text" name="surname" id="surname">
+	<input type="text" name="birthday" id="birthday">
+	<input type="submit" id="submitLoginFB">
+	</form>
+
 	<div class="container">
 		<div class="row row-centerd pos" id="pwd-container">
 			<div class="col-md-3"></div>
@@ -31,15 +79,18 @@
 							class="alert alert-danger" role="alert">Password errata!</div>
 						<input type="email" name="email" id="email"
 							onchange="javascript:checkEmailNotExist()" placeholder="Email"
-							class="form-control input-lg" required /> 
+							class="form-control input-lg" required />
 						<input type="password"
 							name="password" id="password" class="form-control input-lg"
 							placeholder="Password" required />
 						<button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
 						<div>
-							<a href="register.html">Non hai un account? Registrati
-								subito!</a><br> <a href="resetPassword.html">Hai
-								dimenticato la password?</a>
+							<fb:login-button  scope="public_profile,email"
+								 onlogin="checkLoginState();" value="Entra o Registrati con Facebook">
+							</fb:login-button>
+							<br>
+							<a href="register.jsp">Non hai un account? Registrati subito!</a><br>
+							<a href="resetPassword.html">Hai dimenticato la password?</a>
 						</div>
 					</form>
 					<form id="form" method="post" action="home">

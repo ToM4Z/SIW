@@ -178,7 +178,8 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 		Connection connection = this.dataSource.getConnection();
 		List<Messaggio> allMessaggi = new LinkedList<>();
 		try {
-			String query = "select * from messaggio where gruppo = ? and canale = ? and id_messaggio > ?";
+			String query = "select id_messaggio,email_mittente,contenuto,"
+							+ "data_creazione,image from messaggio where gruppo = ? and canale = ? and id_messaggio > ?";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, m.getGruppo().getNome());
 			statement.setString(2, m.getGruppo().getCanale().getNome());
@@ -190,7 +191,7 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 				messaggio.setId(result.getLong("id_messaggio"));
 				messaggio.setMittente(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_mittente")));;
 				messaggio.setContenuto(result.getString("contenuto"));
-				messaggio.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), result.getString("canale")));
+				messaggio.setGruppo(m.getGruppo());
 				messaggio.setData(new java.util.Date(result.getDate("data_creazione").getTime()));
 				messaggio.setImage(result.getString("image"));
 
@@ -213,7 +214,8 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 		Connection connection = this.dataSource.getConnection();
 		List<Messaggio> allMessaggi = new LinkedList<>();
 		try {
-			String query = "select * from messaggio where gruppo = ? and canale = ?"
+			String query = "select id_messaggio,email_mittente,contenuto,"
+							+ "data_creazione,image from messaggio where gruppo = ? and canale = ?"
 							+ ( m.getId() != null ? " and id_messaggio < ?" : "" )
 							+ " LIMIT 50";
 			
@@ -229,7 +231,8 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 				messaggio.setId(result.getLong("id_messaggio"));
 				messaggio.setMittente(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_mittente")));;
 				messaggio.setContenuto(result.getString("contenuto"));
-				messaggio.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), result.getString("canale")));
+				messaggio.setGruppo(m.getGruppo());
+				//messaggio.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), result.getString("canale")));
 				messaggio.setData(new java.util.Date(result.getDate("data_creazione").getTime()));
 				messaggio.setImage(result.getString("image"));
 

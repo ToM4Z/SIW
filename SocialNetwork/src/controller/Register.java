@@ -24,46 +24,53 @@ public class Register extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//controllo se l'email è già registrata nel db
-		if(checkEmail(req.getParameter("email")))
+		// controllo se l'email è già registrata nel db
+		if (checkEmail(req.getParameter("email")))
 			resp.getWriter().write("true");
 		else
 			resp.getWriter().write("false");
 	}
-	
+
 	private boolean checkEmail(String s) {
 		UtenteDao utentedao = DatabaseManager.getInstance().getDaoFactory().getUtenteDAO();
 		return utentedao.findByPrimaryKey(s) != null;
 	}
-	
-	private class Credenziali{
-		private String email,nome,cognome,datadinascita,nickname,password;
+
+	private class Credenziali {
+		private String email, nome, cognome, datadinascita, nickname, password;
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-        Credenziali cred = new Gson().fromJson(br.readLine(), Credenziali.class);
-        
-		if(!checkEmail(cred.email)){
-			Utente user = new Utente();
-			user.setEmail(cred.email);
-			user.setNome(cred.nome);
-			user.setCognome(cred.cognome);
-			user.setUsername(cred.nickname);
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Credenziali cred = new Gson().fromJson(br.readLine(), Credenziali.class);
+
+		if (!checkEmail(cred.email)) {
 			try {
-				user.setDataDiNascita(format.parse(cred.datadinascita));
-			} catch (ParseException e) {
-				user.setDataDiNascita(null);
+				Utente user = new Utente();
+				user.setEmail(cred.email);
+				user.setNome(cred.nome);
+				user.setCognome(cred.cognome);
+				user.setUsername(cred.nickname);
+				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				try {
+					user.setDataDiNascita(format.parse(cred.datadinascita));
+				} catch (ParseException e) {
+					user.setDataDiNascita(null);
+				}
+				user.setDataIscrizione(Calendar.getInstance().getTime());
+
+				UtenteDao utentedao = DatabaseManager.getInstance().getDaoFactory().getUtenteDAO();
+				utentedao.save(user);
+				utentedao.setPassword(user, cred.password);
+
+				System.out.println("registrazione completata");
+				resp.getWriter().write("success");
+			} catch (Exception e) {
+				resp.getWriter().write("error");
 			}
-			user.setDataIscrizione(Calendar.getInstance().getTime());
-	
-			UtenteDao utentedao = DatabaseManager.getInstance().getDaoFactory().getUtenteDAO();
-			utentedao.save(user);
-			utentedao.setPassword(user,cred.password);
-			
-			System.out.println("registrazione completata");
+		} else {
+			resp.getWriter().write("error");
 		}
 	}
 }
