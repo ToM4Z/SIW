@@ -22,7 +22,7 @@ function creaPost(){
 	  var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
 	  var json = JSON.stringify({"gruppo": gruppo,"canale" : canale, "contenuto": $("#contenuto").val()});
-	  alert($("#contenuto").val());
+	  //alert($("#contenuto").val());
 	  var xhr = new XMLHttpRequest();
 	  xhr.open("post","creaPost", true);
 	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");

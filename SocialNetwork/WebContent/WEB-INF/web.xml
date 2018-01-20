@@ -224,8 +224,7 @@
     <servlet-name>EliminaCommento</servlet-name>
     <url-pattern>/eliminaCommenti</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <servlet-name>GestioneBlacklist</servlet-name>
     <servlet-class>controller.GestioneBlacklist</servlet-class>
   </servlet>
@@ -234,4 +233,12 @@
     <url-pattern>/gestioneBlacklist</url-pattern>
   </servlet-mapping>
   
+    <servlet>
+    <servlet-name>Search</servlet-name>
+    <servlet-class>controller.Search</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Search</servlet-name>
+    <url-pattern>/search</url-pattern>
+  </servlet-mapping>
 </web-app>
