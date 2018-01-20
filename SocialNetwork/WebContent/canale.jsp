@@ -27,15 +27,20 @@
 			//do nothing
 		}
 	}
-
-	function load() {
-		$("input.onload").each(function() {
-			$(this).trigger("click");
-		});
-	};
+	
+function load(){
+	$("input.onload").each(function(){
+		$(this).trigger("click");
+	});
+};
+function unload(){
+	$("input.onbeforeunload").each(function(){
+		$(this).trigger("click");
+	});
+}
 </script>
 </head>
-<body onload="javascript:load()" style="overflow-x:hidden">
+<body onload="javascript:load();" onbeforeunload="javascript:unload()" style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
 	</c:if>

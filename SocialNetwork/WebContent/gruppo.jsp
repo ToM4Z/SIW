@@ -8,7 +8,7 @@
 <html>
 <head lang="it">
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>LoosyNet</title>
 
 		<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
@@ -94,12 +94,6 @@ function inviaNotificaRichiesta(){
 	  xhr.send(json);
 	  
 }
-
-function load(){
-	$("input.onload").each(function(){
-		$(this).trigger("click");
-	});
-};
 
 </script>
 <style>
@@ -198,9 +192,19 @@ function shiftRight(){
 		++page;
 	}
 }
+function load(){
+	$("input.onload").each(function(){
+		$(this).trigger("click");
+	});
+};
+function unload(){
+	$("input.onbeforeunload").each(function(){
+		$(this).trigger("click");
+	});
+}
 </script>
 </head>
-<body onload="javascript:load()" style="overflow-x:hidden">
+<body onload="javascript:load();" onbeforeunload="javascript:unload()" style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
 	</c:if>

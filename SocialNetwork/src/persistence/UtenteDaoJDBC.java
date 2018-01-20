@@ -53,17 +53,14 @@ class UtenteDaoJDBC implements UtenteDao {
 		Utente utente = null;
 		try {
 			PreparedStatement statement;
-			statement = connection.prepareStatement("select * from utente where email = ?");
+			statement = connection.prepareStatement("select username,image from utente where email = ?");
 			statement.setString(1, email);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
 				utente = new UtenteProxy(dataSource);
-				utente.setEmail(result.getString("email"));
-				utente.setNome(result.getString("nome"));
-				utente.setCognome(result.getString("cognome"));
+				utente.setEmail(email);
 				utente.setUsername(result.getString("username"));
-				utente.setDataDiNascita(new java.util.Date(result.getDate("data_nascita").getTime()));
-				utente.setDataIscrizione(new java.util.Date(result.getDate("data_iscrizione").getTime()));
+				utente.setImage(result.getString("image"));
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -83,17 +80,14 @@ class UtenteDaoJDBC implements UtenteDao {
 		List<Utente> utenti = new LinkedList<>();
 		try {
 			PreparedStatement statement;
-			statement = connection.prepareStatement("select * from utente");
+			statement = connection.prepareStatement("select email,username,image from utente");
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
 				Utente utente = new UtenteProxy(dataSource);
 				utente.setEmail(result.getString("email"));
-				utente.setNome(result.getString("nome"));
-				utente.setCognome(result.getString("cognome"));
 				utente.setUsername(result.getString("username"));
-				utente.setDataDiNascita(new java.util.Date(result.getDate("data_nascita").getTime()));
-				utente.setDataIscrizione(new java.util.Date(result.getDate("data_iscrizione").getTime()));
+				utente.setUsername(result.getString("image"));
 
 				utenti.add(utente);
 			}
@@ -188,11 +182,8 @@ class UtenteDaoJDBC implements UtenteDao {
 		if (user != null) {
 			userCred = new UtenteCredenziali(dataSource);
 			userCred.setEmail(user.getEmail());
-			userCred.setNome(user.getNome());
-			userCred.setCognome(user.getCognome());
 			userCred.setUsername(user.getUsername());
-			userCred.setDataDiNascita(user.getDataDiNascita());
-			userCred.setDataIscrizione(user.getDataIscrizione());
+			userCred.setUsername(user.getImage());
 		}
 		return userCred;
 	}
@@ -218,8 +209,6 @@ class UtenteDaoJDBC implements UtenteDao {
 
 				allPost.add(post);
 			}
-			
-			//System.out.println("from db"+allPost.size());
 			
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());

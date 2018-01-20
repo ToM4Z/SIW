@@ -5,7 +5,7 @@
 <html>
 <head lang="it">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>LoosyNet</title>
 
@@ -47,29 +47,31 @@
     left: -40px !important;
   }
 }
+.notify{
+margin-left:10px;
+}
 </style>
 
 <script>
-
 function search(){
-	
-	  //alert($("#search").val());
-	  var json = JSON.stringify({"search": $("#search").val()});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","search", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-
-	  xhr.onreadystatechange = function () {
-		    if (xhr.readyState === 4 && xhr.status === 200) {
-		        var data = JSON.parse(xhr.responseText);
-		        $("#listaRisultati").append(data);
+		$.ajax({
+			type: "POST",
+			url: "search",
+			datatype: "json",
+			data: JSON.stringify({"search": $("#search").val()}),
+			success: function(data){
+				var data = JSON.parse(data);
+		        if(data == "")
+		        	$("#listaCanaliTrovati").append($("<li style=\"margin-left:10px;\">Nessun canale trovato</li>"));
+		        else
+		        	$("#listaCanaliTrovati").append(data);
 		        
-		    }
-		};
-		xhr.send(json);
-		showResults();
+				if($("#listaCanaliTrovati").css("display") == "none"){
+		    		$("#listaCanaliTrovati").slideDown();
+		    		$("#listaCanaliTrovati").show();
+		    	}
+			}
+		});
 }
 
 function collapseButton(){
@@ -79,51 +81,93 @@ function collapseButton(){
 		$("#myNavbar").slideUp();
 	}
 }
-
+var timerNotifiche;
 function getNotifiche(){
-	$.ajax({
-		type:"GET",
-		url:"notifiche",
-		success: function(data){
-			if(data!='0'){
-				var liste = JSON.parse(data);
-				$("#numNotifiche").append(liste.length);
-				$("#listaNotifiche").append(liste);
+	timerNotifiche = setInterval(function(){
+		$.ajax({
+			type:"POST",
+			url:"notifiche",
+			success: function(data){
+				if(data != "[]"){
+					var liste = JSON.parse(data);
+					$("#emptylist").remove();
+					$("#numNotifiche").text(liste.length);
+					$("#listaNotifiche").append(liste);
+					$("#listaNotifiche").find('li').addClass('notify');
+				}
 			}
-		}
-	});
+		});
+	},1000);
 }
 
 function showNotify(){
 	if($("#listaNotifiche").css("display") == "none"){
 		$("#listaNotifiche").slideDown();
 		$("#listaNotifiche").show();
-	}else{
-		$("#listaNotifiche").slideUp();
-		$("#listaNotifiche").css("display:none");
-	}
+	}else
+		HideNotify();
 }
-
-function showResults(){
-	if($("#listaRisultati").css("display") == "none"){
-		$("#listaRisultati").slideDown();
-		$("#listaRisultati").show();
-	}else{
-		$("#listaRisultati").slideUp();
-		$("#listaRisultati").css("display:none");
-	}
+function HideNotify(){
+	$("#listaNotifiche").hide();
 }
+function clearlistSearch(){
+	if($("#listaCanaliTrovati").css("display") == "block"){
+		$("#listaCanaliTrovati").hide();
+		$("#listaCanaliTrovati").find("li").remove();
+	}	  
+}
+var mouse_in_listSearch = false;
+var mouse_in_listNotify = false;
+var mouse_in_linkNotify = false;
 
+function onLoadLoosyNetBar(){
+	getNotifiche();
+	$("#linkShowNotify").focus(function(){
+		$(this).blur();
+	});
+	 $('#listaCanaliTrovati').hover(function(){ 
+		 	mouse_in_listSearch=true; 
+	    }, function(){ 
+	    	mouse_in_listSearch=false; 
+	  });
+	 $('#listaNotifiche').hover(function(){ 
+		 	mouse_in_listNotify=true; 
+	    }, function(){ 
+	    	mouse_in_listNotify=false; 
+	  });
+	 $('#linkShowNotify').hover(function(){ 
+		 	mouse_in_linkNotify=true; 
+	    }, function(){ 
+	    	mouse_in_linkNotify=false; 
+	  });
 
-
+    $("body").mouseup(function(){ 
+        if(! mouse_in_listSearch)
+        	clearlistSearch();
+        if(! mouse_in_listNotify && !mouse_in_linkNotify)
+        	HideNotify();
+    });    
+}
+function stopLoosyNetBar(){
+	clearInterval(timerNotifiche);
+}
+function onbeforeunloadLoosyNetBar(){
+	stopLoosyNetBar();
+	alert("stop");
+	 $.ajax({
+	    	type: "GET",
+			url:"notifiche"
+	    });
+}
 </script>
 
 <body>
-	<div style="display:none">
-	<form action="javascript:getNotifiche()">
+	<form action="javascript:onbeforeunloadLoosyNetBar()" style="display:none">
+		<input type="submit" class="onbeforeunload">
+	</form>
+	<form action="javascript:onLoadLoosyNetBar()" style="display:none">
 		<input type="submit" class="onload">
 	</form>
-	</div>
 	
 	<nav class="navbar navbar-default navbar-static-top navbar-fixed-top">
 		<div class="container-fluid">
@@ -142,19 +186,21 @@ function showResults(){
 
 				<ul class="nav navbar-nav navbar-left">
 					<li>
+						<div class="dropdown">
 						<form class="navbar-form " action="javascript:search()">
 							<div class="input-group" style="margin-top: 2px; margin-right:-30px;">
-								<input type="text" id="search" autocomplete="off" class="form-control"	placeholder="Search">
+								<input type="text" id="search" autocomplete="off" class="form-control" onblur="javascript:clearlistSearch()" onkeyup="javascript:clearlistSearch()" placeholder="Search">
 								<div class="input-group-btn" id="buttonSearch">
-									<button class="btn btn-default" type="submit">
-										<i class="glyphicon glyphicon-search"></i>
+									<button class="btn btn-default" type="submit" onclick="javascript:clearlistSearch()">
+										<span class="glyphicon glyphicon-search"></span>
 									</button>
 								</div>
 							</div>
 						</form>
-						<div id="listaRisultati" style="position:absolute; display:none">
-								<ul></ul>
-						  		</div>
+						<ul id="listaCanaliTrovati" class="dropdown-menu" style="left:15px;">
+							<li id="emptylist" class="notify">Non ci sono notifiche</li>
+						</ul>
+						</div>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
@@ -162,14 +208,14 @@ function showResults(){
 							Home</a></li>
 					<li><a href="utente"><span class="glyphicon glyphicon-user"  id="icons"></span>
 							${user.nome}</a></li>
-					<li><a href="javascript:showNotify()">					
-						<span id="numNotifiche" class="badge badge-notify" style="background:red"></span>
-						<span class="glyphicon glyphicon-globe" id="icons"></span>
-							Notifiche
-							<span class="caret"></span></a>
-						<div id="listaNotifiche" style="position:absolute; display:none">
-						<ul></ul>
-						  </div>
+					<li class="dropdown">
+						<a href="javascript:showNotify()" class="dropdown-toggle" id="linkShowNotify">					
+							<span id="numNotifiche" class="badge badge-notify" style="background:red"></span>
+							<span class="glyphicon glyphicon-globe" id="icons"></span>
+								Notifiche
+							<span class="caret"></span>
+						</a>
+						<ul id="listaNotifiche" class="dropdown-menu"></ul>
 						</li>
 					<li><a href="logout"><span class="glyphicon glyphicon-log-out" id="icons"></span>
 							Esci</a></li>

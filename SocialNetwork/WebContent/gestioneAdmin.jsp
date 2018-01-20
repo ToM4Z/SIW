@@ -51,7 +51,6 @@ function rimuoviAdmin(x){
 </script>
 
 <html>
-<head>
 <head lang="it">
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -62,7 +61,6 @@ function rimuoviAdmin(x){
 		<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 		
 	</head>
-</head>
 </head>
 <body>
 	

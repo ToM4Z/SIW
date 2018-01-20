@@ -3,7 +3,6 @@ package controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,15 +13,11 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 
 
-import model.Canale;
 import model.Commento;
-import model.Gruppo;
 import model.Post;
 import model.Utente;
 import persistence.DatabaseManager;
-import persistence.dao.CanaleDao;
 import persistence.dao.CommentoDao;
-import persistence.dao.GruppoDao;
 import persistence.dao.PostDao;
 
 
