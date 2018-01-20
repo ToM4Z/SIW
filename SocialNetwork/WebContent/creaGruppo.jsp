@@ -44,7 +44,7 @@ function load(){
 				 </c:if>
 				<form method="post" action="creaGruppo"> 
 					<br>
-					<label for="nome">Nome:</label><input name="nome" type="text" class="form-control" style="position:relative; left:30%; width:30%"/>
+					<label for="nome">Nome:</label><input name="nome" autocomplete="off" type="text" class="form-control" style="position:relative; left:30%; width:30%"/>
 					<br>  
 					<input name="inviaDati" type="submit" value="creaGruppo"  class="btn btn-success"/>
 				</form>

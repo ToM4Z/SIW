@@ -8,7 +8,7 @@
 <html>
 <head lang="it">
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, charset=UTF-8">
 		<title>LoosyNet</title>
 
 		<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
@@ -107,7 +107,7 @@ function load(){
 	background-color: #E8E8E8;
 	color: #555;
 	border: .1em solid;
-	border-color: #5E5E5E;
+	border-color: #C0C0C0;
 	border-radius: 10px;
 	font-family: Tahoma, Geneva, Arial, sans-serif;
 	font-size: 1.1em;
@@ -143,7 +143,11 @@ function load(){
 .contenuto{
   font-size: 1.2em;
 }
-
+.post-hr{
+	border-color: #D2D2D2;
+	margin-top:4px; 
+	margin-bottom:5px; 
+}
 @media screen and (max-width : 767px) {
 	#barraCanali, #chatGruppo{
 		display:none;
@@ -239,7 +243,7 @@ function shiftRight(){
 				</c:choose>
 
 				<form action = "javascript:creaPost()">
-					<input id="contenuto" type="text" name="contenuto" >
+					<input id="contenuto" autocomplete="off" type="text" name="contenuto" >
 					<input type = "submit" value = "Pubblica">
 				</form>
 	
@@ -259,17 +263,17 @@ function shiftRight(){
 				      </c:if>
 				    </div>
 				    <div class="post-body">
-				      <hr style="margin:-0.5px; margin-bottom:7px; border-color:black">
+				      <hr class="post-hr">
 				      <p class="contenuto">${post.contenuto}</p>
 				    </div>
 				    <div class="post-footer">
 				      <p class="date"><small>${post.dataCreazione}</small></p>
-				      <hr style="margin-top:-2px; margin-bottom:6px; border-color:black">
+				      <hr class="post-hr">
 				      <div style="display:inline" class="row">
 				         <span class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">10</span>
 				        <span class="glyphicon glyphicon-thumbs-down" style="font-size:1.5em;padding-right:10%">10</span>
 				      </div>
-				      <hr style="margin-top:4px; margin-bottom:5px; border-color:black">
+				      <hr class="post-hr">
 				        <a href = "commenti?idPost=${post.id}" style="font-size:1em">mostra commenti</a>
 				        <div style="display:inline">
 				      <form action = "javascript:addCommento(${post.id})">

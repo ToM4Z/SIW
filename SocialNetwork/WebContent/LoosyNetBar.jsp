@@ -5,7 +5,7 @@
 <html>
 <head lang="it">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, charset=UTF-8">
 
 <title>LoosyNet</title>
 
@@ -144,7 +144,7 @@ function showResults(){
 					<li>
 						<form class="navbar-form " action="javascript:search()">
 							<div class="input-group" style="margin-top: 2px; margin-right:-30px;">
-								<input type="text" id="search" class="form-control"	placeholder="Search">
+								<input type="text" id="search" autocomplete="off" class="form-control"	placeholder="Search">
 								<div class="input-group-btn" id="buttonSearch">
 									<button class="btn btn-default" type="submit">
 										<i class="glyphicon glyphicon-search"></i>

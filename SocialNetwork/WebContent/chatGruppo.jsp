@@ -5,7 +5,7 @@
 <head lang="it">
 <meta charset="utf-8">
 <meta name="viewport"
-	content="width=device-width, initial-scale=1,  height=device-height">
+	content="width=device-width, initial-scale=1,  height=device-height, charset=UTF-8">
 <title>LoosyNet</title>
 
 <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
@@ -187,7 +187,7 @@ function stop(){
 				<form action="javascript:sendMessage()">
 					<c:if test="${not empty gruppo.nome}">
 						<input id="messaggio" type="text" class="form-control"
-							placeholder="Inserisci testo"
+							placeholder="Inserisci testo" autocomplete="off"
 							style="float: left; margin-left: -7px; width: 70%"
 							name="messaggio">
 
