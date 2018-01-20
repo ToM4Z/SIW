@@ -50,6 +50,28 @@
 </style>
 
 <script>
+
+function search(){
+	
+	  alert($("#search").val());
+	  var json = JSON.stringify({"search": $("#search").val()});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","search", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+
+	  xhr.onreadystatechange = function () {
+		    if (xhr.readyState === 4 && xhr.status === 200) {
+		        var data = JSON.parse(xhr.responseText);
+		        $("#listaRisultati").append(data);
+		        
+		    }
+		};
+		xhr.send(json);
+		showResults();
+}
+
 function collapseButton(){
 	if($("#myNavbar").css("display")=="none"){
 		$("#myNavbar").slideDown();
@@ -82,6 +104,18 @@ function showNotify(){
 	}
 }
 
+function showResults(){
+	if($("#listaRisultati").css("display") == "none"){
+		$("#listaRisultati").slideDown();
+		$("#listaRisultati").show();
+	}else{
+		$("#listaRisultati").slideUp();
+		$("#listaRisultati").css("display:none");
+	}
+}
+
+
+
 </script>
 
 <body>
@@ -108,7 +142,7 @@ function showNotify(){
 
 				<ul class="nav navbar-nav navbar-left">
 					<li>
-						<form class="navbar-form " action="#">
+						<form class="navbar-form " action="javascript:search()">
 							<div class="input-group" style="margin-top: 2px; margin-right:-30px;">
 								<input type="text" id="search" class="form-control"	placeholder="Search">
 								<div class="input-group-btn" id="buttonSearch">
@@ -118,6 +152,9 @@ function showNotify(){
 								</div>
 							</div>
 						</form>
+						<div id="listaRisultati" style="position:absolute; display:none">
+								<ul></ul>
+						  		</div>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">

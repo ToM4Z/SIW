@@ -32,8 +32,6 @@ public class CanaleServlet extends HttpServlet {
 		
 		for (Utente u : canale.getMembri()) {
 			
-			//System.out.println(u.getEmail());
-			
 			if (u.getEmail().equals(utente.getEmail()))
 				iscritto=true;
 		}
