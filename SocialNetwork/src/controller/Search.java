@@ -45,13 +45,13 @@ public class Search extends HttpServlet {
         
         List<Canale> canali = canaleDao.findAll();
         List<String> results = new LinkedList<>();
-        CharSequence toSearch = s.search.substring(0, s.search.length()-1);
+        CharSequence toSearch = s.search.toLowerCase().substring(0, s.search.length()-1);
         
         results.add("<ul>");
         
         for (Canale c : canali) {
         	
-        	if (c.getNome().contains(toSearch)) {
+        	if (c.getNome().toLowerCase().contains(toSearch)) {
         		
         		results.add("<li><a href = canale?channel="+c.getNome()+">" +c.getNome()+"</a></li>");
         	}
