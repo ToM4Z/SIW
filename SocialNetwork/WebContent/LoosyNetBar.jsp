@@ -53,7 +53,7 @@
 
 function search(){
 	
-	  alert($("#search").val());
+	  //alert($("#search").val());
 	  var json = JSON.stringify({"search": $("#search").val()});
 	  var xhr = new XMLHttpRequest();
 	  xhr.open("post","search", true);
