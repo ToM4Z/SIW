@@ -20,5 +20,6 @@ function convertDate(data,orario){
 		return pezzi[2]+"/"+mese+"/"+pezzi[5];
 	
 	var orario = pezzi[3].split(/:/);
+	
 	return pezzi[2]+"/"+mese+"/"+pezzi[5]+"  "+orario[0]+":"+orario[1];
 }

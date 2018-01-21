@@ -22,8 +22,10 @@ public class SendMessage extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Utente utente = (Utente) req.getSession().getAttribute("user");
-		if(utente == null)
-			resp.sendRedirect("login.html");
+		if(utente == null) {
+			resp.getWriter().write("error");
+			return;
+		}
 		
 		try {
 			String gruppo = req.getParameter("gruppo");

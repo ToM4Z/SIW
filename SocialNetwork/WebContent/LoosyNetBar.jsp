@@ -82,21 +82,29 @@ function collapseButton(){
 	}
 }
 var timerNotifiche;
+var notificheLock = false;
 function getNotifiche(){
 	timerNotifiche = setInterval(function(){
-		$.ajax({
-			type:"POST",
-			url:"notifiche",
-			success: function(data){
-				if(data != "[]"){
-					var liste = JSON.parse(data);
-					$("#numNotifiche").text(liste.length);
-					$("#emptylistNotify").remove();
-					$("#listaNotifiche").append(liste);
-					$("#listaNotifiche").find('li').addClass('notify');
+		if(!notificheLock){
+			notificheLock = true;
+			$.ajax({
+				type:"POST",
+				url:"notifiche",
+				success: function(data){
+					if(data != "[]"){
+						var liste = JSON.parse(data);
+						$("#numNotifiche").text(liste.length);
+						$("#emptylistNotify").remove();
+						$("#listaNotifiche").append(liste);
+						$("#listaNotifiche").find('li').addClass('notify');
+					}
+					notificheLock = false;
+				},
+				error: function(){
+					notificheLock = false;
 				}
-			}
-		});
+			});
+		}
 	},1000);
 }
 
