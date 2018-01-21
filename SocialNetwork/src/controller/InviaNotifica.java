@@ -14,10 +14,12 @@ import com.google.gson.Gson;
 
 import model.Gruppo;
 import model.Notifica;
+import model.Post;
 import model.Utente;
 import persistence.DatabaseManager;
 import persistence.dao.GruppoDao;
 import persistence.dao.NotificaDao;
+import persistence.dao.PostDao;
 
 
 
@@ -29,8 +31,8 @@ public class InviaNotifica extends HttpServlet {
 		private String nomeGruppo;
 		private String nomeCanale;
 		private String tipo;
+		private String idPost;
 	}
-       
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
@@ -69,6 +71,30 @@ public class InviaNotifica extends HttpServlet {
 			
 			gruppoDao.addUserToAttesa(gruppo, utente);
 			//System.out.println("aggiunto in attesa in "+gruppo.getNome());
+			
+		}
+		
+		if (t.tipo.equals("commento")) {
+			
+			PostDao postDao = DatabaseManager.getInstance().getDaoFactory().getPostDAO();
+			Post post = postDao.findByPrimaryKey(Long.parseLong(t.idPost));
+			Utente destinatario = post.getCreatore();
+			boolean invia = true;
+			String contenuto = "<a href = commenti?idPost="+t.idPost +">Il tuo post nel gruppo "+post.getGruppo().getNome()
+					+"del canale "+post.getCanale().getNome()+"è stato commentato</a>";
+			
+			for (Notifica n : destinatario.getNotifiche()) {
+				
+				if (n.getContenuto().equals(contenuto)) {
+					invia = false;
+				}
+			}
+			
+			if (invia) {
+				Notifica notifica = new Notifica(destinatario, contenuto);
+				notificaDao.save(notifica);
+				System.out.println("notifica commento inviata");
+			}
 			
 		}
 		

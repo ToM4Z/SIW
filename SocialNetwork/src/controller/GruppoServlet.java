@@ -33,7 +33,7 @@ public class GruppoServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		Utente utente = (Utente) session.getAttribute("user");
 		
-		
+		//System.out.println(gruppo.getNome());
 		for(Utente u : gruppo.getAdmins()) {
 			
 			if (u.getEmail().equals(utente.getEmail())){

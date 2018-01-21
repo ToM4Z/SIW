@@ -14,7 +14,6 @@
 		<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
 		<script src="js/jquery-3.2.1.min.js"></script>
 		<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-		<script src="js/eliminaPost.js"></script>
 
 <script>
 function creaPost(){
@@ -52,10 +51,31 @@ function addCommento(idPost){
 	  xhr.onreadystatechange = function(){
 		  if(xhr.responseText == "true"){
 		  	  alert("commento aggiunto")
+		  	  inviaNotificaCommento(idPost);
 	  		}else{
 	      }
 	  }
 	  xhr.send(json);
+}
+
+function eliminaPosts(idPost){
+	
+	
+	if (confirm("Sei sicuro di voler cancellare il post?") == true) {
+	  var json = JSON.stringify({"idPost" : idPost});
+	  //alert(idPost);
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","eliminaPost", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  	  
+	  $("#post_"+idPost).remove();
+	  
+	  xhr.send(json);
+	}
+	
+
 }
 
 function seiSicuroGruppo(){
@@ -78,7 +98,7 @@ function inviaNotificaRichiesta(){
 	  var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
 	  var tipo = "richiestaIscrizione";
-	  var json = JSON.stringify({"nomeGruppo": gruppo,"nomeCanale" : canale, "tipo" : tipo});
+	  var json = JSON.stringify({"nomeGruppo": gruppo,"nomeCanale" : canale, "tipo" : tipo, "idPost" : ""});
 	  var xhr = new XMLHttpRequest();
 	  xhr.open("post","inviaNotifica", true);
 	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
@@ -93,6 +113,55 @@ function inviaNotificaRichiesta(){
 	  }
 	  xhr.send(json);
 	  
+}
+
+
+function inviaNotificaCommento(idPost){
+	
+	  var tipo = "commento";
+	  var json = JSON.stringify({"idPost": idPost, "tipo" : tipo, "nomeGruppo": "", "nomeCanale" : ""});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","inviaNotifica", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  xhr.onreadystatechange = function(){
+		  if(xhr.responseText == "true"){
+		  	  alert("notifica commento inviata");
+	  		}else{
+	  			
+	      }
+	  }
+	  xhr.send(json);
+	  
+}
+
+function eseguiModifica(x){
+	  
+	  var mod =  $("#modifica").val();
+	  var json = JSON.stringify({"idPost":x, "modifica": mod});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","modificaPost", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  xhr.onreadystatechange = function(){
+		  if(xhr.responseText == "true"){
+			  $("div.post-body"+x).replaceWith("<div class=\"post-body"+x+"\">"
+					  +"<hr style=\"margin:-0.5px; margin-bottom:7px; border-color:black\">"
+					  +"<p class=\"contenuto\">"+mod+"</p></div>");
+	  		}else{
+	      }
+	  }
+	  xhr.send(json);
+}
+
+function modificaPost(x){
+	alert(x);
+	$("div.post-body"+x).replaceWith("<div class=\"post-body"+x+"\">"
+		+"<hr style=\"margin:-0.5px; margin-bottom:7px; border-color:black\">"
+		+"<form action = \"javascript:eseguiModifica("+x+")\"><input id=\"modifica\" type=\"text\" name=\"modifica\" >"
+		+"<input type = \"submit\" value = \"Modifica\"></form></div>");
 }
 
 function load(){
@@ -222,6 +291,7 @@ function shiftRight(){
 					<h5 onclick="seiSicuroGruppo()">Elimina gruppo</h5>
 					<h5><a href = utentiInAttesa?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Visualizza utenti in attesa</a></h5>
 					<h5><a href = gestioneAdmin?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci admin</a></h5>
+					<h5><a href = gestioneMembri?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci membri</a></h5>
 				</c:if>
 
 				<c:choose>
@@ -244,6 +314,7 @@ function shiftRight(){
 				</form>
 	
 				<c:forEach var = "post" items = "${gruppo.post}">
+				<div id = post_${post.id}> 
 				  <div class="row">
 				  <div class="post">
 				    <div class="post-header">
@@ -252,13 +323,13 @@ function shiftRight(){
 				    </div>
 				    <div class="post-header-right">
 				      <c:if test = "${post.creatore.email == user.email}">
-				        <a onclick="javascript:seiSicuro(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
+				       <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
 				      </c:if>
 				      <c:if test = "${post.creatore.email == user.email || admin==true}">
-				        <a onclick="javascript:seiSicuro(${post.id})"><span class="glyphicon glyphicon-trash"></span></a>
+				       <a onclick="javascript:eliminaPosts(${post.id})"><span class="glyphicon glyphicon-trash"></span></a>
 				      </c:if>
 				    </div>
-				    <div class="post-body">
+				    <div class="post-body${post.id}">
 				      <hr style="margin:-0.5px; margin-bottom:7px; border-color:black">
 				      <p class="contenuto">${post.contenuto}</p>
 				    </div>
@@ -273,16 +344,17 @@ function shiftRight(){
 				        <a href = "commenti?idPost=${post.id}" style="font-size:1em">mostra commenti</a>
 				        <div style="display:inline">
 				      <form action = "javascript:addCommento(${post.id})">
-				        <input id="${post.id }" type="text" class="form-control"
+				        <input id="${post.id}" type="text" class="form-control"
 											placeholder="Commenta"
-											name = "${post.id }">
+											name = "${post.id}">
 				        <button type="button" class="btn btn-default" style="position:absolute;right:7;bottom:16px;height:33px"><span class="glyphicon glyphicon-send" style="font-size:1.2em;margin:-2px"></span></button>
 				      </form>
 				    </div>
 				    </div>
 				  </div>
 				</div>
-				</div>			
+				</div>
+				</div>		
 				</c:forEach>	
 			</div>
 		</div>

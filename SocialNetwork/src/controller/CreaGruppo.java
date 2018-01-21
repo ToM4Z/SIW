@@ -37,7 +37,6 @@ public class CreaGruppo extends HttpServlet {
 		HttpSession session = req.getSession(true);
 		Utente utente = (Utente) session.getAttribute("user");
 		
-		
 		CanaleDao canaleDao = DatabaseManager.getInstance().getDaoFactory().getCanaleDAO();
 		GruppoDao gruppoDao = DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
 		
@@ -53,6 +52,8 @@ public class CreaGruppo extends HttpServlet {
 			
 			gruppo.addAdmin(utente);
 			gruppo.addMembro(utente);
+			gruppo.addAdmin(canale.getAdmin());
+			gruppo.addMembro(canale.getAdmin());
 			
 			gruppoDao.save(gruppo);
 			

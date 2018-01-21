@@ -232,8 +232,7 @@
     <servlet-name>GestioneBlacklist</servlet-name>
     <url-pattern>/gestioneBlacklist</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <servlet-name>Search</servlet-name>
     <servlet-class>controller.Search</servlet-class>
   </servlet>
@@ -241,4 +240,22 @@
     <servlet-name>Search</servlet-name>
     <url-pattern>/search</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>ModificaPost</servlet-name>
+    <servlet-class>controller.ModificaPost</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ModificaPost</servlet-name>
+    <url-pattern>/modificaPost</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>GestioneMembri</servlet-name>
+    <servlet-class>controller.GestioneMembri</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GestioneMembri</servlet-name>
+    <url-pattern>/gestioneMembri</url-pattern>
+  </servlet-mapping>
+  
 </web-app>
