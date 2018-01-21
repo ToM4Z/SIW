@@ -23,6 +23,9 @@ function unload(){
 		$(this).trigger("click");
 	});
 }
+function convertDateUser(id, date){
+	$("h3#"+id).append(convertDate(date,false));
+}
 </script>
 </head>
 <body onload="javascript:load();" onbeforeunload="javascript:unload()" style="overflow-x:hidden">
@@ -44,16 +47,16 @@ function unload(){
 					<h3><strong>Cognome:</strong> ${utente.cognome}</h3>
 					<h3><strong>Username:</strong> ${utente.username}</h3>
 					<h3><strong>Email:</strong> ${utente.email}</h3>
-					<h3><strong>Data di nascita:</strong> ${utente.dataDiNascita}</h3>	
-					<h3><strong>Data di iscrizione:</strong> ${utente.dataIscrizione}</h3>	
+					<h3 id="dateN"><strong>Data di nascita:</strong><script>convertDateUser('dateN','${utente.dataDiNascita}');</script></h3>	
+					<h3 id="dateI"><strong>Data di iscrizione:</strong><script>convertDateUser('dateI','${utente.dataIscrizione}');</script></h3>	
 				</c:if>
 				<c:if test="${empty utente.nome}">	
 					<h3><strong>Nome:</strong> ${user.nome}</h3>
 					<h3><strong>Cognome:</strong> ${user.cognome}</h3>
 					<h3><strong>Username:</strong> ${user.username}</h3>
 					<h3><strong>Email:</strong> ${user.email}</h3>
-					<h3><strong>Data di nascita:</strong> ${user.dataDiNascita}</h3>	
-					<h3><strong>Data di iscrizione:</strong> ${user.dataIscrizione}</h3>	
+					<h3 id="dateN"><strong>Data di nascita:</strong><script>convertDateUser('dateN','${user.dataDiNascita}');</script></h3>	
+					<h3 id="dateI"><strong>Data di iscrizione:</strong><script>convertDateUser('dateI','${user.dataIscrizione}');</script></h3>	
 				</c:if>
 			</div>
 		</div>
