@@ -262,7 +262,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 	public void removeUserFromBlackList(Canale canale, Utente utente) {
 		Connection connection = dataSource.getConnection();
 		try {
-			String delete = "delete FROM blacklist WHERE canale = ? and nome = ?";
+			String delete = "delete FROM blacklist WHERE canale = ? and utente = ?";
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.setString(1, canale.getNome());
 			statement.setString(2, utente.getEmail());
@@ -335,6 +335,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 			statement.setString(2, utente.getEmail());
 
 			statement.executeUpdate();
+			this.removeFromAllGroups(canale, utente);
 		} catch (SQLException e) {
 			if (connection != null)
 				try {
@@ -347,6 +348,39 @@ public class CanaleDaoJDBC implements CanaleDao {
 				connection.close();
 			} catch (SQLException e) {
 				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
+	
+	private void removeFromAllGroups(Canale canale, Utente utente) {
+		
+		Connection connection = dataSource.getConnection();
+		for (Gruppo gruppo : canale.getGruppi()) {
+			try {
+				
+				
+				
+					String delete = "delete FROM iscrizione WHERE canale = ? and gruppo = ? and email_utente = ?";
+					PreparedStatement statement = connection.prepareStatement(delete);
+					statement.setString(1, canale.getNome());
+					statement.setString(2, gruppo.getNome());
+					statement.setString(3, utente.getEmail());
+		
+					statement.executeUpdate();
+				
+			} catch (SQLException e) {
+				if (connection != null)
+					try {
+						connection.rollback();
+					} catch (SQLException excep) {
+						throw new PersistenceException(e.getMessage());
+					}
+			} finally {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					throw new PersistenceException(e.getMessage());
+				}
 			}
 		}
 	}

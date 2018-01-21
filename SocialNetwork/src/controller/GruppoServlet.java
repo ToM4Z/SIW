@@ -27,9 +27,9 @@ public class GruppoServlet extends HttpServlet {
 		boolean iscritto = false;
 		Utente utente = (Utente) req.getSession().getAttribute("user");
 		
-		
 		for(Utente u : gruppo.getAdmins())			
 			if (u.getEmail().equals(utente.getEmail()))
+
 				admin = true;
 		
 		for (Utente u : gruppo.getMembri())			

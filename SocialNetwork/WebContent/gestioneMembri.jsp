@@ -2,7 +2,53 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:useBean id="user" class="model.Utente" scope="session" />
 
+<script>
 
+function aggiungiMembro(x){
+	
+	  
+	  var canale = $("#nomeCanale").text();
+	  var gruppo = $("#nomeGruppo").text();
+	  var azione = "aggiungi";
+	  var json = JSON.stringify({"nomeCanale" : canale, "nomeGruppo" : gruppo, "user" : x, "azione": azione});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","gestioneMembri", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  xhr.onreadystatechange = function(){
+		  if(xhr.responseText == "true"){
+		  	  alert("hai aggiunto ai membri "+x);
+	  		}else{
+	  			
+	      }
+	  }
+	  xhr.send(json);
+}
+
+function rimuoviMembro(x){
+	  
+	  alert(x);
+	  var canale = $("#nomeCanale").text();
+	  var gruppo = $("#nomeGruppo").text();
+	  var azione = "rimuovi";
+	  var json = JSON.stringify({"nomeCanale" : canale, "nomeGruppo" : gruppo, "user" : x, "azione": azione});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","gestioneMembri", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  xhr.onreadystatechange = function(){
+		  if(xhr.responseText == "true"){
+		  	  alert("hai rimpsso dai membri "+x);
+	  		}else{
+	  			
+	      }
+	  }
+	  xhr.send(json);
+}
+
+</script>
 
 <html>
 <head lang="it">
@@ -21,55 +67,6 @@
 	};
 </script>
 </head>
-
-<script>
-
-function aggiungiBlacklist(x){
-
-	
-	  var canale = $("#canale").text();
-	  alert($("#canale").text());
-	  var azione = "aggiungi";
-	  var json = JSON.stringify({"nomeCanale" : canale, "user" : x, "azione": azione});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","gestioneBlacklist", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("hai aggiunto alla Blacklist "+x);
-	  		}else{
-	  			
-	      }
-	  }
-	  xhr.send(json);
-}
-
-function rimuoviBlacklist(x){
-	  
-	  //alert(x);
-	  var canale = $("#canale").text();
-	  var azione = "rimuovi";
-	  var json = JSON.stringify({"nomeCanale" : canale, "user" : x, "azione": azione});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","gestioneBlacklist", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("hai rimosso dalla Blacklist "+x);
-	  		}else{
-	  			
-	      }
-	  }
-	  xhr.send(json);
-}
-
-</script>
-
-
 <body onload="javascript:load()" style="overflow-x: hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
@@ -79,26 +76,23 @@ function rimuoviBlacklist(x){
 		<div class="col-bg-6 brd">
 			<jsp:include page="barraCanali.jsp" />
 		</div>
-		<div class="col-bg-6 brd">
-			<jsp:include page="chatGruppo.jsp" />
+		
 		</div>
 		<div class="col-bg-6 brd">
 			<div id="homePost" style="margin-top: 60px; text-align: center;">
 
-				<h2>Stai gestendo la Blacklist del canale:</h2>
-				<h1>${canale}</h1>
-				<h3 id="canale">${canale}</h3>
+				<h2>Stai gestendo i membri del gruppo:</h2>
+				<h1 id="nomeGruppo">${gruppo}</h1>
+				<h1 id="nomeCanale" style="display:none">${canale}</h1>
 				<c:forEach var="riga" items="${righe}">
-
-	
-
 	
 					${riga}
 	
 				</c:forEach>
 
 			</div>
-		</div>
+		
 	</div>
+	
 </body>
 </html>

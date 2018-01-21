@@ -130,14 +130,14 @@ public class PostDaoJDBC implements PostDao {
 		
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String update = "update post SET contenuto = ? and image = ? WHERE id_post = ?";
+			String update = "update post SET contenuto = ?"+/* and image = ?*/" WHERE id_post = ?";
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setString(1, post.getContenuto());
-			statement.setString(2, post.getImage());
-			statement.setLong(3, post.getId());
+			//statement.setString(2, post.getImage());
+			statement.setLong(2, post.getId());
 
 			statement.executeUpdate();
-			connection.commit();
+			//connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
