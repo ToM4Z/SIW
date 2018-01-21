@@ -90,8 +90,8 @@ function getNotifiche(){
 			success: function(data){
 				if(data != "[]"){
 					var liste = JSON.parse(data);
-					$("#emptylist").remove();
 					$("#numNotifiche").text(liste.length);
+					$("#emptylistNotify").remove();
 					$("#listaNotifiche").append(liste);
 					$("#listaNotifiche").find('li').addClass('notify');
 				}
@@ -110,7 +110,16 @@ function showNotify(){
 function HideNotify(){
 	$("#listaNotifiche").hide();
 }
+
 function clearlistSearch(){
+	if($("#listaCanaliTrovati").css("display") == "block"){
+		$("#listaCanaliTrovati").hide();
+		$("#listaCanaliTrovati").find("li").remove();
+	}	  
+}
+function clearlistSearch(event){
+	if(event!=undefined && event.keyCode == 13)
+		return;
 	if($("#listaCanaliTrovati").css("display") == "block"){
 		$("#listaCanaliTrovati").hide();
 		$("#listaCanaliTrovati").find("li").remove();
@@ -189,7 +198,7 @@ function onbeforeunloadLoosyNetBar(){
 						<div class="dropdown">
 						<form class="navbar-form " action="javascript:search()">
 							<div class="input-group" style="margin-top: 2px; margin-right:-30px;">
-								<input type="text" id="search" autocomplete="off" class="form-control" onblur="javascript:clearlistSearch()" onkeyup="javascript:clearlistSearch()" placeholder="Search">
+								<input type="text" id="search" autocomplete="off" class="form-control" onkeyup="javascript:clearlistSearch(event)" placeholder="Search">
 								<div class="input-group-btn" id="buttonSearch">
 									<button class="btn btn-default" type="submit" onclick="javascript:clearlistSearch()">
 										<span class="glyphicon glyphicon-search"></span>
@@ -198,7 +207,6 @@ function onbeforeunloadLoosyNetBar(){
 							</div>
 						</form>
 						<ul id="listaCanaliTrovati" class="dropdown-menu" style="left:15px;">
-							<li id="emptylist" class="notify">Non ci sono notifiche</li>
 						</ul>
 						</div>
 					</li>
@@ -215,8 +223,10 @@ function onbeforeunloadLoosyNetBar(){
 								Notifiche
 							<span class="caret"></span>
 						</a>
-						<ul id="listaNotifiche" class="dropdown-menu"></ul>
-						</li>
+						<ul id="listaNotifiche" class="dropdown-menu">
+							<li id="emptylistNotify" class="notify">Non ci sono notifiche</li>
+						</ul>
+					</li>
 					<li><a href="logout"><span class="glyphicon glyphicon-log-out" id="icons"></span>
 							Esci</a></li>
 				</ul>

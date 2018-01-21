@@ -81,7 +81,7 @@ public class MainJDBC {
 		
 		postdao.save(a);
 		
-		Notifica n = new Notifica(u1,"ooooo");
+		Notifica n = new Notifica(u1,"<a href=\"canale?channel=UNICAL\">UNICAL</a>");
 		notificadao.save(n);
 		
 		List<Post> prova = utentedao.getPostsOfMyGroups(u1);
