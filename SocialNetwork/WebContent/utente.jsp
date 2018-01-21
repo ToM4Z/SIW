@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+	<script src="js/dateConverter.js"></script>
 <script>
 function load(){
 	$("input.onload").each(function(){
@@ -25,7 +26,7 @@ function unload(){
 </script>
 </head>
 <body onload="javascript:load();" onbeforeunload="javascript:unload()" style="overflow-x:hidden">
-	<c:if test="${empty user.nome}">
+	<c:if test="${empty user.username}">
 		<c:redirect url="login.html" />
 	</c:if>
 	<jsp:include page="LoosyNetBar.jsp" />

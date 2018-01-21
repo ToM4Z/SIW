@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class PostDaoJDBC implements PostDao {
 			statement.setString(3, post.getContenuto());
 			statement.setString(4, post.getCanale().getNome());
 			statement.setString(5, post.getGruppo().getNome());
-			statement.setDate(6, new java.sql.Date(post.getDataCreazione().getTime()));
+			statement.setTimestamp(6, new Timestamp(post.getDataCreazione().getTime()));
 			statement.setString(7, post.getImage());
 			statement.executeUpdate();
 		} catch (SQLException e) {
@@ -67,7 +69,7 @@ public class PostDaoJDBC implements PostDao {
 				post.setContenuto(result.getString("contenuto"));
 				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
 				post.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), post.getCanale().getNome()));
-				post.setDataCreazione(new java.util.Date(result.getDate("data_creazione").getTime()));
+				post.setDataCreazione(new Date(result.getTimestamp("data_creazione").getTime()));
 				post.setImage(result.getString("image"));
 				
 			}
@@ -99,7 +101,7 @@ public class PostDaoJDBC implements PostDao {
 				post.setContenuto(result.getString("contenuto"));
 				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
 				post.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), post.getCanale().getNome()));
-				post.setDataCreazione(new java.util.Date(result.getDate("data_creazione").getTime()));
+				post.setDataCreazione(new Date(result.getTimestamp("data_creazione").getTime()));
 				post.setImage(result.getString("image"));
 
 				allPost.add(post);

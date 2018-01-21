@@ -10,6 +10,7 @@ public interface GruppoDao {
 	public List<Gruppo> findAll();       
 	public void update(Gruppo gruppo); 
 	public void delete(Gruppo gruppo);
+	
 	public void addUserToGroup(Gruppo gruppo, Utente utente);
 	public void removeUserFromGroup(Gruppo gruppo, Utente utente);
 	public void addUserToAdmin(Gruppo gruppo, Utente utente);

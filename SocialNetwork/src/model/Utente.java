@@ -12,7 +12,6 @@ public class Utente {
 	private String username;
 	private Date dataDiNascita;
 	private Date dataIscrizione;
-	private String image;
 	private Set<Notifica> notifiche; 
 	
 	
@@ -80,14 +79,6 @@ public class Utente {
 		this.dataIscrizione = dataIscrizione;
 	}
 
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
 	public Set<Notifica> getNotifiche() {
 		return notifiche;
 	}
@@ -95,7 +86,5 @@ public class Utente {
 	public void setNotifiche(Set<Notifica> notifiche) {
 		this.notifiche = notifiche;
 	}
-	
-	
 	
 }

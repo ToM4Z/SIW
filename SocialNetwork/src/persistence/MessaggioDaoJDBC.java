@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 			statement.setString(3, messaggio.getContenuto());
 			statement.setString(4, messaggio.getGruppo().getCanale().getNome());
 			statement.setString(5, messaggio.getGruppo().getNome());
-			statement.setDate(6, new java.sql.Date(messaggio.getData().getTime()));
+			statement.setTimestamp(6, new Timestamp(messaggio.getData().getTime()));
 			statement.setString(7, messaggio.getImage());
 			statement.executeUpdate();
 		} catch (SQLException e) {
@@ -68,7 +70,7 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 				messaggio.setMittente(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_mittente")));;
 				messaggio.setContenuto(result.getString("contenuto"));
 				messaggio.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), result.getString("canale")));
-				messaggio.setData(new java.util.Date(result.getDate("data_creazione").getTime()));
+				messaggio.setData(new Date(result.getTimestamp("data_creazione").getTime()));
 				messaggio.setImage(result.getString("image"));
 			}
 		} catch (SQLException e) {
@@ -99,7 +101,7 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 				messaggio.setMittente(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_mittente")));;
 				messaggio.setContenuto(result.getString("contenuto"));
 				messaggio.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), result.getString("canale")));
-				messaggio.setData(new java.util.Date(result.getDate("data_creazione").getTime()));
+				messaggio.setData(new Date(result.getTimestamp("data_creazione").getTime()));
 				messaggio.setImage(result.getString("image"));
 
 				allMessaggi.add(messaggio);
@@ -192,7 +194,7 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 				messaggio.setMittente(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_mittente")));;
 				messaggio.setContenuto(result.getString("contenuto"));
 				messaggio.setGruppo(m.getGruppo());
-				messaggio.setData(new java.util.Date(result.getDate("data_creazione").getTime()));
+				messaggio.setData(new Date(result.getTimestamp("data_creazione").getTime()));
 				messaggio.setImage(result.getString("image"));
 
 				allMessaggi.add(messaggio);
@@ -232,8 +234,7 @@ public class MessaggioDaoJDBC implements MessaggioDao{
 				messaggio.setMittente(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_mittente")));;
 				messaggio.setContenuto(result.getString("contenuto"));
 				messaggio.setGruppo(m.getGruppo());
-				//messaggio.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), result.getString("canale")));
-				messaggio.setData(new java.util.Date(result.getDate("data_creazione").getTime()));
+				messaggio.setData(new Date(result.getTimestamp("data_creazione").getTime()));
 				messaggio.setImage(result.getString("image"));
 
 				allMessaggi.add(messaggio);

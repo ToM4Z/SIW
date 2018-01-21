@@ -1,6 +1,7 @@
 package persistence;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +38,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 			statement = connection.prepareStatement(insert);
 			statement.setString(1, canale.getNome());
 			statement.setString(2, canale.getDescrizione());
-			statement.setDate(3, new java.sql.Date(canale.getData_creazione().getTime()));
+			statement.setDate(3, new Date(canale.getData_creazione().getTime()));
 			statement.setString(4, canale.getAdmin().getEmail());
 			statement.setString(5, canale.getImage());
 			statement.executeUpdate();
@@ -168,10 +169,9 @@ public class CanaleDaoJDBC implements CanaleDao {
 	public void update(Canale canale) {
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String update = "update canale SET descrizione = ?"+/* and image = ?*/ " WHERE nome = ?";	//anche l'immagine
+			String update = "update canale SET descrizione = ? WHERE nome = ?";	//anche l'immagine
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setString(1, canale.getDescrizione());
-			//statement.setString(2, canale.getImage());
 			statement.setString(2, canale.getNome());
 
 			statement.executeUpdate();

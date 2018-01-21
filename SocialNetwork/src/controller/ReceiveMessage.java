@@ -1,7 +1,7 @@
 package controller;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -74,12 +74,12 @@ public class ReceiveMessage extends HttpServlet{
 	
 	private List<String> createListMex(Utente me,List<Messaggio> mex){
 		List<String> json = new LinkedList<>();
-		
-		SimpleDateFormat parser = new SimpleDateFormat("hh.mm");
+		Calendar calendar = Calendar.getInstance();
 		for(int i=0;i<mex.size();++i) {
-			Messaggio m = mex.get(i);
-			String side = m.getMittente().getEmail().equals(me.getEmail()) ? "right" : "left";			
-			String data = parser.format(m.getData());
+			Messaggio m = mex.get(i);	
+			calendar.setTime(m.getData());
+			String side = m.getMittente().getEmail().equals(me.getEmail()) ? "right" : "left";		
+			String data = ""+calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE); 
 			
 			json.add("<li><span class=\"mex mex-"+side+"\">"
 						+ "<span class=\"mex-header mex-header-"+side+"\">"
@@ -93,6 +93,5 @@ public class ReceiveMessage extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.getSession().removeAttribute("lastMessageID");
-		System.out.println("lastMessage removed");
 	}
 }

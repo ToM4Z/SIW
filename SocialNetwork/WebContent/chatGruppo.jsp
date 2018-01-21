@@ -108,10 +108,10 @@ function loadMessaggi(){
 				var liste = JSON.parse(data);
 				$("#listchat").append(liste);
 				$("#chat").animate({scrollTop:$("#chat").get(0).scrollHeight}, 'slow');
-				getMessaggi();
 			}else if(data == "error"){
 				alert("error");
 			}
+			getMessaggi();
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			stopChat();

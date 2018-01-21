@@ -51,7 +51,7 @@ public class UtilDao {
 		try {
 			String create = "create SEQUENCE sequenza_id;"
 					+ "create table utente (email varchar(255) primary key, nome varchar(255), cognome varchar(255), "
-						+ "username varchar(255), \"password\" varchar(255), data_nascita date, data_iscrizione date, image text);"
+						+ "username varchar(255), \"password\" varchar(255), data_nascita date, data_iscrizione date);"
 					
 					+ "create table canale (nome varchar(255) primary key, descrizione text, "
 						+ "data_creazione date, email_admin varchar(255) REFERENCES utente(email), image text);"
