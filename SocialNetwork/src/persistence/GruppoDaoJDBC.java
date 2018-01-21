@@ -37,12 +37,11 @@ public class GruppoDaoJDBC implements GruppoDao {
 			ResultSet result = statement.executeQuery();
 			if(!result.next()){				
 				//INSERISCO IL GRUPPO
-				String insert = "insert into gruppo(nome, data_creazione, canale, image) values (?,?,?,?)";
+				String insert = "insert into gruppo(nome, data_creazione, canale) values (?,?,?)";
 				statement = connection.prepareStatement(insert);
 				statement.setString(1, gruppo.getNome());
 				statement.setDate(2, new Date(gruppo.getData_creazione().getTime()));
 				statement.setString(3, gruppo.getCanale().getNome());
-				statement.setString(4, gruppo.getImage());
 				statement.executeUpdate();
 			}
 			// salviamo anche tutti gli utenti del gruppo in CASCATA
