@@ -1,0 +1,75 @@
+
+.li-mex{
+	list-style-type: none;
+}
+
+.mex {
+	background-color: #e3f7fc;
+	color: #555;
+	border: .1em solid;
+	border-color: #8ed9f6;
+	border-radius: 10px;
+	font-family: Tahoma, Geneva, Arial, sans-serif;
+	font-size: 1.1em;
+	padding: 10px 10px 10px 10px;
+	margin: 10px;
+	cursor: default;
+}
+
+.mex-left {
+	float: left;
+	margin-right: 100px;
+	margin-left: -40px;
+}
+
+.mex-right {
+	float: right;
+	margin-left: 100px;
+}
+
+.mex-header {
+	font-family: Tahoma, Geneva, Arial, sans-serif;
+	font-size: 1.0em;
+	font-weight: bold;
+	cursor: default;
+	position: relative;
+}
+.mex-header a{
+	font-family: Tahoma, Geneva, Arial, sans-serif;
+	font-size: 1.0em;
+	font-weight: bold;
+	color:#515151;
+}
+
+.mex-header-right {
+	float: right;
+}
+
+.mex-header-left {
+	float: left;
+}
+
+.mex-footer {
+	font-family: Tahoma, Geneva, Arial, sans-serif;
+	font-size: 0.7em;
+	font-weight: bold;
+	cursor: default;
+	position: relative;
+}
+
+.mex-footer-right {
+	float: right;
+}
+
+.mex-footer-left {
+	float: left;
+}
+
+hr {
+	display: block;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	width: 100%;
+	border-style: inset;
+	border-width: 1px;
+}

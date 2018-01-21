@@ -4,83 +4,15 @@
 <html>
 <head lang="it">
 <meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1,  height=device-height">
+<meta name="viewport" content="width=device-width, initial-scale=1,  height=device-height">
 <title>LoosyNet</title>
 
 <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<style>
-hr {
-	display: block;
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
-	width: 100%;
-	border-style: inset;
-	border-width: 1px;
-}
-
-.mex {
-	background-color: #e3f7fc;
-	color: #555;
-	border: .1em solid;
-	border-color: #8ed9f6;
-	border-radius: 10px;
-	font-family: Tahoma, Geneva, Arial, sans-serif;
-	font-size: 1.1em;
-	padding: 10px 10px 10px 10px;
-	margin: 10px;
-	cursor: default;
-}
-
-.mex-left {
-	float: left;
-	margin-right: 100px;
-	margin-left: -40px;
-}
-
-.mex-right {
-	float: right;
-	margin-left: 100px;
-}
-
-.mex-header {
-	font-family: Tahoma, Geneva, Arial, sans-serif;
-	font-size: 1.0em;
-	font-weight: bold;
-	cursor: default;
-	position: relative;
-}
-
-.mex-header-right {
-	float: right;
-}
-
-.mex-header-left {
-	float: left;
-}
-
-.mex-footer {
-	font-family: Tahoma, Geneva, Arial, sans-serif;
-	font-size: 0.7em;
-	font-weight: bold;
-	cursor: default;
-	position: relative;
-	margin-top: 20px;
-}
-
-.mex-footer-right {
-	float: right;
-}
-
-.mex-footer-left {
-	float: left;
-}
-</style>
+<link rel="stylesheet" href="css/message.css">
 
 <script>
-
 function sendMessage(){
 	$.ajax({
 			type:"POST",
@@ -96,7 +28,7 @@ function sendMessage(){
 	$("#messaggio").val("");
 }
 
-var continua;
+var querying = false;
 function loadMessaggi(){
 	$.ajax({
 		type:"POST",
@@ -104,7 +36,7 @@ function loadMessaggi(){
 		datatype: "json",
 		data: {first: 'true', gruppo : $("#nomeGruppo").text(), canale : $("#nomeCanale").text()},
 		success: function(data){
-			if(data != "empty" && data != "error"){
+			if(data != "[]" && data != "error"){
 				var liste = JSON.parse(data);
 				$("#listchat").append(liste);
 				$("#chat").animate({scrollTop:$("#chat").get(0).scrollHeight}, 'slow');
@@ -112,38 +44,40 @@ function loadMessaggi(){
 				alert("error");
 			}
 			getMessaggi();
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			stopChat();
 		}
 	});
 }
 
+var intervalMex;
 function getMessaggi(){
-	continua = setInterval(function(){
-		$.ajax({
-			type:"POST",
-			url:"receiveMessage",
-			datatype: "json",
-			data: {first: 'false', gruppo : $("#nomeGruppo").text(), canale : $("#nomeCanale").text()},
-			success: function(data){
-				if(data != "empty" && data != "error"){
-					var liste = JSON.parse(data);
-					$("#chat").append(liste);
-					$("#chat").animate({scrollTop:$("#chat").get(0).scrollHeight}, 'slow');
-				}else if(data == "error"){
-					alert("error");
+	intervalMex = setInterval(function(){
+		if(!querying){
+			querying = true;
+			$.ajax({
+				type:"POST",
+				url:"receiveMessage",
+				datatype: "json",
+				data: {first: 'false'},
+				success: function(data){
+					if(data != "[]" && data != "error"){
+						var liste = JSON.parse(data);
+						$("#chat").append(liste);
+						$("#chat").animate({scrollTop:$("#chat").get(0).scrollHeight}, 'slow');
+					}else if(data == "error"){
+						alert("error");
+					}
+					querying=false;
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					querying=false;
 				}
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-				stopChat();
-			}
-		});
+			});
+		}
 	}, 250);
 }
 
 function stopChat(){	
-	clearInterval(continua);
+	clearInterval(intervalMex);
 }
 
 function onbeforeunloadChat(){
@@ -177,7 +111,7 @@ function onbeforeunloadChat(){
 				<div id="chat"
 					style="position: relative; margin-top: -15px; margin-right: -15px; height: 72%; overflow-y: scroll; overflow-x: hidden;">
 					<ul id="listchat"
-						style="list-style-type: none; margin-left: auto; margin-right: auto;">
+						style="margin-left: auto; margin-right: auto;">
 					</ul>
 				</div>
 			</c:if>
