@@ -86,7 +86,6 @@ public class GestioneBlacklist extends HttpServlet {
         	Utente utente = utenteDao.findByPrimaryKey(a.user);
         	System.out.println(canale.getNome());
         	canaleDao.addUserToBlackList(canale, utente);
-        	canaleDao.removeUserFromChannel(canale, utente);
         	//System.out.println("aggiunto alla blacklist");
         	
         	
