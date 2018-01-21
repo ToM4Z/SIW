@@ -6,46 +6,40 @@
 
 function aggiungiMembro(x){
 	
-	  
-	  var canale = $("#nomeCanale").text();
-	  var gruppo = $("#nomeGruppo").text();
-	  var azione = "aggiungi";
-	  var json = JSON.stringify({"nomeCanale" : canale, "nomeGruppo" : gruppo, "user" : x, "azione": azione});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","gestioneMembri", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("hai aggiunto ai membri "+x);
-	  		}else{
-	  			
-	      }
-	  }
-	  xhr.send(json);
+	var canale = $("#nomeCanale").text();
+	var gruppo = $("#nomeGruppo").text();
+	var azione = "aggiungi";
+	
+	$.ajax({
+		type: "POST",
+		url: "gestioneMembri",
+		datatype: "json",
+		data: JSON.stringify({"nomeCanale" : canale, "nomeGruppo" : gruppo, "user" : x, "azione": azione}),
+		success: function(data){
+			var data = JSON.parse(data);
+			//alert("#mem"+data);
+			$("#mem"+data).replaceWith("<div id = \"mem"+data+"\"><h4 onclick = javascript:rimuoviMembro('"+x+"')>"+data+" Rimuovi membro</h4></div>");
+	    	}
+	});
 }
 
 function rimuoviMembro(x){
 	  
-	  alert(x);
+	  //alert(x);
 	  var canale = $("#nomeCanale").text();
 	  var gruppo = $("#nomeGruppo").text();
 	  var azione = "rimuovi";
-	  var json = JSON.stringify({"nomeCanale" : canale, "nomeGruppo" : gruppo, "user" : x, "azione": azione});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","gestioneMembri", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("hai rimpsso dai membri "+x);
-	  		}else{
-	  			
-	      }
-	  }
-	  xhr.send(json);
+	  $.ajax({
+			type: "POST",
+			url: "gestioneMembri",
+			datatype: "json",
+			data: JSON.stringify({"nomeCanale" : canale, "nomeGruppo" : gruppo, "user" : x, "azione": azione}),
+			success: function(data){
+				var data = JSON.parse(data);
+		        //alert("#mem"+data);
+		        $("#mem"+data).replaceWith("<div id=\"mem"+data+"\"><h4 onclick = javascript:aggiungiMembro('"+x+"')>"+data+" Aggiungi membro</h4></div>");
+		    	}
+		});
 }
 
 </script>

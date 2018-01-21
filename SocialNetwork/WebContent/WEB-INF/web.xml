@@ -248,14 +248,22 @@
     <servlet-name>ModificaPost</servlet-name>
     <url-pattern>/modificaPost</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <servlet-name>GestioneMembri</servlet-name>
     <servlet-class>controller.GestioneMembri</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>GestioneMembri</servlet-name>
     <url-pattern>/gestioneMembri</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>EliminaNotifica</servlet-name>
+    <servlet-class>controller.EliminaNotifica</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EliminaNotifica</servlet-name>
+    <url-pattern>/eliminaNotifica</url-pattern>
   </servlet-mapping>
   
 </web-app>

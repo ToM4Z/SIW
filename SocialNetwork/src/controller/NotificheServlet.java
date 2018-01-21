@@ -46,7 +46,7 @@ public class NotificheServlet extends HttpServlet {
 	private List<String> createList(List<Notifica> notifiche){
 		List<String> list = new LinkedList<>();
 		for(Notifica n: notifiche)
-			list.add("<li>"+n.getContenuto()+"</li>");
+			list.add("<div id=notifica"+n.getId()+"><li>"+n.getContenuto()+"<a onclick=\"javascript:eliminaNotifica("+n.getId()+")\"><span class=\"glyphicon glyphicon-trash\"></span></a></li><div>");
 		return list;
 	}
 	

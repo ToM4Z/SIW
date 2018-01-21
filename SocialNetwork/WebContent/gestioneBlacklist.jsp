@@ -25,46 +25,42 @@
 <script>
 
 function aggiungiBlacklist(x){
-
 	
-	  var canale = $("#canale").text();
-	  alert($("#canale").text());
-	  var azione = "aggiungi";
-	  var json = JSON.stringify({"nomeCanale" : canale, "user" : x, "azione": azione});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","gestioneBlacklist", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("hai aggiunto alla Blacklist "+x);
-	  		}else{
-	  			
-	      }
-	  }
-	  xhr.send(json);
+	var canale = $("#canale").text();
+	var azione = "aggiungi";
+	
+	$.ajax({
+		type: "POST",
+		url: "gestioneBlacklist",
+		datatype: "json",
+		data: JSON.stringify({"nomeCanale" : canale, "user" : x, "azione": azione}),
+		success: function(data){
+			var data = JSON.parse(data);
+			//alert("#mem"+data);
+			$("#bl"+data).replaceWith("<div id = \"bl"+data+"\"><h4 onclick = javascript:rimuoviBlacklist('"+x+"')>"+data+" Rimuovi dalla Blacklist</h4></div>");
+	    	}
+	});
+
 }
 
 function rimuoviBlacklist(x){
-	  
-	  //alert(x);
+	
+	
 	  var canale = $("#canale").text();
 	  var azione = "rimuovi";
-	  var json = JSON.stringify({"nomeCanale" : canale, "user" : x, "azione": azione});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","gestioneBlacklist", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("hai rimosso dalla Blacklist "+x);
-	  		}else{
-	  			
-	      }
-	  }
-	  xhr.send(json);
+	  $.ajax({
+			type: "POST",
+			url: "gestioneBlacklist",
+			datatype: "json",
+			data: JSON.stringify({"nomeCanale" : canale, "user" : x, "azione": azione}),
+			success: function(data){
+				var data = JSON.parse(data);
+		        //alert("#mem"+data);
+		        $("#bl"+data).remove();
+		    	}
+		});
+	  
+	  //alert(x);
 }
 
 </script>
@@ -86,13 +82,9 @@ function rimuoviBlacklist(x){
 			<div id="homePost" style="margin-top: 60px; text-align: center;">
 
 				<h2>Stai gestendo la Blacklist del canale:</h2>
-				<h1>${canale}</h1>
-				<h3 id="canale">${canale}</h3>
+				<h1 id="canale">${canale}</h1>
 				<c:forEach var="riga" items="${righe}">
 
-	
-
-	
 					${riga}
 	
 				</c:forEach>

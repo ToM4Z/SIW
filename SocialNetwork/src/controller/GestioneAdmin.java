@@ -47,11 +47,11 @@ public class GestioneAdmin extends HttpServlet {
 					admin = true;
 			}
 			if (admin) {
-				out.add("<h4 onclick = javascript:rimuoviAdmin('"+u.getEmail()+"')>"+u.getNome()+" "+u.getCognome()+" Rimuovi dagli admin</h4>");
+				out.add("<div id=\"ad"+u.getUsername()+"\"><h4 onclick = javascript:rimuoviAdmin('"+u.getEmail()+"')>"+u.getNome()+" "+u.getCognome()+" Rimuovi dagli admin</h4></div>");
 				//System.out.println("admin"+u.getUsername());
 			}
 			else {
-				out.add("<h4 onclick = javascript:aggiungiAdmin('"+u.getEmail()+"')>"+u.getNome()+" "+u.getCognome()+" Aggiungi dagli admin</h4>");
+				out.add("<div id=\"ad"+u.getUsername()+"\"><h4 onclick = javascript:aggiungiAdmin('"+u.getEmail()+"')>"+u.getNome()+" "+u.getCognome()+" Aggiungi agli admin</h4></div>");
 				//System.out.println("non admin"+u.getUsername());
 			}
 		}
@@ -85,6 +85,7 @@ public class GestioneAdmin extends HttpServlet {
         	Utente utente = utenteDao.findByPrimaryKey(a.user);
 
         	gruppoDao.addUserToAdmin(gruppo, utente); 
+        	resp.getWriter().write(new Gson().toJson(utente.getUsername()));
         }
         
         else if (a.azione.equals("rimuovi")) {
@@ -95,9 +96,9 @@ public class GestioneAdmin extends HttpServlet {
         	Utente utente = utenteDao.findByPrimaryKey(a.user);
         	
         	gruppoDao.removeUserFromAdmin(gruppo, utente);
+        	resp.getWriter().write(new Gson().toJson(utente.getUsername()));
         }
         
-        resp.getWriter().write("true");
 		
 	}
 

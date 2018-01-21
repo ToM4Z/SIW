@@ -15,23 +15,21 @@
 <script>
 function deleteCommento(idCommento){
 	
-	  alert("ok");
-	  var idPost = $("#idPost").text();
-	  var elimina = "true";
-	  var json = JSON.stringify({"idCommento": idCommento, "elimina" : elimina});
-	  alert(json);
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","eliminaCommenti", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  window.location.replace("commenti?idPost="+idPost);
-	  		}else{
-	      }
-	  }
-	  xhr.send(json);
+	if (confirm("Sei sicuro di voler cancellare il post?") == true) {
+		  var idPost = $("#idPost").text();
+		  var elimina = "true";
+		  var json = JSON.stringify({"idCommento": idCommento, "elimina" : elimina});
+		  alert(json);
+		  var xhr = new XMLHttpRequest();
+		  xhr.open("post","eliminaCommenti", true);
+		  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+		  xhr.setRequestHeader("connection","close");
+		  xhr.setRequestHeader("Content-Type", "application/json");
+		  
+		  $("#commento_"+idCommento).remove();
+		  
+		  xhr.send(json);
+	}
 };
 
 function load(){
@@ -65,13 +63,14 @@ function unload(){
 				<p>${post.contenuto}</p>
 				<small>commenti:</small>
 				<c:forEach var="commento" items="${commenti}">
-
+				
+				<div id=commento_${commento.id}>
 					<h4>${commento.creatore.username}</h4>
 					<c:if test = "${commento.creatore.email == user.email || post.creatore.email == user.email}">
 						<small onclick = "javascript:deleteCommento(${commento.id})">Elimina commento</small>
 					</c:if>
 					<h4>${commento.contenuto}</h4>
-
+				</div>
 
 				</c:forEach>
 			</div>
