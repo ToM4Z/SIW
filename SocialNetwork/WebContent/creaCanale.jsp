@@ -18,9 +18,14 @@ function load(){
 		$(this).trigger("click");
 	});
 };
+function unload(){
+	$("input.onbeforeunload").each(function(){
+		$(this).trigger("click");
+	});
+}
 </script>
 </head>
-<body onload="javascript:load()" style="overflow-x:hidden">
+<body onload="javascript:load();" onbeforeunload="javascript:unload()" style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
 	</c:if>
@@ -47,9 +52,9 @@ function load(){
 				 
 				 <form method="post" action="creaCanale">
 		          <br>
-		          <label for="descrizione">Nome:</label> <input name="nome" type="text" class="form-control" style="position:relative; left:30%; width:30%"/>
+		          <label for="descrizione">Nome:</label> <input name="nome" autocomplete="off" type="text" class="form-control" style="position:relative; left:30%; width:30%"/>
 		          <br>
-		          <label for="descrizione">Descrizione:</label> <input name="descrizione" type="text" class="form-control" style="position:relative; left:30%; width:30%"/>
+		          <label for="descrizione">Descrizione:</label> <input name="descrizione" autocomplete="off" type="text" class="form-control" style="position:relative; left:30%; width:30%"/>
 		          <br>
 		          <input name="inviaDati" type="submit" value="creaCanale"  class="btn btn-success"/>
 				</form>

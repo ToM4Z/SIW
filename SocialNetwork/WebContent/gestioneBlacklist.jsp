@@ -69,6 +69,7 @@ function rimuoviBlacklist(x){
 
 </script>
 
+
 <body onload="javascript:load()" style="overflow-x: hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
@@ -88,6 +89,9 @@ function rimuoviBlacklist(x){
 				<h1>${canale}</h1>
 				<h3 id="canale">${canale}</h3>
 				<c:forEach var="riga" items="${righe}">
+
+	
+
 	
 					${riga}
 	

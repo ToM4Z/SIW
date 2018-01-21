@@ -28,7 +28,7 @@ public class ReceiveMessage extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Utente utente = (Utente) req.getSession().getAttribute("user");
 		if(utente == null)
-			resp.sendRedirect("login.html");
+			return;
 		
 		try {
 	        GruppoDao gruppoDao = DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
@@ -44,29 +44,23 @@ public class ReceiveMessage extends HttpServlet{
 			if(first || tmp == null) {
 				Messaggio lastMex = new Messaggio();
 				lastMex.setGruppo(group);
-
-				//System.out.println("new:");
 				
 				List<Messaggio> mex = messaggioDao.getOther50(lastMex);
 				if(mex.size() != 0) {
 					req.getSession().setAttribute("lastMessageID", ""+mex.get(mex.size()-1).getId());
-					//System.out.println("lastMessageID: "+mex.get(mex.size()-1).getId());
 					
 					resp.getWriter().write(new Gson().toJson(createListMex(utente,mex)));
 				}else
 					resp.getWriter().write("empty");
-				//System.out.println("end");
 			}else {
 				Messaggio lastMex = new Messaggio();
 				lastMex.setId(Long.valueOf(tmp));
 				lastMex.setGruppo(group);
-				//System.out.println("tmp: "+lastMex.getId());
 				
 				List<Messaggio> mex = messaggioDao.getAfter(lastMex);
 				
 				if(mex.size() != 0) {
 					req.getSession().setAttribute("lastMessageID", ""+mex.get(mex.size()-1).getId());
-					//System.out.println("2lastMessageID: "+mex.get(mex.size()-1).getId());
 					
 					resp.getWriter().write(new Gson().toJson(createListMex(utente,mex)));
 				}else
@@ -99,6 +93,6 @@ public class ReceiveMessage extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.getSession().removeAttribute("lastMessageID");
-		//System.out.println("lastMessageID removed");
+		System.out.println("lastMessage removed");
 	}
 }

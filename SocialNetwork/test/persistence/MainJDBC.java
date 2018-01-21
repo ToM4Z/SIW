@@ -6,11 +6,12 @@ import java.util.List;
 import model.Utente;
 import model.Canale;
 import model.Gruppo;
-import model.Messaggio;
+import model.Notifica;
 import model.Post;
 import persistence.dao.UtenteDao;
 import persistence.dao.CanaleDao;
 import persistence.dao.GruppoDao;
+import persistence.dao.NotificaDao;
 import persistence.dao.PostDao;
 
 public class MainJDBC {
@@ -28,6 +29,7 @@ public class MainJDBC {
 		UtenteDao utentedao = factory.getUtenteDAO();
 		CanaleDao canaledao = factory.getCanaleDAO();
 		GruppoDao gruppodao = factory.getGruppoDAO();
+		NotificaDao notificadao = factory.getNotificaDAO();
 		PostDao postdao = factory.getPostDAO();
 		
 		
@@ -52,11 +54,11 @@ public class MainJDBC {
 		a.setCreatore(u1);
 		a.setCanale(c1);
 		a.setGruppo(g1);
-		a.setContenuto("ca-ca-cazza di sicurezzooooo");
+		a.setContenuto("ciao");
 		
 		postdao.save(a);
 		
-		Utente u2 = new Utente("danielesali@outlook.it","Daniele","Salimonti","ds.hitman",cal.getTime(),Calendar.getInstance().getTime());
+		Utente u2 = new Utente("danielesalim@outlook.it","Daniele","Salimonti","ds.hitman",cal.getTime(),Calendar.getInstance().getTime());
 		
 		c1.addMembro(u1);
 		
@@ -64,8 +66,6 @@ public class MainJDBC {
 		g1.addAdmin(u1);
 		g1.addMembro(u1);
 		c1.addGruppo(g1);
-		
-		c1.getBlacklist().add(u2);
 
 		utentedao.save(u2);
 		utentedao.setPassword(u2, "pasticcio");
@@ -80,6 +80,9 @@ public class MainJDBC {
 		a.setContenuto("primo post");
 		
 		postdao.save(a);
+		
+		Notifica n = new Notifica(u1,"ooooo");
+		notificadao.save(n);
 		
 		List<Post> prova = utentedao.getPostsOfMyGroups(u1);
 		

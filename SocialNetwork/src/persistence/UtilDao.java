@@ -86,7 +86,7 @@ public class UtilDao {
                 		+ "PRIMARY KEY (canale,utente));"
                 	
                 	+ "create table notifica ( id_notifica bigint primary key, email_utente varchar(255) REFERENCES utente(email), "
-                		+"contenuto text, data_creazione date, visualizzata varchar(10)); "
+                		+"contenuto text); "
 					;
 			PreparedStatement statement = connection.prepareStatement(create);
 			statement.executeUpdate();

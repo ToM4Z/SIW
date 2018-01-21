@@ -13,12 +13,6 @@
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script>
-function load(){
-	$("input.onload").each(function(){
-		$(this).trigger("click");
-	});
-};
-
 function deleteCommento(idCommento){
 	
 	  alert("ok");
@@ -40,9 +34,19 @@ function deleteCommento(idCommento){
 	  xhr.send(json);
 };
 
+function load(){
+	$("input.onload").each(function(){
+		$(this).trigger("click");
+	});
+};
+function unload(){
+	$("input.onbeforeunload").each(function(){
+		$(this).trigger("click");
+	});
+}
 </script>
 </head>
-<body onload="javascript:load()" style="overflow-x: hidden">
+<body onload="javascript:load();" onbeforeunload="javascript:unload()" style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
 	</c:if>

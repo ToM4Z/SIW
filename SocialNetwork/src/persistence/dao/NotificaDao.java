@@ -13,4 +13,5 @@ public interface NotificaDao {
 	public void update(Notifica notifica); //Update
 	public void delete(Notifica notifica);
 
+	public List<Notifica> getAfter(Notifica notifica);
 }

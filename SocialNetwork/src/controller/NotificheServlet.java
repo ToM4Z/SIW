@@ -1,41 +1,58 @@
 package controller;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
 import model.Notifica;
 import model.Utente;
-
+import persistence.DatabaseManager;
+import persistence.dao.NotificaDao;
 
 public class NotificheServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		HttpSession session = req.getSession();
-		Utente utente = (Utente) session.getAttribute("user");
-		
-		Set<Notifica> notifiche = utente.getNotifiche();		
-		Set<String> list = new HashSet<>();
-		for(Notifica n: notifiche)
-			list.add(n.getContenuto());
-	    resp.getWriter().write(new Gson().toJson(list));
-	}
-
-	
+      
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		doGet(req, resp);
-	}
+		Utente utente = (Utente) req.getSession().getAttribute("user");
+		if(utente == null)
+			return;
 
+		NotificaDao notificadao = DatabaseManager.getInstance().getDaoFactory().getNotificaDAO();
+		String tmp = (String) req.getSession().getAttribute("lastNotifyID");
+		
+		List<Notifica> notifiche = null;
+		if(tmp == null) 
+			notifiche = notificadao.getNotificheUtente(utente);	
+		else {	
+			Notifica notifica = new Notifica();
+			notifica.setId(Long.valueOf(tmp));
+			notifica.setUtente(utente);
+			
+			notifiche = notificadao.getAfter(notifica);
+		}
+		
+		if(notifiche.size()!=0)			
+		    req.getSession().setAttribute("lastNotifyID", ""+notifiche.get(notifiche.size()-1).getId());
+		resp.getWriter().write(new Gson().toJson(createList(notifiche)));			
+	}
+	
+	private List<String> createList(List<Notifica> notifiche){
+		List<String> list = new LinkedList<>();
+		for(Notifica n: notifiche)
+			list.add("<li>"+n.getContenuto()+"</li>");
+		return list;
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.getSession().removeAttribute("lastNotifyID");
+		System.out.println("lastNotify removed");
+	}
 }

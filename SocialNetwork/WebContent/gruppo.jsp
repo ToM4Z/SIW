@@ -115,6 +115,7 @@ function inviaNotificaRichiesta(){
 	  
 }
 
+<<<<<<< HEAD
 
 function inviaNotificaCommento(idPost){
 	
@@ -170,13 +171,15 @@ function load(){
 	});
 };
 
+=======
+>>>>>>> branch 'master' of https://github.com/ToM4Z/SIW
 </script>
 <style>
 .post{
 	background-color: #E8E8E8;
 	color: #555;
 	border: .1em solid;
-	border-color: #5E5E5E;
+	border-color: #C0C0C0;
 	border-radius: 10px;
 	font-family: Tahoma, Geneva, Arial, sans-serif;
 	font-size: 1.1em;
@@ -212,7 +215,11 @@ function load(){
 .contenuto{
   font-size: 1.2em;
 }
-
+.post-hr{
+	border-color: #D2D2D2;
+	margin-top:4px; 
+	margin-bottom:5px; 
+}
 @media screen and (max-width : 767px) {
 	#barraCanali, #chatGruppo{
 		display:none;
@@ -263,9 +270,19 @@ function shiftRight(){
 		++page;
 	}
 }
+function load(){
+	$("input.onload").each(function(){
+		$(this).trigger("click");
+	});
+};
+function unload(){
+	$("input.onbeforeunload").each(function(){
+		$(this).trigger("click");
+	});
+}
 </script>
 </head>
-<body onload="javascript:load()" style="overflow-x:hidden">
+<body onload="javascript:load();" onbeforeunload="javascript:unload()" style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
 	</c:if>
@@ -309,7 +326,7 @@ function shiftRight(){
 				</c:choose>
 
 				<form action = "javascript:creaPost()">
-					<input id="contenuto" type="text" name="contenuto" >
+					<input id="contenuto" autocomplete="off" type="text" name="contenuto" >
 					<input type = "submit" value = "Pubblica">
 				</form>
 	
@@ -329,18 +346,20 @@ function shiftRight(){
 				       <a onclick="javascript:eliminaPosts(${post.id})"><span class="glyphicon glyphicon-trash"></span></a>
 				      </c:if>
 				    </div>
+
 				    <div class="post-body${post.id}">
-				      <hr style="margin:-0.5px; margin-bottom:7px; border-color:black">
+				   <!--    <hr style="margin:-0.5px; margin-bottom:7px; border-color:black"> -->
+				      <hr class="post-hr">
 				      <p class="contenuto">${post.contenuto}</p>
 				    </div>
 				    <div class="post-footer">
 				      <p class="date"><small>${post.dataCreazione}</small></p>
-				      <hr style="margin-top:-2px; margin-bottom:6px; border-color:black">
+				      <hr class="post-hr">
 				      <div style="display:inline" class="row">
 				         <span class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">10</span>
 				        <span class="glyphicon glyphicon-thumbs-down" style="font-size:1.5em;padding-right:10%">10</span>
 				      </div>
-				      <hr style="margin-top:4px; margin-bottom:5px; border-color:black">
+				      <hr class="post-hr">
 				        <a href = "commenti?idPost=${post.id}" style="font-size:1em">mostra commenti</a>
 				        <div style="display:inline">
 				      <form action = "javascript:addCommento(${post.id})">

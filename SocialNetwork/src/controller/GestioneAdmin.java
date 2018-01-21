@@ -7,11 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
@@ -20,7 +18,6 @@ import model.Gruppo;
 import model.Utente;
 import persistence.DatabaseManager;
 import persistence.dao.GruppoDao;
-import persistence.dao.NotificaDao;
 import persistence.dao.UtenteDao;
 
 

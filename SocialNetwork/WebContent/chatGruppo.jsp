@@ -114,8 +114,7 @@ function loadMessaggi(){
 			}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
-			alert("lost connection"); 
-			stop();
+			stopChat();
 		}
 	});
 }
@@ -137,26 +136,30 @@ function getMessaggi(){
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
-				stop();
+				stopChat();
 			}
 		});
 	}, 250);
 }
 
-window.onbeforeunload = function(event) {
-    stop();
+function stopChat(){	
+	clearInterval(continua);
+}
+
+function onbeforeunloadChat(){
+	stopChat();
     $.ajax({
     	type: "GET",
 		url:"receiveMessage"
     });
 }
-
-function stop(){	
-	clearInterval(continua);
-}
 </script>
 </head>
 <body>
+	<form action="javascript:onbeforeunloadChat()" style="display:none">
+		<input type="submit" class="onbeforeunload">
+	</form>
+	
 	<h1 id="nomeGruppo" style="display: none">${gruppo.nome}</h1>
 	<h1 id="nomeCanale" style="display: none">${gruppo.canale.nome}</h1>
 
@@ -187,7 +190,7 @@ function stop(){
 				<form action="javascript:sendMessage()">
 					<c:if test="${not empty gruppo.nome}">
 						<input id="messaggio" type="text" class="form-control"
-							placeholder="Inserisci testo"
+							placeholder="Inserisci testo" autocomplete="off"
 							style="float: left; margin-left: -7px; width: 70%"
 							name="messaggio">
 
