@@ -30,9 +30,10 @@ public class Login extends HttpServlet{
                 
         UtenteDao utentedao = DatabaseManager.getInstance().getDaoFactory().getUtenteDAO();
 		UtenteCredenziali user = utentedao.findByPrimaryKeyCredential(cred.email);
+		Utente utente = utentedao.findByPrimaryKey(cred.email);
 		
 		if(user!=null && cred.password.equals(user.getPassword())) {
-				req.getSession().setAttribute("user", (Utente) user);
+				req.getSession().setAttribute("user", utente);
 				resp.getWriter().write("true");
 		}else 
 			resp.getWriter().write("false");

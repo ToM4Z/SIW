@@ -1,6 +1,7 @@
 package persistence;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,7 +40,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 				String insert = "insert into gruppo(nome, data_creazione, canale, image) values (?,?,?,?)";
 				statement = connection.prepareStatement(insert);
 				statement.setString(1, gruppo.getNome());
-				statement.setDate(2, new java.sql.Date(gruppo.getData_creazione().getTime()));
+				statement.setDate(2, new Date(gruppo.getData_creazione().getTime()));
 				statement.setString(3, gruppo.getCanale().getNome());
 				statement.setString(4, gruppo.getImage());
 				statement.executeUpdate();
@@ -221,7 +222,7 @@ public class GruppoDaoJDBC implements GruppoDao {
 			if (result.next()) {
 				gruppo = new GruppoProxy(dataSource);
 				gruppo.setNome(nome);
-				gruppo.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(canale));
+				gruppo.setCanale(DatabaseManager.getInstance().getDaoFactory().getCanaleDAO().findByPrimaryKey(canale));
 				gruppo.setData_creazione(result.getDate("data_creazione"));
 			}
 		} catch (SQLException e) {
@@ -264,20 +265,10 @@ public class GruppoDaoJDBC implements GruppoDao {
 	public void update(Gruppo gruppo) {
 		Connection connection = this.dataSource.getConnection();
 		try {
-			/*
-			String update = "update gruppo SET image = ? WHERE nome = ? and gruppo = ?";	
-			PreparedStatement statement = connection.prepareStatement(update);
-			statement.setString(1, gruppo.getImage());
-			statement.setString(2, gruppo.getNome());
-			statement.setString(3, gruppo.getCanale().getNome());
-
-			statement.executeUpdate();
-			*/
 			this.updateMembri(gruppo, connection);
 			this.updateAdmins(gruppo, connection);
 			this.updateUtentiInAttesa(gruppo, connection);
 			this.updateChat(gruppo, connection);
-			//connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {

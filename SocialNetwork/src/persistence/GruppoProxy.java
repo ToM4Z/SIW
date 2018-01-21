@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import model.Gruppo;
@@ -110,7 +108,7 @@ public class GruppoProxy extends Gruppo {
 				post.setContenuto(result.getString("contenuto"));
 				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
 				post.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), post.getCanale().getNome()));
-				post.setDataCreazione(new java.util.Date(result.getDate("data_creazione").getTime()));
+				post.setDataCreazione(new java.util.Date(result.getTimestamp("data_creazione").getTime()));
 
 				allPost.add(post);
 			}

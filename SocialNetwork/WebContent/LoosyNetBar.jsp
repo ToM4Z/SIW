@@ -207,7 +207,7 @@ function onbeforeunloadLoosyNetBar(){
 					<li><a href="home"><span class="glyphicon glyphicon-home" id="icons"></span>
 							Home</a></li>
 					<li><a href="utente"><span class="glyphicon glyphicon-user"  id="icons"></span>
-							${user.nome}</a></li>
+							${user.username}</a></li>
 					<li class="dropdown">
 						<a href="javascript:showNotify()" class="dropdown-toggle" id="linkShowNotify">					
 							<span id="numNotifiche" class="badge badge-notify" style="background:red"></span>

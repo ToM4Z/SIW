@@ -24,7 +24,7 @@ function unload(){
 </script>
 </head>
 <body onload="javascript:load();" onbeforeunload="javascript:unload()" style="overflow-x:hidden">
-	<c:if test="${empty user.nome}">
+	<c:if test="${empty user.username}">
 		<c:redirect url="login.html" />
 	</c:if>
 	<c:if test="${not empty gruppo.nome}">

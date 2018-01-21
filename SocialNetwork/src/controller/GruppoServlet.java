@@ -5,20 +5,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import model.Gruppo;
 import model.Utente;
 import persistence.DatabaseManager;
 import persistence.dao.GruppoDao;
 
-
-
 public class GruppoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-   
-
+      
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		String nomeGruppo = req.getParameter("group");
@@ -30,24 +25,16 @@ public class GruppoServlet extends HttpServlet {
 		
 		boolean admin = false;
 		boolean iscritto = false;
-		HttpSession session = req.getSession();
-		Utente utente = (Utente) session.getAttribute("user");
+		Utente utente = (Utente) req.getSession().getAttribute("user");
 		
-		//System.out.println(gruppo.getNome());
-		for(Utente u : gruppo.getAdmins()) {
-			
-			if (u.getEmail().equals(utente.getEmail())){
+		for(Utente u : gruppo.getAdmins())			
+			if (u.getEmail().equals(utente.getEmail()))
+
 				admin = true;
-			}
-		}
 		
-		for (Utente u : gruppo.getMembri()) {
-			
-			if (u.getEmail().equals(utente.getEmail())) {
-				iscritto = true;
-			}
-		}
-		
+		for (Utente u : gruppo.getMembri())			
+			if (u.getEmail().equals(utente.getEmail()))
+				iscritto = true;		
 		
 		req.setAttribute("admin", admin);
 		req.setAttribute("iscritto", iscritto);
@@ -57,7 +44,6 @@ public class GruppoServlet extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
 		doGet(req, resp);
 	}
 

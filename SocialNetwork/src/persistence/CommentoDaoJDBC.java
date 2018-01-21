@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
 
 import model.Commento;
 import persistence.dao.CommentoDao;
@@ -36,7 +39,7 @@ public class CommentoDaoJDBC implements CommentoDao {
 			statement.setLong(2, commento.getPost().getId());
 			statement.setString(3, commento.getCreatore().getEmail());
 			statement.setString(4, commento.getContenuto());
-			statement.setDate(5, new java.sql.Date(commento.getDataCreazione().getTime()));
+			statement.setTimestamp(5, new Timestamp(commento.getDataCreazione().getTime()));
 			statement.setString(6, commento.getImage());
 			statement.executeUpdate();
 		} catch (SQLException e) {
@@ -66,7 +69,7 @@ public class CommentoDaoJDBC implements CommentoDao {
 				commento.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
 				commento.setContenuto(result.getString("contenuto"));
 				commento.setPost(new PostDaoJDBC(dataSource).findByPrimaryKey(result.getLong("id_post")));
-				commento.setDataCreazione(new java.util.Date(result.getDate("data_creazione").getTime()));
+				commento.setDataCreazione(new Date(result.getTimestamp("data_creazione").getTime()));
 				
 			}
 		} catch (SQLException e) {
@@ -98,7 +101,7 @@ public class CommentoDaoJDBC implements CommentoDao {
 				commento.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
 				commento.setContenuto(result.getString("contenuto"));
 				commento.setPost(new PostDaoJDBC(dataSource).findByPrimaryKey(result.getLong("post")));
-				commento.setDataCreazione(new java.util.Date(result.getDate("data_creazione").getTime()));
+				commento.setDataCreazione(new Date(result.getTimestamp("data_creazione").getTime()));
 
 				commenti.add(commento);
 			}

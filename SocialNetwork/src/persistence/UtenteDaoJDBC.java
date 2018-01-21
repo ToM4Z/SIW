@@ -1,9 +1,11 @@
 package persistence;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,8 +35,8 @@ class UtenteDaoJDBC implements UtenteDao {
 			statement.setString(2, utente.getNome());
 			statement.setString(3, utente.getCognome());
 			statement.setString(4, utente.getUsername());
-			statement.setDate(5, new java.sql.Date(utente.getDataDiNascita().getTime()));
-			statement.setDate(6, new java.sql.Date(utente.getDataIscrizione().getTime()));
+			statement.setDate(5, new Date(utente.getDataDiNascita().getTime()));
+			statement.setDate(6, new Date(utente.getDataIscrizione().getTime()));
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -53,14 +55,13 @@ class UtenteDaoJDBC implements UtenteDao {
 		Utente utente = null;
 		try {
 			PreparedStatement statement;
-			statement = connection.prepareStatement("select username,image from utente where email = ?");
+			statement = connection.prepareStatement("select username from utente where email = ?");
 			statement.setString(1, email);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
 				utente = new UtenteProxy(dataSource);
 				utente.setEmail(email);
 				utente.setUsername(result.getString("username"));
-				utente.setImage(result.getString("image"));
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -80,14 +81,13 @@ class UtenteDaoJDBC implements UtenteDao {
 		List<Utente> utenti = new LinkedList<>();
 		try {
 			PreparedStatement statement;
-			statement = connection.prepareStatement("select email,username,image from utente");
+			statement = connection.prepareStatement("select email,username from utente");
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
 				Utente utente = new UtenteProxy(dataSource);
 				utente.setEmail(result.getString("email"));
 				utente.setUsername(result.getString("username"));
-				utente.setUsername(result.getString("image"));
 
 				utenti.add(utente);
 			}
@@ -108,10 +108,9 @@ class UtenteDaoJDBC implements UtenteDao {
 
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String update = "update utente SET username = ?"/* and image = ?*/ +" WHERE email_utente = ?";
+			String update = "update utente SET username = ? WHERE email_utente = ?";
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setString(1, utente.getUsername());
-			//statement.setString(2, utente.getImage());
 			statement.setString(2, utente.getEmail());
 
 			statement.executeUpdate();
@@ -183,7 +182,6 @@ class UtenteDaoJDBC implements UtenteDao {
 			userCred = new UtenteCredenziali(dataSource);
 			userCred.setEmail(user.getEmail());
 			userCred.setUsername(user.getUsername());
-			userCred.setUsername(user.getImage());
 		}
 		return userCred;
 	}
@@ -205,7 +203,7 @@ class UtenteDaoJDBC implements UtenteDao {
 				post.setContenuto(result.getString("contenuto"));
 				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
 				post.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), post.getCanale().getNome()));
-				post.setDataCreazione(new java.util.Date(result.getDate("data_creazione").getTime()));
+				post.setDataCreazione(new Timestamp(result.getTimestamp("data_creazione").getTime()));
 
 				allPost.add(post);
 			}

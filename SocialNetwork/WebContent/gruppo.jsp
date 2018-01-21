@@ -14,6 +14,8 @@
 		<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
 		<script src="js/jquery-3.2.1.min.js"></script>
 		<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+		<script src="js/dateConverter.js"></script>
+
 
 <script>
 function creaPost(){
@@ -115,7 +117,6 @@ function inviaNotificaRichiesta(){
 	  
 }
 
-<<<<<<< HEAD
 
 function inviaNotificaCommento(idPost){
 	
@@ -171,8 +172,6 @@ function load(){
 	});
 };
 
-=======
->>>>>>> branch 'master' of https://github.com/ToM4Z/SIW
 </script>
 <style>
 .post{
@@ -270,6 +269,10 @@ function shiftRight(){
 		++page;
 	}
 }
+
+function convertDatePost(post,data){	
+	$("p#"+post+" small").text(convertDate(data,true));
+}
 function load(){
 	$("input.onload").each(function(){
 		$(this).trigger("click");
@@ -283,7 +286,7 @@ function unload(){
 </script>
 </head>
 <body onload="javascript:load();" onbeforeunload="javascript:unload()" style="overflow-x:hidden">
-	<c:if test="${empty user.nome}">
+	<c:if test="${empty user.username}">
 		<c:redirect url="login.html" />
 	</c:if>
 	<jsp:include page="LoosyNetBar.jsp" />
@@ -353,7 +356,7 @@ function unload(){
 				      <p class="contenuto">${post.contenuto}</p>
 				    </div>
 				    <div class="post-footer">
-				      <p class="date"><small>${post.dataCreazione}</small></p>
+				      <p class="date" id="${post.id}"><small><script>convertDatePost('${post.id}','${post.dataCreazione}');</script></small></p>
 				      <hr class="post-hr">
 				      <div style="display:inline" class="row">
 				         <span class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">10</span>
