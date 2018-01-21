@@ -37,7 +37,6 @@ public class InviaNotifica extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		
-		
 	}
 
 	
@@ -64,14 +63,22 @@ public class InviaNotifica extends HttpServlet {
 				+" ha chiesto di iscriversi al gruppo "+gruppo.getNome()+"</a>";
 			
 			for (Utente admin : gruppo.getAdmins()) {
-				Notifica notifica = new Notifica(admin, contenuto);
-				notificaDao.save(notifica);
-				//System.out.println("notifica inviata a "+admin.getEmail());
+				
+				boolean invia = true;
+				
+				for (Notifica n : admin.getNotifiche()) {
+					if (n.getContenuto().equals(contenuto)) {
+						invia = false;
+					}
+				}
+				
+				if (invia) {
+					Notifica notifica = new Notifica(admin, contenuto);
+					notificaDao.save(notifica);
+				}
 			}
 			
 			gruppoDao.addUserToAttesa(gruppo, utente);
-			//System.out.println("aggiunto in attesa in "+gruppo.getNome());
-			
 		}
 		
 		if (t.tipo.equals("commento")) {
