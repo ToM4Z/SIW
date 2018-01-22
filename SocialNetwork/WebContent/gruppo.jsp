@@ -39,10 +39,10 @@ function creaPost(){
 
 function addCommento(idPost){
 	
-	  alert("addando");
+	  alert($("#commento"+idPost).val());
 	  var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
-	  var json = JSON.stringify({"gruppo": gruppo,"canale" : canale, "idPost":idPost, "commento": $("#"+idPost).val()});
+	  var json = JSON.stringify({"gruppo": gruppo,"canale" : canale, "idPost":idPost, "commento": $("#commento"+idPost).val()});
 	  var xhr = new XMLHttpRequest();
 	  xhr.open("post","commento", true);
 	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
@@ -98,7 +98,7 @@ function inviaNotificaEliminaGruppo(){
 	
 	  var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
-	  var tipo = "richiestaIscrizione";
+	  var tipo = "eliminazioneGruppo";
 	  var json = JSON.stringify({"nomeGruppo": gruppo,"nomeCanale" : canale, "tipo" : tipo, "idPost" : ""});
 	  var xhr = new XMLHttpRequest();
 	  xhr.open("post","inviaNotifica", true);
@@ -107,7 +107,7 @@ function inviaNotificaEliminaGruppo(){
 	  xhr.setRequestHeader("Content-Type", "application/json");
 	  xhr.onreadystatechange = function(){
 		  if(xhr.responseText == "true"){
-		  	  alert("richiesta inviata");
+		  	  alert("notifica eliminazione inviata");
 	  		}else{
 	  			
 	      }
@@ -135,6 +135,28 @@ function inviaNotificaRichiesta(){
 	  }
 	  xhr.send(json);
 	  
+}
+
+
+function inviaNotificaSegnalazione(idPost){
+	
+	  var tipo = "segnalazione";
+	  var gruppo = $("#nomeGruppo").text();
+	  var canale = $("#nomeCanale").text();
+	  var json = JSON.stringify({"idPost": idPost, "tipo" : tipo, "nomeGruppo": gruppo, "nomeCanale" : canale});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","inviaNotifica", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  xhr.onreadystatechange = function(){
+		  if(xhr.responseText == "true"){
+		  	  alert("notifica segnalazione inviata");
+	  		}else{
+	  			
+	      }
+	  }
+	  xhr.send(json);
 }
 
 
@@ -386,9 +408,9 @@ function unload(){
 				        <a href = "commenti?idPost=${post.id}" style="font-size:1em">mostra commenti</a>
 				        <div style="display:inline">
 				      <form action = "javascript:addCommento(${post.id})">
-				        <input id="${post.id}" type="text" class="form-control"
+				        <input id="commento${post.id}" type="text" class="form-control"
 											placeholder="Commenta"
-											name = "${post.id}">
+											name = "commento${post.id}">
 				        <button type="button" class="btn btn-default" style="position:absolute;right:7;bottom:16px;height:33px"><span class="glyphicon glyphicon-send" style="font-size:1.2em;margin:-2px"></span></button>
 				      </form>
 				    </div>

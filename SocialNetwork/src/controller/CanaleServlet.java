@@ -1,12 +1,16 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.google.gson.Gson;
 
 import model.Canale;
 import model.Utente;
@@ -55,10 +59,28 @@ public class CanaleServlet extends HttpServlet {
 		
 		
 	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+	private class ModificaDescrizione{
 		
-		doGet(request, response);
+		private String nomeCanale;
+		private String modifica;
+	}
+
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+		String linea = br.readLine();
+		//System.out.println(linea);
+        ModificaDescrizione md = new Gson().fromJson(linea, ModificaDescrizione.class);
+        
+        CanaleDao canaleDao = DatabaseManager.getInstance().getDaoFactory().getCanaleDAO();
+        
+        Canale canale = canaleDao.findByPrimaryKey(md.nomeCanale);
+        
+        canale.setDescrizione(md.modifica);
+        
+        canaleDao.update(canale);
+        resp.getWriter().write("true");
 	}
 
 }

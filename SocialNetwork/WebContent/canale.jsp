@@ -16,16 +16,37 @@
 <script>
 	function seisicuro() {
 
-		var canale = $("#nomeCanale").text();
+		var canale = $("#canale").text();
 
 		if (confirm("Sei sicuro di voler cancellare il canale?") == true) {
-
+			
+			inviaNotificaEliminaCanale();
 			document.location.href = "eliminaCanale?channel=" + canale;
 
 		} else {
 
 			//do nothing
 		}
+	}
+	
+	function inviaNotificaEliminaCanale(){
+		
+		  var canale = $("#canale").text();
+		  var tipo = "eliminazioneCanale";
+		  var json = JSON.stringify({"nomeGruppo": "","nomeCanale" : canale, "tipo" : tipo, "idPost" : ""});
+		  var xhr = new XMLHttpRequest();
+		  xhr.open("post","inviaNotifica", true);
+		  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+		  xhr.setRequestHeader("connection","close");
+		  xhr.setRequestHeader("Content-Type", "application/json");
+		  xhr.onreadystatechange = function(){
+			  if(xhr.responseText == "true"){
+			  	  alert("notifica eliminazione inviata");
+		  		}else{
+		  			
+		      }
+		  }
+		  xhr.send(json);
 	}
 	
 function load(){
@@ -38,6 +59,34 @@ function unload(){
 		$(this).trigger("click");
 	});
 }
+
+function modificaDescrizione(){
+	
+	$("#descrizione").replaceWith("<div id=descrizione>"
+			+"<form action = \"javascript:confermaModifica()\"><input id=\"modifica\" type=\"text\" name=\"modifica\" >"
+			+"<input type = \"submit\" value = \"Modifica descrizione\"></form></div>");
+}
+
+function confermaModifica(){
+	
+	  var mod =  $("#modifica").val();
+	  alert(mod);
+	  var canale = $("#canale").text();
+	  var json = JSON.stringify({"nomeCanale":canale, "modifica": mod});
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","canale", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  xhr.onreadystatechange = function(){
+		  if(xhr.responseText == "true"){
+			  $("#descrizione").replaceWith("<h3 id = descrizione>Descizione: "+mod+"</h3>");
+	  		}else{
+	      }
+	  }
+	  xhr.send(json);
+}
+
 </script>
 </head>
 <body onload="javascript:load();" onbeforeunload="javascript:unload()" style="overflow-x:hidden">
@@ -55,9 +104,10 @@ function unload(){
 		<div class="col-bg-6 brd">
 
 			<div id="homePost" style="margin-top: 60px; text-align: center;">
-				<h1 id="nomeCanale">${canale.nome}</h1>
-				<h3>Descizione: ${canale.descrizione}</h3>
+				<h1 id="canale">${canale.nome}</h1>
+				<h3 id = descrizione>Descizione: ${canale.descrizione}</h3>
 				<c:if test="${sessionScope.user.email == canale.admin.email}">
+				<small onclick = "javascript:modificaDescrizione()">modifica descrizione</small>
 					<h4>
 						<a href=creaGruppo?channel=${canale.nome}>Crea Gruppo</a>
 					</h4>

@@ -351,16 +351,15 @@ public class GruppoDaoJDBC implements GruppoDao {
 			statement.setString(2, gruppo.getNome());
 			statement.setString(3, utente.getEmail());
 			ResultSet result = statement.executeQuery();
-			if(result.next())
-				throw new PersistenceException("L'Utente "+utente.getEmail()+" è già iscritto al gruppo "+gruppo.getNome());
+			if(!result.next()) {
 			
-			
-			String insert = "insert into iscrizione(canale, gruppo, email_utente) values (?,?,?)";
-			statement = connection.prepareStatement(insert);
-			statement.setString(1, gruppo.getCanale().getNome());
-			statement.setString(2, gruppo.getNome());
-			statement.setString(3, utente.getEmail());
-			statement.executeUpdate();
+				String insert = "insert into iscrizione(canale, gruppo, email_utente) values (?,?,?)";
+				statement = connection.prepareStatement(insert);
+				statement.setString(1, gruppo.getCanale().getNome());
+				statement.setString(2, gruppo.getNome());
+				statement.setString(3, utente.getEmail());
+				statement.executeUpdate();
+			}
 
 		} catch (SQLException e) {
 			if (connection != null)

@@ -176,6 +176,20 @@ function onbeforeunloadLoosyNetBar(){
 			url:"notifiche"
 	    });
 }
+
+function eliminaNotifica(idNotifica){
+	
+	  var json = JSON.stringify({"idNotifica": idNotifica});
+	  alert(idNotifica);
+	  var xhr = new XMLHttpRequest();
+	  xhr.open("post","eliminaNotifica", true);
+	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+	  xhr.setRequestHeader("connection","close");
+	  xhr.setRequestHeader("Content-Type", "application/json");
+	  $("#notifica"+idNotifica).remove();
+	  xhr.send(json);
+}
+
 </script>
 
 <body>	

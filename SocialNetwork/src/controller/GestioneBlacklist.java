@@ -43,11 +43,11 @@ public class GestioneBlacklist extends HttpServlet {
 					blacklist = true;
 			}
 			if (blacklist) {
-				out.add("<h4 onclick = javascript:rimuoviBlacklist('"+u.getEmail()+"')>"+u.getNome()+" "+u.getCognome()+" Rimuovi dalla Blacklist</h4>");
+				out.add("<div id=\"bl"+u.getUsername()+"\"><h4 onclick = javascript:rimuoviBlacklist('"+u.getEmail()+"')>"+u.getNome()+" "+u.getCognome()+" Rimuovi dalla Blacklist</h4></div>");
 				//System.out.println("admin"+u.getUsername());
 			}
 			else {
-				out.add("<h4 onclick = javascript:aggiungiBlacklist('"+u.getEmail()+"')>"+u.getNome()+" "+u.getCognome()+" Aggiungi alla Blacklist</h4>");
+				out.add("<div id=\"bl"+u.getUsername()+"\"><h4 onclick = javascript:aggiungiBlacklist('"+u.getEmail()+"')>"+u.getNome()+" "+u.getCognome()+" Aggiungi alla Blacklist</h4></div>");
 				//System.out.println("non admin"+u.getUsername());
 			}
 		}
@@ -87,7 +87,7 @@ public class GestioneBlacklist extends HttpServlet {
         	System.out.println(canale.getNome());
         	canaleDao.addUserToBlackList(canale, utente);
         	//System.out.println("aggiunto alla blacklist");
-        	
+        	resp.getWriter().write(new Gson().toJson(utente.getUsername()));
         	
         }
         
@@ -99,9 +99,8 @@ public class GestioneBlacklist extends HttpServlet {
         	Utente utente = utenteDao.findByPrimaryKey(a.user);
 
         	canaleDao.removeUserFromBlackList(canale, utente);
+        	resp.getWriter().write(new Gson().toJson(utente.getUsername()));
         }
-        
-        resp.getWriter().write("true");
 		
 	}
 	
