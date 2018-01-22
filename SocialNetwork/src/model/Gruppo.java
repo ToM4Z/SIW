@@ -2,6 +2,8 @@ package model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class Gruppo {
@@ -10,17 +12,17 @@ public class Gruppo {
 	private Set<Utente> admins;
 	private Set<Utente> membri;
 	private Set<Utente> utentiInAttesa;
-	private Set<Post> post;
+	private List<Post> post;
 	private Date data_creazione;
 	private Canale canale;
-	private Set<Messaggio> chat;
-	private String image;
+	private List<Messaggio> chat;
 	
 	public Gruppo() {
 		admins = new HashSet<>();
 		membri = new HashSet<>();
 		utentiInAttesa=new HashSet<>();
-		chat = new HashSet<>();
+		post = new LinkedList<>();
+		chat = new LinkedList<>();
 	}
 	
 	public Gruppo(String nome,Date dc, Canale canale) {
@@ -30,7 +32,8 @@ public class Gruppo {
 		admins = new HashSet<>();
 		membri = new HashSet<>();
 		utentiInAttesa=new HashSet<>();
-		chat = new HashSet<>();
+		post = new LinkedList<>();
+		chat = new LinkedList<>();
 	}
 
 	public void addMembro(Utente u) {
@@ -89,28 +92,20 @@ public class Gruppo {
 		this.admins = admin;
 	}
 
-	public Set<Post> getPost() {
+	public List<Post> getPost() {
 		return post;
 	}
 
-	public void setPost(Set<Post> post) {
+	public void setPost(List<Post> post) {
 		this.post = post;
 	}
 
-	public Set<Messaggio> getChat() {
+	public List<Messaggio> getChat() {
 		return chat;
 	}
 
-	public void setChat(Set<Messaggio> chat) {
+	public void setChat(List<Messaggio> chat) {
 		this.chat = chat;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
 	}
 
 	public Set<Utente> getUtentiInAttesa() {
@@ -121,8 +116,7 @@ public class Gruppo {
 		this.utentiInAttesa = inAttesa;
 	}
 	
-	public void addMessaggio (Messaggio m) {
-		
+	public void addMessaggio (Messaggio m) {		
 		chat.add(m);
 	}
 	

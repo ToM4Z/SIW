@@ -59,7 +59,7 @@ public class UtilDao {
 						+ "data_creazione date, email_admin varchar(255) REFERENCES utente(email), image text);"
 					
 					+ "create table gruppo (nome varchar(255), data_creazione date, "
-						+ "canale varchar(255) REFERENCES canale(nome), PRIMARY KEY (nome,canale), image text);"
+						+ "canale varchar(255) REFERENCES canale(nome), PRIMARY KEY (nome,canale));"
 					
 					+ "create table gestione_gruppo (email_utente varchar(255) REFERENCES utente(email)," 
 						+ " gruppo varchar(255), canale varchar(255), "
@@ -78,7 +78,7 @@ public class UtilDao {
 						+" data_creazione timestamp, image text);"
 					
 					+"create table commento (id_commento bigint primary key, id_post bigint REFERENCES post(id_post),"
-                    	+ "email_utente varchar(255) REFERENCES utente(email), contenuto text, data_creazione timestamp, image text);"
+                    	+ "email_utente varchar(255) REFERENCES utente(email), contenuto text, data_creazione timestamp);"
 					
                     +"create table likes (id_post bigint REFERENCES post(id_post), email_utente varchar(255) REFERENCES utente(email), "
                     	+"PRIMARY KEY (id_post, email_utente));"
@@ -88,7 +88,7 @@ public class UtilDao {
                     	
                     +"create table messaggio ( id_messaggio bigint primary key, email_mittente varchar(255) REFERENCES utente(email),"
                     	+"contenuto text, canale varchar(255), gruppo varchar(255), FOREIGN KEY(gruppo, canale) REFERENCES gruppo(nome, canale),"
-                    	+"data_creazione timestamp, image text);"
+                    	+"data_creazione timestamp);"
                 	
                 	+ "create table blacklist (canale varchar(255) REFERENCES canale(nome), utente varchar(255) REFERENCES utente(email),"
                 		+ "PRIMARY KEY (canale,utente));"

@@ -192,7 +192,10 @@ class UtenteDaoJDBC implements UtenteDao {
 		List<Post> allPost = new LinkedList<>();
 		try {
 			PreparedStatement statement;
-			statement = connection.prepareStatement("select * from post as p where gruppo in (select gruppo from iscrizione as i where email_utente = ? and i.canale = p.canale)");
+			statement = connection.prepareStatement("select * from post as p where gruppo in "
+													+ "(select gruppo from iscrizione as i where "
+													+ "email_utente = ? and i.canale = p.canale)"
+													+ "ORDER BY id_post DESC");
 			statement.setString(1, utente.getEmail());
 			ResultSet result = statement.executeQuery();
 
