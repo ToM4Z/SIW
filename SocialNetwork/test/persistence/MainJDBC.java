@@ -40,6 +40,8 @@ public class MainJDBC {
 		Canale c1 = new Canale("UNICAL","per studenti unical",Calendar.getInstance().getTime(),u1);
 		c1.addMembro(u1);
 		
+		
+		
 		Gruppo g1 = new Gruppo("home",Calendar.getInstance().getTime(),c1);
 		g1.addAdmin(u1);
 		g1.addMembro(u1);
@@ -57,6 +59,8 @@ public class MainJDBC {
 		a.setContenuto("ciao");
 		
 		postdao.save(a);
+		
+		postdao.removeLike(a, u1);
 		
 		Utente u2 = new Utente("danielesalim@outlook.it","Daniele","Salimonti","ds.hitman",cal.getTime(),Calendar.getInstance().getTime());
 		

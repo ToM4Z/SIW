@@ -210,11 +210,148 @@ function modificaPost(x){
 		+"<input type = \"submit\" value = \"Modifica\"></form></div>");
 }
 
+function addLike(idPost, numLike, numDis){
+	//alert("inizio");
+	var tipo = "addLike";
+	$.ajax({
+		type: "POST",
+		url: "reaction",
+		datatype: "json",
+		data: JSON.stringify({"idPost" : idPost, "tipo" : tipo}),
+		success: function(data){
+			
+			var out = JSON.parse(data);
+			
+			$("#reaction"+idPost).replaceWith("<div id = reaction"+idPost+" style=\"display:inline\" class=\"row\">"
+			    + "<a onclick=\"javascript:removeLike("+idPost+")\">"
+        		+"<span id=\"like\" class=\"glyphicon glyphicon-thumbs-up\" style=\"font-size:1.5em;padding-left:10%;padding-right:20%;color:#36c906\">"+out.nLike+"</span>"
+       			+"</a><a onclick=\"javascript:addDislike("+idPost+")\">"
+        	+"<span id = \"dislike\" class=\"glyphicon glyphicon-thumbs-down\" style=\"font-size:1.5em;padding-right:10%\">"+out.nDislike+"</span></a></div>");
+		}
+	});
+}
+
+function addDislike(idPost, numLike, numDis){
+	
+	var tipo = "addDislike";
+	$.ajax({
+		type: "POST",
+		url: "reaction",
+		datatype: "json",
+		data: JSON.stringify({"idPost" : idPost, "tipo" : tipo}),
+		success: function(data){
+			var out = JSON.parse(data);
+			$("#reaction"+idPost).replaceWith("<div id = reaction"+idPost+" style=\"display:inline\" class=\"row\">"
+				    + "<a onclick=\"javascript:addLike("+idPost+")\">"
+	        		+"<span id=\"like\" class=\"glyphicon glyphicon-thumbs-up\" style=\"font-size:1.5em;padding-left:10%;padding-right:20%\">"+out.nLike+"</span>"
+	       			+"</a><a onclick=\"javascript:removeDislike("+idPost+")\">"
+	        	+"<span id = \"dislike\" class=\"glyphicon glyphicon-thumbs-down\" style=\"font-size:1.5em;padding-right:10%;color:#ed0707\">"+out.nDislike+"</span></a></div>");
+	    	}
+	});
+}
+
+function removeLike(idPost, numLike, numDis){
+	
+	var tipo = "removeLike";
+	$.ajax({
+		type: "POST",
+		url: "reaction",
+		datatype: "json",
+		data: JSON.stringify({"idPost" : idPost, "tipo" : tipo}),
+		success: function(data){
+			var out = JSON.parse(data);
+			$("#reaction"+idPost).replaceWith("<div id = reaction"+idPost+" style=\"display:inline\" class=\"row\">"
+			    + "<a onclick=\"javascript:addLike("+idPost+")\">"
+        		+"<span id=\"like\" class=\"glyphicon glyphicon-thumbs-up\" style=\"font-size:1.5em;padding-left:10%;padding-right:20%\">"+out.nLike+"</span>"
+       			+"</a><a onclick=\"javascript:addDislike("+idPost+")\">"
+        	+"<span id = \"dislike\" class=\"glyphicon glyphicon-thumbs-down\" style=\"font-size:1.5em;padding-right:10%\">"+out.nDislike+"</span></a></div>");
+		}
+	});
+}
+
+function removeDislike(idPost, numLike, numDis){
+	
+	var tipo = "removeDislike";
+	$.ajax({
+		type: "POST",
+		url: "reaction",
+		datatype: "json",
+		data: JSON.stringify({"idPost" : idPost, "tipo" : tipo}),
+		success: function(data){
+			var out = JSON.parse(data);
+			$("#reaction"+idPost).replaceWith("<div id = reaction"+idPost+" style=\"display:inline\" class=\"row\">"
+			    + "<a onclick=\"javascript:addLike("+idPost+")\">"
+        		+"<span id=\"like\" class=\"glyphicon glyphicon-thumbs-up\" style=\"font-size:1.5em;padding-left:10%;padding-right:20%\">"+out.nLike+"</span>"
+       			+"</a><a onclick=\"javascript:addDislike("+idPost+")\">"
+        	+"<span id = \"dislike\" class=\"glyphicon glyphicon-thumbs-down\" style=\"font-size:1.5em;padding-right:10%\">"+out.nDislike+"</span></a></div>");
+		}
+	});
+}
+
 function load(){
 	$("input.onload").each(function(){
 		$(this).trigger("click");
 	});
 };
+
+var intervalUp;
+
+function startUpdate(){
+	update();
+	intervalUp = setInterval(update,20000);
+}
+
+function stopUpdate(){
+	//alert("fine");
+	clearInterval(intervalUp);
+}
+
+	function update(){
+		//alert("ok");
+		 var gruppo = $("#nomeGruppo").text();
+		  var canale = $("#nomeCanale").text();
+		
+		$.ajax({
+			type: "POST",
+			url: "updateReaction",
+			datatype: "json",
+			data: JSON.stringify({"nomeGruppo": gruppo, "nomeCanale" : canale}),
+			success: function(data){
+				var out = JSON.parse(data);
+				//alert(out);
+				out.forEach(function(item, index){ 
+						if (item.like == '1'){
+							
+							$("#reaction"+item.postId).replaceWith("<div id = reaction"+item.postId+" style=\"display:inline\" class=\"row\">"
+								    + "<a onclick=\"javascript:removeLike('" +item.postId+ "')\">"
+					        		+"<span id=\"like\" class=\"glyphicon glyphicon-thumbs-up\" style=\"font-size:1.5em;padding-left:10%;padding-right:20%;color:#36c906\">"+item.nLike+"</span>"
+					       			+"</a><a onclick=\"javascript:addDislike('" +item.postId+ "')\">"
+					        	+"<span id = \"dislike\" class=\"glyphicon glyphicon-thumbs-down\" style=\"font-size:1.5em;padding-right:10%\">"+item.nDislike+"</span></a></div>");
+						}
+						
+						else if (item.dislike == '1'){
+							
+							$("#reaction"+item.postId).replaceWith("<div id = reaction"+item.postId+" style=\"display:inline\" class=\"row\">"
+								    + "<a onclick=\"javascript:addLike('" +item.postId+ "')\">"
+					        		+"<span id=\"like\" class=\"glyphicon glyphicon-thumbs-up\" style=\"font-size:1.5em;padding-left:10%;padding-right:20%\">"+item.nLike+"</span>"
+					       			+"</a><a onclick=\"javascript:removeDislike('" +item.postId+ "')\">"
+					        	+"<span id = \"dislike\" class=\"glyphicon glyphicon-thumbs-down\" style=\"font-size:1.5em;padding-right:10%;color:#ed0707\">"+item.nDislike+"</span></a></div>");
+						}
+						
+						else{
+							
+							$("#reaction"+item.postId).replaceWith("<div id = reaction"+item.postId+" style=\"display:inline\" class=\"row\">"
+								    + "<a onclick=\"javascript:addLike('" +item.postId+ "')\">"
+					        		+"<span id=\"like\" class=\"glyphicon glyphicon-thumbs-up\" style=\"font-size:1.5em;padding-left:10%;padding-right:20%\">"+item.nLike+"</span>"
+					       			+"</a><a onclick=\"javascript:addDislike('" +item.postId+ "')\">"
+					        	+"<span id = \"dislike\" class=\"glyphicon glyphicon-thumbs-down\" style=\"font-size:1.5em;padding-right:10%\">"+item.nDislike+"</span></a></div>");
+						}
+						
+					});
+			}
+		});
+	}
+
 
 </script>
 <style>
@@ -346,10 +483,22 @@ function unload(){
 					<span class="glyphicon glyphicon-chevron-left" style="font-size:2em;" onclick="javascript:shiftLeft()"></span>
 					<span class="glyphicon glyphicon-chevron-right" style="font-size:2em;left:500%;" onclick="javascript:shiftRight()"></span>
 				</div>
+				
 			<div id="homePost" style="margin-top:60px; text-align: center;">
 				
 				<h1 id="nomeGruppo">${gruppo.nome}</h1>
 				<h1 id="nomeCanale" style="display:none">${gruppo.canale.nome}</h1>
+				
+				<c:if test="${gruppo.nome != null}">
+					<script type="text/javascript">
+					startUpdate();
+				</script>
+				</c:if>
+				<c:if test="${gruppo.nome == null}">
+					<script type="text/javascript">
+					stopUpdate();
+				</script>
+				</c:if>
 				
 				<c:if test = "${admin == true }">
 					<h5 onclick="seiSicuroGruppo()">Elimina gruppo</h5>
@@ -357,7 +506,7 @@ function unload(){
 					<h5><a href = gestioneAdmin?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci admin</a></h5>
 					<h5><a href = gestioneMembri?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci membri</a></h5>
 				</c:if>
-
+					<h3 onclick = "javascript:update()">prova</h3>
 				<c:choose>
 					<c:when test="${iscritto == true }">
 						<h4>
@@ -387,10 +536,11 @@ function unload(){
 				    </div>
 				    <div class="post-header-right">
 				      <c:if test = "${post.creatore.email == user.email}">
-				       <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
+				      <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
 				      </c:if>
 				      <c:if test = "${post.creatore.email == user.email || admin==true}">
-				       <a onclick="javascript:eliminaPosts(${post.id})"><span class="glyphicon glyphicon-trash"></span></a>
+			    
+			       <a onclick="javascript:eliminaPosts(${post.id})"><span class="glyphicon glyphicon-trash"></span></a>
 				      </c:if>
 				    </div>
 
@@ -402,10 +552,16 @@ function unload(){
 				    <div class="post-footer">
 				      <p class="date" id="${post.id}"><small><script>convertDatePost('${post.id}','${post.dataCreazione}');</script></small></p>
 				      <hr class="post-hr">
-				      <div style="display:inline" class="row">
-				         <span class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">10</span>
-				        <span class="glyphicon glyphicon-thumbs-down" style="font-size:1.5em;padding-right:10%">10</span>
+				      
+				      <div id = reaction${post.id} style="display:inline" class="row">
+				        <a onclick="javascript:addLike(${post.id})">
+				        	<span id="like" class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">-</span>
+				        </a>
+				        <a onclick="javascript:addDislike(${post.id})">
+				        	<span id = "dislike" class="glyphicon glyphicon-thumbs-down" style="font-size:1.5em;padding-right:10%">-</span>
+				        </a>
 				      </div>
+				      
 				      <hr class="post-hr">
 				        <a href = "commenti?idPost=${post.id}" style="font-size:1em">mostra commenti</a>
 				        <div style="display:inline">

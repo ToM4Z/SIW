@@ -308,8 +308,8 @@ public class GruppoDaoJDBC implements GruppoDao {
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			
 			
-			System.out.println(gruppo.getNome());
-			System.out.println(gruppo.getCanale().getNome());
+			//System.out.println(gruppo.getNome());
+			//System.out.println(gruppo.getCanale().getNome());
 
 			statement.executeUpdate();
 			connection.commit();
@@ -477,17 +477,15 @@ public class GruppoDaoJDBC implements GruppoDao {
 			statement.setString(3, utente.getEmail());
 			ResultSet result = statement.executeQuery();
 			if(!result.next()) {
-				//throw new PersistenceException("L'Utente "+utente.getEmail()+" è già in attesa del gruppo "+gruppo.getNome());
-			
-			
-			String insert = "insert into utenti_attesa(canale, gruppo, email_utente) values (?,?,?)";
-			statement = connection.prepareStatement(insert);
-			statement.setString(1, gruppo.getCanale().getNome());
-			statement.setString(2, gruppo.getNome());
-			statement.setString(3, utente.getEmail());
-			statement.executeUpdate();
+				
+				String insert = "insert into utenti_attesa(canale, gruppo, email_utente) values (?,?,?)";
+				statement = connection.prepareStatement(insert);
+				statement.setString(1, gruppo.getCanale().getNome());
+				statement.setString(2, gruppo.getNome());
+				statement.setString(3, utente.getEmail());
+				statement.executeUpdate();
 			}
-			System.out.println("aggiunto in attesa nel db al gruppo "+gruppo.getNome());
+			//System.out.println("aggiunto in attesa nel db al gruppo "+gruppo.getNome());
 
 		} catch (SQLException e) {
 			if (connection != null)

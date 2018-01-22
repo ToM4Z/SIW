@@ -17,6 +17,8 @@ public class UtilDao {
 		try {
 			String drop = "drop SEQUENCE if EXISTS sequenza_id;" 
 					+ "drop table if exists commento;"
+					+ "drop table if exists likes;"
+					+ "drop table if exists dislikes;"
 					+ "drop table if exists post;"
 					+ "drop table if exists messaggio;"
 					+ "drop table if exists gestione_gruppo;"
@@ -78,6 +80,12 @@ public class UtilDao {
 					+"create table commento (id_commento bigint primary key, id_post bigint REFERENCES post(id_post),"
                     	+ "email_utente varchar(255) REFERENCES utente(email), contenuto text, data_creazione timestamp, image text);"
 					
+                    +"create table likes (id_post bigint REFERENCES post(id_post), email_utente varchar(255) REFERENCES utente(email), "
+                    	+"PRIMARY KEY (id_post, email_utente));"
+					
+					+"create table dislikes (id_post bigint REFERENCES post(id_post), email_utente varchar(255) REFERENCES utente(email), "
+						+"PRIMARY KEY (id_post, email_utente));"
+                    	
                     +"create table messaggio ( id_messaggio bigint primary key, email_mittente varchar(255) REFERENCES utente(email),"
                     	+"contenuto text, canale varchar(255), gruppo varchar(255), FOREIGN KEY(gruppo, canale) REFERENCES gruppo(nome, canale),"
                     	+"data_creazione timestamp, image text);"
@@ -125,6 +133,12 @@ public class UtilDao {
 			statement = connection.prepareStatement("delete FROM canale");
 			statement.executeUpdate();
 			
+			statement = connection.prepareStatement("delete FROM likes");
+			statement.executeUpdate();
+			
+			statement = connection.prepareStatement("delete FROM dislikes");
+			statement.executeUpdate();
+			
 			statement = connection.prepareStatement("delete FROM utente");
 			statement.executeUpdate();
 			
@@ -139,6 +153,7 @@ public class UtilDao {
 			
 			statement = connection.prepareStatement("delete FROM notifica");
 			statement.executeUpdate();	
+
 			
 			System.out.println("Reset database: Success");
 			
