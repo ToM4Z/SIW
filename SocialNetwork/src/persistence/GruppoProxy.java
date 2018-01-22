@@ -98,7 +98,9 @@ public class GruppoProxy extends Gruppo {
 		List<Post> allPost = new LinkedList<>();
 		try {
 			PreparedStatement statement;
-			statement = connection.prepareStatement("select * from post where gruppo = ? and canale = ?");
+			statement = connection.prepareStatement("select id_post,email_utente,contenuto,"
+												+ "data_creazione,image from post where gruppo = ? and canale = ?"
+												+ "ORDER BY id_post DESC");
 			statement.setString(1, this.getNome());
 			statement.setString(2, this.getCanale().getNome());
 			ResultSet result = statement.executeQuery();
@@ -108,8 +110,8 @@ public class GruppoProxy extends Gruppo {
 				post.setId(result.getLong("id_post"));
 				post.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
 				post.setContenuto(result.getString("contenuto"));
-				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
-				post.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), post.getCanale().getNome()));
+				post.setCanale(this.getCanale());
+				post.setGruppo(this);
 				post.setDataCreazione(new java.util.Date(result.getTimestamp("data_creazione").getTime()));
 
 				allPost.add(post);

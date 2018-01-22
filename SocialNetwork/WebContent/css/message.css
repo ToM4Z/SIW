@@ -1,70 +1,4 @@
 
-.li-mex{
-	list-style-type: none;
-}
-
-.mex {
-	background-color: #e3f7fc;
-	color: #555;
-	border: .1em solid;
-	border-color: #8ed9f6;
-	border-radius: 10px;
-	font-family: Tahoma, Geneva, Arial, sans-serif;
-	font-size: 1.1em;
-	padding: 10px 10px 10px 10px;
-	margin: 10px;
-	cursor: default;
-}
-
-.mex-left {
-	float: left;
-	margin-right: 100px;
-	margin-left: -40px;
-}
-
-.mex-right {
-	float: right;
-	margin-left: 100px;
-}
-
-.mex-header {
-	font-family: Tahoma, Geneva, Arial, sans-serif;
-	font-size: 1.0em;
-	font-weight: bold;
-	cursor: default;
-	position: relative;
-}
-.mex-header a{
-	font-family: Tahoma, Geneva, Arial, sans-serif;
-	font-size: 1.0em;
-	font-weight: bold;
-	color:#515151;
-}
-
-.mex-header-right {
-	float: right;
-}
-
-.mex-header-left {
-	float: left;
-}
-
-.mex-footer {
-	font-family: Tahoma, Geneva, Arial, sans-serif;
-	font-size: 0.7em;
-	font-weight: bold;
-	cursor: default;
-	position: relative;
-}
-
-.mex-footer-right {
-	float: right;
-}
-
-.mex-footer-left {
-	float: left;
-}
-
 hr {
 	display: block;
 	margin-top: 0.5em;
@@ -72,4 +6,78 @@ hr {
 	width: 100%;
 	border-style: inset;
 	border-width: 1px;
+}
+
+.mexContainer {
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    padding-bottom: 0px;
+    margin: 10px 0;
+}
+
+.mexContainer.right{
+	margin-right:0px;
+	text-align:right;
+}
+.mexContainer.left{
+	margin-left:-38px;
+	text-align:left;
+}
+
+.mexContainer::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.mexContainer div.row img {
+    float: left;
+    width: 100%;
+    max-width: 45px;
+    min-height: 45px;
+    max-height:45px;
+    margin-right: 20px;
+    margin-left: 15px;
+    border-radius: 50%;
+}
+.mexContainer div.row  img.right {
+    float: right;
+    margin-left: 20px;
+    margin-right:15px;
+}
+.mexContainer div.row span#Name {
+	float:left;
+	margin-top:10px;
+    margin-left:5px;
+    margin-bottom:5px;
+}
+
+.mexContainer div.row span#Name a{
+	font-family: Tahoma, Geneva, Arial, sans-serif;
+	font-size: 1.0em;
+	font-weight: bold;
+	color:#515151;
+}
+
+.mexContainer div.row span#Name.right {
+	float:right;
+	right:5px;
+}
+
+.mexContainer div.row span.time-right {
+    float: right;
+    font-size:0.9em;
+    color: #aaa;
+    margin-top:14px;
+    margin-right: 14px;
+}
+
+.mexContainer div.row span.time-left {
+    float: left;
+    font-size:0.9em;
+    color: #aaa;
+    margin-top:14px;
+    margin-left: 14px;
 }

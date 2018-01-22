@@ -1,9 +1,9 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <html>
 <head lang="it">
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1,  height=device-height">
 <title>LoosyNet</title>
 
@@ -21,7 +21,7 @@ function sendMessage(){
 			data: {gruppo : $("#nomeGruppo").text(), canale : $("#nomeCanale").text(), testo : $("#messaggio").val()},
 			success: function(data){
 				if(data == "error"){
-					alert("error");
+					console.log("error");
 				}
 			}
 	});
@@ -41,7 +41,7 @@ function loadMessaggi(){
 				$("#listchat").append(liste);
 				$("#chat").animate({scrollTop:$("#chat").get(0).scrollHeight}, 'slow');
 			}else if(data == "error"){
-				alert("error");
+				console.log("error");
 			}
 			getMessaggi();
 		}
@@ -93,16 +93,16 @@ function onbeforeunloadChat(){
 	<form action="javascript:onbeforeunloadChat()" style="display:none">
 		<input type="submit" class="onbeforeunload">
 	</form>
-	
+		
 	<h1 id="nomeGruppo" style="display: none">${gruppo.nome}</h1>
 	<h1 id="nomeCanale" style="display: none">${gruppo.canale.nome}</h1>
 
 	<div id="chatGruppo" class="panel panel-default"
-		style="position: fixed; width: 25%; height: 100%; right: 0%; margin-top: 40px; margin-bottom: -20px">
+		style="position: fixed; width: 25%; height: 100%; right: 0%; margin-top: 40px; margin-bottom: -20px;">
 		<div class="panel-heading" style="text-align: center">
 			<h3>Chat ${gruppo.nome}</h3>
 		</div>
-		<div class="panel-body">
+		<div class="panel-body" style="padding-left:0px;">
 			<c:if test="${gruppo.nome != null}">
 				<script type="text/javascript">
 					loadMessaggi();
@@ -119,19 +119,20 @@ function onbeforeunloadChat(){
 				<h2 style="text-align: center">Apri un gruppo per visualizzare la chat</h2>
 			</c:if>
 
-			<div id="writeMex" style="position: fixed; bottom: 10px; width: 30%;">
+			<div id="writeMex" style="position: fixed; bottom: 5px; width: 30%;">
 				<hr>
 				<form action="javascript:sendMessage()">
 					<c:if test="${not empty gruppo.nome}">
 						<input id="messaggio" type="text" class="form-control"
 							placeholder="Inserisci testo" autocomplete="off"
-							style="float: left; margin-left: -7px; width: 70%"
+							style="float: left; margin-left: 8px; margin-top:3px; width: 70%"
 							name="messaggio">
 
-						<span> <input type="submit" class="btn btn-info btn-bg"
-							style="left: 5px; width: 32px; height: 32px" value=""> <span
-							class="glyphicon glyphicon-send"
-							style="position: relative; left: -28px; top: 2px"></span>
+						<span> 
+							<input type="submit" class="btn btn-info btn-bg"
+								style="left: 5px; width: 32px; height: 32px; top:5px;" value=""> 
+							<span class="glyphicon glyphicon-send"
+								style="position: relative; left: -28px; top: 5px"></span>
 						</span>
 					</c:if>
 				</form>

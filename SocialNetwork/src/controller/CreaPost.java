@@ -44,6 +44,7 @@ public class CreaPost extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setCharacterEncoding("UTF-8");
 		
 		HttpSession session = req.getSession();
 		Utente utente = (Utente) session.getAttribute("user");

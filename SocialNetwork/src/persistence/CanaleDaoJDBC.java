@@ -358,8 +358,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 	
 	private void removeFromAllGroups(Canale canale, Utente utente) {
 		
-		Connection connection = dataSource.getConnection();
-		
+		Connection connection = dataSource.getConnection();	
 		
 			try {	
 				for (Gruppo gruppo : canale.getGruppi()) {
@@ -367,7 +366,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 					statement1.setString(1, canale.getNome());
 					statement1.setString(2, gruppo.getNome());
 					statement1.setString(3, utente.getEmail());
-					System.out.println("canale "+canale.getNome()+" utente: "+utente.getEmail());
+					
 					ResultSet result = statement1.executeQuery();
 					
 					if (result.next()) {

@@ -1,10 +1,10 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <jsp:useBean id="user" class="model.Utente" scope="session" />
 
 <html>
 <head lang="it">
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>LoosyNet</title>
@@ -178,7 +178,8 @@ function onbeforeunloadLoosyNetBar(){
 }
 </script>
 
-<body>
+<body>	
+	<jsp:include page="showUser.jsp" />
 	<form action="javascript:onbeforeunloadLoosyNetBar()" style="display:none">
 		<input type="submit" class="onbeforeunload">
 	</form>
@@ -222,7 +223,7 @@ function onbeforeunloadLoosyNetBar(){
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="home"><span class="glyphicon glyphicon-home" id="icons"></span>
 							Home</a></li>
-					<li><a href="utente"><span class="glyphicon glyphicon-user"  id="icons"></span>
+					<li><a href="javascript:showUser('')"><span class="glyphicon glyphicon-user"  id="icons"></span>
 							${user.username}</a></li>
 					<li class="dropdown">
 						<a href="javascript:showNotify()" class="dropdown-toggle" id="linkShowNotify">					

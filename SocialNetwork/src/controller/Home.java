@@ -27,18 +27,13 @@ public class Home extends HttpServlet{
 		
 		HttpSession session = req.getSession();
 		Utente utente = (Utente) session.getAttribute("user");
+		resp.setCharacterEncoding("UTF-8");
 		
 		UtenteDao dao =DatabaseManager.getInstance().getDaoFactory().getUtenteDAO();
 		List<Post> posts = dao.getPostsOfMyGroups(utente);
 		req.setAttribute("posts", posts);
-		
-		//System.out.println(posts.size());
-		
-//		List<Canale> canali = dao.getMyChannels(utente);
-//		req.setAttribute("canali", canali);
-		
+				
 		req.getRequestDispatcher("home.jsp").forward(req, resp);
-		//resp.sendRedirect("home.jsp");
 	}	
 }
 

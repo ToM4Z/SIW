@@ -15,6 +15,7 @@ public class GruppoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
       
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setCharacterEncoding("UTF-8");
 		
 		String nomeGruppo = req.getParameter("group");
 		String nomeCanale = req.getParameter("channel");

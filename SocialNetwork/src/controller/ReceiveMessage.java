@@ -29,6 +29,8 @@ public class ReceiveMessage extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		Utente utente = (Utente) session.getAttribute("user");
+		resp.setCharacterEncoding("UTF-8");
+		
 		if(utente == null) {
 			resp.getWriter().write("error");
 			return;
@@ -70,22 +72,31 @@ public class ReceiveMessage extends HttpServlet{
 	
 	private List<String> createListMex(Utente me,List<Messaggio> mex){
 		List<String> json = new LinkedList<>();
+		Calendar today = Calendar.getInstance();
 		Calendar calendar = Calendar.getInstance();
 		for(int i=0;i<mex.size();++i) {
 			Messaggio m = mex.get(i);	
 			calendar.setTime(m.getData());
-			String side = m.getMittente().getEmail().equals(me.getEmail()) ? "right" : "left";
+			boolean right = m.getMittente().getEmail().equals(me.getEmail()) ? true : false;
+			int day = calendar.get(Calendar.DATE);
+			int month = calendar.get(Calendar.MONTH)+1;
+			int year = calendar.get(Calendar.YEAR);
 			int hour = calendar.get(Calendar.HOUR_OF_DAY);
 			int min = calendar.get(Calendar.MINUTE);
-			String data = (hour<10 ? "0"+hour : hour) +":"+ (min<10 ? "0"+min : min);
+			String data = "";
+			if(!(year == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)))
+				data = day+"/"+ (month<10 ? "0"+month : month) +"/"+ year +" ";			
+			data += (hour<10 ? "0"+hour : hour) +":"+ (min<10 ? "0"+min : min);
 			String email = m.getMittente().getEmail();
 			String username = m.getMittente().getUsername();
 			
-			json.add("<li class=\"li-mex\"><span class=\"mex mex-"+side+"\">"
-						+ "<span class=\"mex-header mex-header-"+side+"\">"
-						+"<a href=\"utente?to="+email+"\">"+username+"</a></span><br><p>"+m.getContenuto()
-						+"</p><span class=\"mex-footer mex-footer-"+side+"\">"+data+"</span><br>"
-						+"</span></li>"); 
+			json.add("<div class=\"mexContainer "+(right? "right":"left")+"\">"
+			  + "<div class=\"row\">"
+			  + "<img src=\"images/users/"+email+".jpg\" alt=\"Avatar\" onerror=\"this.src='images/users/unknown.jpg';\""+(right? "class=\"right\"":"")+">"
+			  + "<span id=\"Name\""+(right? "class=\"right\"":"")+"><a href=\"javascript:showUser('"+email+"')\">"+username+"</a></span>"
+			  + "<span class=\"time-"+(right? "left":"right")+"\">"+data+"</span>"	  
+			  + "</div><hr><p style=\"float:"+(right? "right":"left")+"\">"+m.getContenuto()+"</p>"
+			  + "</div>");
 		}
 		return json;
 	}
