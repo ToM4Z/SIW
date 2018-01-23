@@ -12,12 +12,31 @@
 <title>LoosyNet</title>
 
 <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script src="js/dateConverter.js"></script>
 
 
 <script>
+
+window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '165758527482837',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.11'
+    });      
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
 function creaPost(){
 	  var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
@@ -350,6 +369,10 @@ function stopUpdate(){
 		});
 	}
 
+	function post() {
+		
+	}
+
 
 </script>
 <style>
@@ -483,6 +506,25 @@ function unload(){
 				</div>
 				
 			<div id="homePost" style="margin-top:60px; text-align: center;">
+			
+			<div class="page-header">
+  <h1>Share Dialog</h1>
+</div>
+
+<p>Click the button below to trigger a Share Dialog</p>
+
+<div id="shareBtn" class="btn btn-success clearfix">Share</div>
+
+<script>
+function shareOnFacebook(x){
+  FB.ui({
+    method: 'share',
+    display: 'popup',
+    href: 'commenti?idPost='+x,
+    quote: x,
+  }, function(response){});
+}
+</script>
 				
 				<h1 id="nomeGruppo">${gruppo.nome}</h1>
 				<h1 id="nomeCanale" style="display:none">${gruppo.canale.nome}</h1>
@@ -497,6 +539,8 @@ function unload(){
 					stopUpdate();
 				</script>
 				</c:if>
+				
+				<h2 onclick = "javascript:post()">prova pubblicazione</h2>
 				
 				<c:if test = "${admin == true }">
 					<h5 onclick="seiSicuroGruppo()">Elimina gruppo</h5>
@@ -534,7 +578,9 @@ function unload(){
 				    </div>
 				    <div class="post-header-right">
 				      <c:if test = "${post.creatore.email == user.email}">
+				      <a onclick="javascript:shareOnFacebook('${post.id}')"><i class="fa fa-facebook-square" style="font-size:22px"></i></a>
 				      <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
+				      
 				      </c:if>
 				      <c:if test = "${post.creatore.email == user.email || admin==true}">
 			    
