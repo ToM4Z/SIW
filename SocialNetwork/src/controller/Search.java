@@ -42,7 +42,7 @@ public class Search extends HttpServlet {
 	        	
 	        	if (c.getNome().toLowerCase().contains(toSearch)) {
 	        		
-	        		results.add("<li><a href = canale?channel="+c.getNome()+">" +c.getNome()+"</a></li>");
+	        		results.add("<li><a href =\"javascript:showChannel('"+c.getNome()+"')\">" +c.getNome()+"</a></li>");
 	        	}
 	        }
 	        resp.getWriter().write(new Gson().toJson(results));

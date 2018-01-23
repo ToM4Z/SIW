@@ -5,12 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
@@ -26,28 +24,18 @@ import persistence.dao.PostDao;
 
 public class CreaPost extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
 
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		RequestDispatcher dispacher = req.getRequestDispatcher("creaPost.jsp");
-		dispacher.forward(req, resp);
-	}
-	
-	private class CanaleGruppo{
-		
+	private class CanaleGruppo{		
 		private String canale;
 		private String gruppo;
-		private String contenuto;
-		
+		private String contenuto;		
 	}
 
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
 		
-		HttpSession session = req.getSession();
-		Utente utente = (Utente) session.getAttribute("user");
+		Utente utente = (Utente) req.getSession().getAttribute("user");
 		PostDao postDao = DatabaseManager.getInstance().getDaoFactory().getPostDAO();
 		CanaleDao canaleDao = DatabaseManager.getInstance().getDaoFactory().getCanaleDAO();
 		GruppoDao gruppoDao = DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();

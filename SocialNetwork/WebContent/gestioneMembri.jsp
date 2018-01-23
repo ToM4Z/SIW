@@ -2,6 +2,15 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:useBean id="user" class="model.Utente" scope="session" />
 
+<html>
+<head lang="it">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LoosyNet</title>
+
+<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script>
 
 function aggiungiMembro(x){
@@ -42,26 +51,19 @@ function rimuoviMembro(x){
 		});
 }
 
-</script>
-
-<html>
-<head lang="it">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LoosyNet</title>
-
-<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
-<script src="js/jquery-3.2.1.min.js"></script>
-<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<script>
-	function load() {
-		$("input.onload").each(function() {
-			$(this).trigger("click");
-		});
-	};
+function load(){
+	$("input.onload").each(function(){
+		$(this).trigger("click");
+	});
+};
+function unload(){
+	$("input.onbeforeunload").each(function(){
+		$(this).trigger("click");
+	});
+}
 </script>
 </head>
-<body onload="javascript:load()" style="overflow-x: hidden">
+<body onload="javascript:load();" onbeforeunload="javascript:unload()" style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
 	</c:if>
@@ -70,14 +72,15 @@ function rimuoviMembro(x){
 		<div class="col-bg-6 brd">
 			<jsp:include page="barraCanali.jsp" />
 		</div>
-		
+		<div class="col-bg-6 brd">
+			<jsp:include page="chatGruppo.jsp" />
 		</div>
 		<div class="col-bg-6 brd">
 			<div id="homePost" style="margin-top: 60px; text-align: center;">
 
 				<h2>Stai gestendo i membri del gruppo:</h2>
-				<h1 id="nomeGruppo">${gruppo}</h1>
-				<h1 id="nomeCanale" style="display:none">${canale}</h1>
+				<h1 id="nomeGruppo">${nomegruppo}</h1>
+				<h1 id="nomeCanale" style="display:none">${nomecanale}</h1>
 				<c:forEach var="riga" items="${righe}">
 	
 					${riga}
@@ -85,8 +88,7 @@ function rimuoviMembro(x){
 				</c:forEach>
 
 			</div>
-		
+		</div>
 	</div>
-	
 </body>
 </html>

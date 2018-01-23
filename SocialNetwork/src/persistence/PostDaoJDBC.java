@@ -30,7 +30,7 @@ public class PostDaoJDBC implements PostDao {
 			post.setDataCreazione(Calendar.getInstance().getTime());
 
 			String insert = "insert into post(id_post, email_utente, contenuto, "
-					+ "canale, gruppo, data_creazione, image) values (?,?,?,?,?,?,?)";
+					+ "canale, gruppo, data_creazione) values (?,?,?,?,?,?)";
 
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1, post.getId());
@@ -39,7 +39,6 @@ public class PostDaoJDBC implements PostDao {
 			statement.setString(4, post.getCanale().getNome());
 			statement.setString(5, post.getGruppo().getNome());
 			statement.setTimestamp(6, new Timestamp(post.getDataCreazione().getTime()));
-			statement.setString(7, post.getImage());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -70,7 +69,6 @@ public class PostDaoJDBC implements PostDao {
 				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
 				post.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), post.getCanale().getNome()));
 				post.setDataCreazione(new Date(result.getTimestamp("data_creazione").getTime()));
-				post.setImage(result.getString("image"));
 				
 			}
 		} catch (SQLException e) {
@@ -102,7 +100,6 @@ public class PostDaoJDBC implements PostDao {
 				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
 				post.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), post.getCanale().getNome()));
 				post.setDataCreazione(new Date(result.getTimestamp("data_creazione").getTime()));
-				post.setImage(result.getString("image"));
 
 				allPost.add(post);
 			}
@@ -130,14 +127,12 @@ public class PostDaoJDBC implements PostDao {
 		
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String update = "update post SET contenuto = ?"+/* and image = ?*/" WHERE id_post = ?";
+			String update = "update post SET contenuto = ? WHERE id_post = ?";
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setString(1, post.getContenuto());
-			//statement.setString(2, post.getImage());
 			statement.setLong(2, post.getId());
 
 			statement.executeUpdate();
-			//connection.commit();
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {

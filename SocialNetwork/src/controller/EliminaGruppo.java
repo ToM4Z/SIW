@@ -25,13 +25,7 @@ public class EliminaGruppo extends HttpServlet {
 		
 		gruppoDao.delete(gruppo);
 		
-		resp.sendRedirect("canale?channel="+nomeCanale);
-	}
-
-	
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		doGet(req, resp);
+		resp.sendRedirect("home");
 	}
 
 }

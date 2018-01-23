@@ -18,6 +18,10 @@ public class IscrizioneCanale extends HttpServlet {
        
     
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if(req.getSession().getAttribute("user") == null) {
+			resp.sendRedirect("login.html");
+			return;
+		}
 		
 		HttpSession session = req.getSession();
 		Utente utente = (Utente) session.getAttribute("user");
@@ -40,7 +44,7 @@ public class IscrizioneCanale extends HttpServlet {
 			dao.update(canale);
 		}
 		
-		resp.sendRedirect("canale?channel="+nomeCanale);
+		resp.sendRedirect("home");
 	}
 
 	

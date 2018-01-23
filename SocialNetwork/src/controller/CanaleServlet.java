@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
@@ -20,48 +19,40 @@ import persistence.dao.CanaleDao;
 
 public class CanaleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
+	@SuppressWarnings("unused")
+	private class InfoChannel{
+		private boolean iscritto = false;
+		private boolean blacklist = false;
+		private Canale canale;
+	}
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		HttpSession session = req.getSession();
-		Utente utente = (Utente) session.getAttribute("user");
-		boolean iscritto = false;
-		boolean blacklist = false;
-		String nomeCanale = req.getParameter("channel");
+		Utente utente = (Utente) req.getSession().getAttribute("user");
+		
+		InfoChannel channel = new InfoChannel();
 		CanaleDao dao =DatabaseManager.getInstance().getDaoFactory().getCanaleDAO();
-		
-		//System.out.println(nomeCanale);
-		Canale canale = dao.findByPrimaryKey(nomeCanale);
-		
-		for (Utente u : canale.getMembri()) {
-			
-			if (u.getEmail().equals(utente.getEmail()))
-				iscritto=true;
-		}
+		channel.canale = dao.findByPrimaryKey(req.getParameter("channel"));
 		
 		
-		for (Utente u : canale.getBlacklist()) {
-			
+		for (Utente u : channel.canale.getMembri())			
 			if (u.getEmail().equals(utente.getEmail())) {
-				
-				blacklist = true;
+				channel.iscritto=true;
+				break;
+			}		
+		
+		for (Utente u : channel.canale.getBlacklist())			
+			if (u.getEmail().equals(utente.getEmail())) {			
+				channel.blacklist = true;
+				break;
 			}
-		}
 		
-		req.setAttribute("iscritto", iscritto);
-		req.setAttribute("canale", canale);
-		req.setAttribute("blacklist", blacklist);
-		
-		//System.out.println(canale.getNome());
-		
-		req.getRequestDispatcher("canale.jsp").forward(req, resp);
-		
-		
+		resp.setCharacterEncoding("UTF-8");
+		resp.getWriter().write(new Gson().toJson(channel));		
 	}
-	
-	private class ModificaDescrizione{
 		
+	private class ModificaDescrizione{		
 		private String nomeCanale;
 		private String modifica;
 	}
@@ -69,18 +60,15 @@ public class CanaleServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-		String linea = br.readLine();
-		//System.out.println(linea);
-        ModificaDescrizione md = new Gson().fromJson(linea, ModificaDescrizione.class);
+        ModificaDescrizione md = new Gson().fromJson(br.readLine(), ModificaDescrizione.class);
         
         CanaleDao canaleDao = DatabaseManager.getInstance().getDaoFactory().getCanaleDAO();
         
-        Canale canale = canaleDao.findByPrimaryKey(md.nomeCanale);
-        
-        canale.setDescrizione(md.modifica);
-        
+        Canale canale = canaleDao.findByPrimaryKey(md.nomeCanale);        
+        canale.setDescrizione(md.modifica);        
         canaleDao.update(canale);
-        resp.getWriter().write("true");
+        
+        resp.getWriter().write("success");
 	}
 
 }

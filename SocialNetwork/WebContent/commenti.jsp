@@ -2,7 +2,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <jsp:useBean id="user" class="model.Utente" scope="session" />
 
-
 <html>
 <head lang="it">
 <meta charset="UTF-8">
@@ -64,13 +63,13 @@ function unload(){
 				<small>commenti:</small>
 				<c:forEach var="commento" items="${commenti}">
 				
-				<div id=commento_${commento.id}>
-					<h4>${commento.creatore.username}</h4>
-					<c:if test = "${commento.creatore.email == user.email || post.creatore.email == user.email}">
-						<small onclick = "javascript:deleteCommento(${commento.id})">Elimina commento</small>
-					</c:if>
-					<h4>${commento.contenuto}</h4>
-				</div>
+					<div id=commento_${commento.id}>
+						<h4>${commento.creatore.username}</h4>
+						<c:if test = "${commento.creatore.email == user.email || post.creatore.email == user.email}">
+							<small onclick = "javascript:deleteCommento(${commento.id})">Elimina commento</small>
+						</c:if>
+						<h4>${commento.contenuto}</h4>
+					</div>
 
 				</c:forEach>
 			</div>

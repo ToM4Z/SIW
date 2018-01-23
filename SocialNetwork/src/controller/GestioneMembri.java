@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,10 +24,12 @@ import persistence.dao.UtenteDao;
 
 public class GestioneMembri extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
+		if(req.getSession().getAttribute("user") == null) {
+			resp.sendRedirect("login.html");
+			return;
+		}
 		String nomeGruppo = req.getParameter("group");
 		String nomeCanale = req.getParameter("channel");
 		GruppoDao gruppoDao =DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
@@ -59,8 +60,8 @@ public class GestioneMembri extends HttpServlet {
 		}
 		
 		req.setAttribute("righe", out);
-		req.setAttribute("gruppo", nomeGruppo);
-		req.setAttribute("canale", nomeCanale);
+		req.setAttribute("nomegruppo", nomeGruppo);
+		req.setAttribute("nomecanale", nomeCanale);
 		
 		req.getRequestDispatcher("gestioneMembri.jsp").forward(req, resp);
 		

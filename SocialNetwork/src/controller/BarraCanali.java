@@ -38,6 +38,7 @@ public class BarraCanali extends HttpServlet {
 			canaliegruppi.add(l);
 		}
 		
+		resp.setCharacterEncoding("UTF-8");
 	    resp.getWriter().write(new Gson().toJson(canaliegruppi));
 	}
 }

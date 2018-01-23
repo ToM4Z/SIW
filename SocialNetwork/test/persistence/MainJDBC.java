@@ -6,12 +6,10 @@ import java.util.List;
 import model.Utente;
 import model.Canale;
 import model.Gruppo;
-import model.Notifica;
 import model.Post;
 import persistence.dao.UtenteDao;
 import persistence.dao.CanaleDao;
 import persistence.dao.GruppoDao;
-import persistence.dao.NotificaDao;
 import persistence.dao.PostDao;
 
 public class MainJDBC {
@@ -29,7 +27,6 @@ public class MainJDBC {
 		UtenteDao utentedao = factory.getUtenteDAO();
 		CanaleDao canaledao = factory.getCanaleDAO();
 		GruppoDao gruppodao = factory.getGruppoDAO();
-		NotificaDao notificadao = factory.getNotificaDAO();
 		PostDao postdao = factory.getPostDAO();
 		
 		
@@ -68,9 +65,7 @@ public class MainJDBC {
 		c1.addGruppo(g1);
 
 		utentedao.save(u2);
-		utentedao.setPassword(u2, "pasticcio");
-		canaledao.addUserToBlackList(c1, u2);
-		
+		utentedao.setPassword(u2, "pasticcio");		
 		gruppodao.save(g1);
 		
 		a = new Post();
@@ -80,10 +75,7 @@ public class MainJDBC {
 		a.setContenuto("primo post");
 		
 		postdao.save(a);
-		
-		Notifica n = new Notifica(u1,"<a href=\"canale?channel=UNICAL\">UNICAL</a>");
-		notificadao.save(n);
-		
+				
 		List<Post> prova = utentedao.getPostsOfMyGroups(u1);
 		
 		for (Post s : prova) {

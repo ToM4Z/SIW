@@ -15,7 +15,10 @@
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script src="js/dateConverter.js"></script>
-
+<script src="js/post.js"></script>
+<link rel="stylesheet" href="css/post.css">
+<script src="js/ResizeScreen.js"></script>
+<link rel="stylesheet" href="css/ResizeScreen.css">
 
 <script>
 function creaPost(){
@@ -36,48 +39,6 @@ function creaPost(){
 	  xhr.send(json);
 }
 
-
-function addCommento(idPost){
-	
-	  alert($("#commento"+idPost).val());
-	  var gruppo = $("#nomeGruppo").text();
-	  var canale = $("#nomeCanale").text();
-	  var json = JSON.stringify({"gruppo": gruppo,"canale" : canale, "idPost":idPost, "commento": $("#commento"+idPost).val()});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","commento", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("commento aggiunto")
-		  	  inviaNotificaCommento(idPost);
-	  		}else{
-	      }
-	  }
-	  xhr.send(json);
-}
-
-function eliminaPosts(idPost){
-	
-	
-	if (confirm("Sei sicuro di voler cancellare il post?") == true) {
-	  var json = JSON.stringify({"idPost" : idPost});
-	  //alert(idPost);
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","eliminaPost", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  	  
-	  $("#post_"+idPost).remove();
-	  
-	  xhr.send(json);
-	}
-	
-
-}
-
 function seiSicuroGruppo(){
 	
 	var gruppo = $("#nomeGruppo").text();
@@ -88,9 +49,6 @@ function seiSicuroGruppo(){
 		inviaNotificaEliminaGruppo();
 		document.location.href = "eliminaGruppo?group="+gruppo+"&channel="+canale;
 		
-	} else {
-	    
-		//do nothing
 	} 
 }
 
@@ -105,13 +63,6 @@ function inviaNotificaEliminaGruppo(){
 	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
 	  xhr.setRequestHeader("connection","close");
 	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("notifica eliminazione inviata");
-	  		}else{
-	  			
-	      }
-	  }
 	  xhr.send(json);
 }
 
@@ -137,189 +88,12 @@ function inviaNotificaRichiesta(){
 	  
 }
 
-
-function inviaNotificaSegnalazione(idPost){
-	
-	  var tipo = "segnalazione";
-	  var gruppo = $("#nomeGruppo").text();
-	  var canale = $("#nomeCanale").text();
-	  var json = JSON.stringify({"idPost": idPost, "tipo" : tipo, "nomeGruppo": gruppo, "nomeCanale" : canale});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","inviaNotifica", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("notifica segnalazione inviata");
-	  		}else{
-	  			
-	      }
-	  }
-	  xhr.send(json);
-}
-
-
-function inviaNotificaCommento(idPost){
-	
-	  var tipo = "commento";
-	  var json = JSON.stringify({"idPost": idPost, "tipo" : tipo, "nomeGruppo": "", "nomeCanale" : ""});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","inviaNotifica", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("notifica commento inviata");
-	  		}else{
-	  			
-	      }
-	  }
-	  xhr.send(json);
-	  
-}
-
-function eseguiModifica(x){
-	  
-	  var mod =  $("#modifica").val();
-	  var json = JSON.stringify({"idPost":x, "modifica": mod});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","modificaPost", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-			  $("div.post-body"+x).replaceWith("<div class=\"post-body"+x+"\">"
-					  +"<hr style=\"margin:-0.5px; margin-bottom:7px; border-color:black\">"
-					  +"<p class=\"contenuto\">"+mod+"</p></div>");
-	  		}else{
-	      }
-	  }
-	  xhr.send(json);
-}
-
-function modificaPost(x){
-	alert(x);
-	$("div.post-body"+x).replaceWith("<div class=\"post-body"+x+"\">"
-		+"<hr style=\"margin:-0.5px; margin-bottom:7px; border-color:black\">"
-		+"<form action = \"javascript:eseguiModifica("+x+")\"><input id=\"modifica\" type=\"text\" name=\"modifica\" >"
-		+"<input type = \"submit\" value = \"Modifica\"></form></div>");
-}
-
 function load(){
 	$("input.onload").each(function(){
 		$(this).trigger("click");
 	});
-};
-
-</script>
-<style>
-.post{
-	background-color: #E8E8E8;
-	color: #555;
-	border: .1em solid;
-	border-color: #C0C0C0;
-	border-radius: 10px;
-	font-family: Tahoma, Geneva, Arial, sans-serif;
-	font-size: 1.1em;
-	padding: 10px;
-	margin: 20px;
-	cursor: default;
-	position: relative;
-  	left:  calc(40vw - 5%);
-    width: calc(40vw - 10%);
-}
-.post-header{
-  padding-left: 10px;
-	cursor: default;
-  display: inline;
-}
-.post-header-left{
-  float:left;
-}
-.post-header a{
-  font-family: Tahoma, Geneva, Arial, sans-serif;
-	font-size: 1.1em;
-  color:#555;
-}
-.post-header-right{
-  float: right;
-}
-.post-body{
-  padding-top: 10px;
-}
-.post-footer{
-    margin-bottom: -30px;
-}
-.contenuto{
-  font-size: 1.2em;
-}
-.post-hr{
-	border-color: #D2D2D2;
-	margin-top:4px; 
-	margin-bottom:5px; 
-}
-@media screen and (max-width : 767px) {
-	#barraCanali, #chatGruppo{
-		display:none;
-		float:none !important;
-		width:100% !important;
-	}
-	#writeMex{
-		width: 100% !important;
-		bottom: 10px;
-	}
-	#switchPanel{
-		display:block !important;
-	}
-	.post{
-		left:10%;
-		width:70%;
-	}
 }
 
-#switchPanel{
-	position:fixed;
-	top:60px;
-	left:10px;
-	display:none;
-}
-</style>
-<script>
-var page = 2;
-function shiftLeft(){
-	if(page===2){
-		$("#homePost").hide();
-		$("#barraCanali").show();
-		--page;
-	}else if(page===3){
-		$("#chatGruppo").hide();
-		$("#homePost").show();
-		--page;
-	}
-}
-function shiftRight(){
-	if(page===1){
-		$("#barraCanali").hide();
-		$("#homePost").show();
-		++page;
-	}else if(page===2){
-		$("#homePost").hide();
-		$("#chatGruppo").show();
-		++page;
-	}
-}
-
-function convertDatePost(post,data){	
-	$("p#"+post+" small").text(convertDate(data,true));
-}
-function load(){
-	$("input.onload").each(function(){
-		$(this).trigger("click");
-	});
-};
 function unload(){
 	$("input.onbeforeunload").each(function(){
 		$(this).trigger("click");
@@ -341,16 +115,16 @@ function unload(){
 		</div>
 		<div class="col-bg-6 brd">
 			<div id="switchPanel">
-					<span class="glyphicon glyphicon-chevron-left" style="font-size:2em;" onclick="javascript:shiftLeft()"></span>
-					<span class="glyphicon glyphicon-chevron-right" style="font-size:2em;left:500%;" onclick="javascript:shiftRight()"></span>
-				</div>
+				<span class="glyphicon glyphicon-chevron-left" style="font-size:2em;" onclick="javascript:shiftLeft()"></span>
+				<span class="glyphicon glyphicon-chevron-right" style="font-size:2em;left:500%;" onclick="javascript:shiftRight()"></span>
+			</div>
 			<div id="homePost" style="margin-top:60px; text-align: center;">
 				
 				<h1 id="nomeGruppo">${gruppo.nome}</h1>
 				<h1 id="nomeCanale" style="display:none">${gruppo.canale.nome}</h1>
 				
 				<c:if test = "${admin == true }">
-					<h5 onclick="seiSicuroGruppo()">Elimina gruppo</h5>
+					<h5><a onclick="seiSicuroGruppo()">Elimina gruppo</a></h5>
 					<h5><a href = utentiInAttesa?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Visualizza utenti in attesa</a></h5>
 					<h5><a href = gestioneAdmin?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci admin</a></h5>
 					<h5><a href = gestioneMembri?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci membri</a></h5>
@@ -381,7 +155,7 @@ function unload(){
 				  <div class="post">
 				    <div class="post-header">
 				    <div class="post-header-left">
-				        <a href = "utente?to=${post.creatore.email}">${post.creatore.username}</a>
+				        <a href = "javascript:showUser('${post.creatore.email}')">${post.creatore.username}</a>
 				    </div>
 				    <div class="post-header-right">
 				      <c:if test = "${post.creatore.email == user.email}">
@@ -393,7 +167,6 @@ function unload(){
 				    </div>
 
 				    <div class="post-body${post.id}">
-				   <!--    <hr style="margin:-0.5px; margin-bottom:7px; border-color:black"> -->
 				      <hr class="post-hr">
 				      <p class="contenuto">${post.contenuto}</p>
 				    </div>

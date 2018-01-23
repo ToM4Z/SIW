@@ -16,7 +16,10 @@ public class GruppoServlet extends HttpServlet {
       
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
-		
+		if(req.getSession().getAttribute("user") == null) {
+			resp.sendRedirect("login.html");
+			return;
+		}
 		String nomeGruppo = req.getParameter("group");
 		String nomeCanale = req.getParameter("channel");
 		GruppoDao dao =DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();

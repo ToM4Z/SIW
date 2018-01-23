@@ -1,0 +1,45 @@
+.post{
+	background-color: #E8E8E8;
+	color: #555;
+	border: .1em solid;
+	border-color: #C0C0C0;
+	border-radius: 10px;
+	font-family: Tahoma, Geneva, Arial, sans-serif;
+	font-size: 1.1em;
+	padding: 10px;
+	margin: 20px;
+	cursor: default;
+	position: relative;
+  	left:  calc(40vw - 5%);
+    width: calc(40vw - 10%);
+}
+.post-header{
+  padding-left: 10px;
+	cursor: default;
+  display: inline;
+}
+.post-header-left{
+  float:left;
+}
+.post-header a{
+  font-family: Tahoma, Geneva, Arial, sans-serif;
+	font-size: 1.1em;
+  color:#555;
+}
+.post-header-right{
+  float: right;
+}
+.post-body{
+  padding-top: 10px;
+}
+.post-footer{
+    margin-bottom: -30px;
+}
+.contenuto{
+  font-size: 1.2em;
+}
+.post-hr{
+	border-color: #D2D2D2;
+	margin-top:4px; 
+	margin-bottom:5px; 
+}
