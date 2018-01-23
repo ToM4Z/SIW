@@ -103,7 +103,8 @@ function getNotifiche(){
 					notificheLock = true;
 					$.ajax({
 						type:"POST",
-						url:"notifiche?numberNotifySession="+numberNotifySession,
+						url:"notifiche",
+						data: {"numberNotifySession" : numberNotifySession},
 						success: function(data){
 							if(data != "[]" && data!="error"){
 								var liste = JSON.parse(data);
