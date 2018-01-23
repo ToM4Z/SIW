@@ -12,11 +12,9 @@ public class Post {
 	private Set<Commento> commenti;
 	private Gruppo gruppo;
 	private Canale canale;
-	private Date dataCreazione;
-	private String image;
+	private Date dataCreazione;	
 	private Set<String> like;
 	private Set<String> dislike;
-	
 
 	public Post(){
 		commenti = new HashSet<>();
@@ -102,14 +100,6 @@ public class Post {
 		this.dataCreazione = dataCreazione;
 	}
 
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
 	public Set<String> getLike() {
 		return like;
 	}
@@ -125,6 +115,4 @@ public class Post {
 	public void setDislike(Set<String> dislike) {
 		this.dislike = dislike;
 	}
-	
-
 }

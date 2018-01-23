@@ -25,10 +25,13 @@ public class GestioneBlacklist extends HttpServlet {
        
    
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if(req.getSession().getAttribute("user") == null) {
+			resp.sendRedirect("login.html");
+			return;
+		}
 		
 		String nomeCanale = req.getParameter("channel");
 		CanaleDao canaleDao =DatabaseManager.getInstance().getDaoFactory().getCanaleDAO();
-		
 		Canale canale = canaleDao.findByPrimaryKey(nomeCanale);
 		
 		List<String> out = new LinkedList<>();
@@ -37,28 +40,27 @@ public class GestioneBlacklist extends HttpServlet {
 		for (Utente u : canale.getMembri()) {
 			boolean blacklist = false;
 			
-			for (Utente u1 : canale.getBlacklist()) {
-				
-				if (u.getEmail().equals(u1.getEmail()))
+			for (Utente u1 : canale.getBlacklist())				
+				if (u.getEmail().equals(u1.getEmail())) {
 					blacklist = true;
-			}
+					break;
+				}
+			
 			if (blacklist) {
-				out.add("<div id=\"bl"+u.getUsername()+"\"><h4 onclick = javascript:rimuoviBlacklist('"+u.getEmail()+"')>"+u.getNome()+" "+u.getCognome()+" Rimuovi dalla Blacklist</h4></div>");
+				out.add("<div id=\"bl"+u.getUsername()+"\"><h4>"+u.getNome()+" "+u.getCognome()+"<a onclick = javascript:rimuoviBlacklist('"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4></div>");
 				//System.out.println("admin"+u.getUsername());
 			}
 			else {
-				out.add("<div id=\"bl"+u.getUsername()+"\"><h4 onclick = javascript:aggiungiBlacklist('"+u.getEmail()+"')>"+u.getNome()+" "+u.getCognome()+" Aggiungi alla Blacklist</h4></div>");
+				out.add("<div id=\"bl"+u.getUsername()+"\"><h4>"+u.getNome()+" "+u.getCognome()+"<a onclick = javascript:aggiungiBlacklist('"+u.getEmail()+"')>Aggiungi alla Blacklist</a></h4></div>");
 				//System.out.println("non admin"+u.getUsername());
 			}
 		}
-		
 		for (Utente u : canale.getBlacklist()) {
-			out.add("<h4 onclick = javascript:rimuoviBlacklist('"+u.getEmail()+"')>"+u.getNome()+" "+u.getCognome()+" Rimuovi dalla Blacklist</h4>");
+			out.add("<h4>"+u.getNome()+" "+u.getCognome()+"<a onclick = javascript:rimuoviBlacklist('"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4>");
 		}
-		
+		System.out.println(out.toString());
 		req.setAttribute("righe", out);
-		req.setAttribute("canale", nomeCanale);
-		System.out.println(nomeCanale);
+		req.setAttribute("nomecanale", nomeCanale);
 		
 		req.getRequestDispatcher("gestioneBlacklist.jsp").forward(req, resp);
 	}

@@ -9,6 +9,7 @@
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script src="js/dateConverter.js"></script>
+<link rel="stylesheet" href="css/buttonFile.css">
 </head>
 <script>
 
@@ -28,6 +29,8 @@ function showUser(utente){
 					+"<tr><td><h4><strong>Data di nascita:   </strong></h4></td><td><h4>"+convertDateUser(json.dataDiNascita)+"</h4></td></tr>"	
 					+"<tr><td><h4><strong>Data di iscrizione:</strong></h4></td><td><h4>"+convertDateUser(json.dataIscrizione)+"</h4></td></tr>"
 					+"</table>");
+			if(json.nome != '${sessionScope.user.username}')
+				$("#fileUserImage").hide();
 			$("#userModal").modal("show");
 		}
 	});
@@ -39,7 +42,7 @@ function convertDateUser(data){
 	
 	return giorno+"/"+mese+"/"+pezzi[2];
 }
-function sendImage(){
+function sendUserImage(){
 	$.ajax({
 		type: "POST",
 		url: "loadFile?request=user&user=${sessionScope.user.email}",
@@ -71,10 +74,9 @@ function removeUserInfo(){
     <div class="modal-dialog">    
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" onclick="removeUserInfo()">&times;</button>
-          <h4 id="userModalTitle"class="modal-title" style="text-align:center"></h4>
+          <h2 id="userModalTitle"class="modal-title" style="text-align:center"></h2>
         </div>
-		<div id="modal-body" class="modal-body" style="text-align: center;">
+		<div class="modal-body" style="text-align: center;">
 			<div class="row">
 				<div class="col-md-6">
 					<img id="userInfoImage" src="" width=60% 
@@ -83,7 +85,7 @@ function removeUserInfo(){
 					<br><br>
 					<form id="fileUserImage" method="post" enctype="multipart/form-data" >					
 						<span class="btn btn-info btn-file">
-						    Cambia Foto <input type="file" name="file" onchange="sendImage()" accept="image/jpeg">
+						    Cambia Foto <input type="file" name="file" onchange="sendUserImage()" accept="image/jpeg">
 						</span>
 					</form>
           		</div>
@@ -102,24 +104,4 @@ function removeUserInfo(){
 </div>
 
 </body>
-<style>
-.btn-file {
-    position: relative;
-    overflow: hidden;
-}
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
-}</style>
 </html>

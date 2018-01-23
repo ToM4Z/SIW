@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
@@ -23,24 +22,15 @@ import persistence.dao.PostDao;
 
 public class CreaCommento extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
-	}
-	
-	private class JsonCommento{
-		
+       	
+	private class JsonCommento{		
 		private String idPost;
-		private String commento;
-		
+		private String commento;		
 	}
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		HttpSession session = req.getSession();
-		Utente utente = (Utente) session.getAttribute("user");
+		Utente utente = (Utente) req.getSession().getAttribute("user");
 		CommentoDao commentoDao = DatabaseManager.getInstance().getDaoFactory().getCommentoDAO();
 		PostDao postDao = DatabaseManager.getInstance().getDaoFactory().getPostDAO();
 		

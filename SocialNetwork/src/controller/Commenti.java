@@ -17,6 +17,10 @@ public class Commenti extends HttpServlet {
        
   
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if(req.getSession().getAttribute("user") == null) {
+			resp.sendRedirect("login.html");
+			return;
+		}
 		
 		Long idPost = Long.parseLong(req.getParameter("idPost"));
 		PostDao postDao = DatabaseManager.getInstance().getDaoFactory().getPostDAO();
@@ -29,12 +33,4 @@ public class Commenti extends HttpServlet {
 		req.getRequestDispatcher("commenti.jsp").forward(req, resp);
 		
 	}
-	
-	
-
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		
-	}
-
 }

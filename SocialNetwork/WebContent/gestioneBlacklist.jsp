@@ -2,8 +2,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:useBean id="user" class="model.Utente" scope="session" />
 
-
-
 <html>
 <head lang="it">
 <meta charset="utf-8">
@@ -13,15 +11,6 @@
 <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<script>
-	function load() {
-		$("input.onload").each(function() {
-			$(this).trigger("click");
-		});
-	};
-</script>
-</head>
-
 <script>
 
 function aggiungiBlacklist(x){
@@ -44,29 +33,31 @@ function aggiungiBlacklist(x){
 }
 
 function rimuoviBlacklist(x){
-	
-	
-	  var canale = $("#canale").text();
-	  var azione = "rimuovi";
 	  $.ajax({
 			type: "POST",
 			url: "gestioneBlacklist",
 			datatype: "json",
-			data: JSON.stringify({"nomeCanale" : canale, "user" : x, "azione": azione}),
+			data: JSON.stringify({"nomeCanale" : $("#canale").text(), "user" : x, "azione": "rimuovi"}),
 			success: function(data){
 				var data = JSON.parse(data);
-		        //alert("#mem"+data);
 		        $("#bl"+data).remove();
-		    	}
+	    	}
 		});
-	  
-	  //alert(x);
 }
 
+function load(){
+	$("input.onload").each(function(){
+		$(this).trigger("click");
+	});
+};
+function unload(){
+	$("input.onbeforeunload").each(function(){
+		$(this).trigger("click");
+	});
+}
 </script>
-
-
-<body onload="javascript:load()" style="overflow-x: hidden">
+</head>
+<body onload="javascript:load();" onbeforeunload="javascript:unload()" style="overflow-x:hidden">
 	<c:if test="${empty user.nome}">
 		<c:redirect url="login.html" />
 	</c:if>
@@ -82,13 +73,13 @@ function rimuoviBlacklist(x){
 			<div id="homePost" style="margin-top: 60px; text-align: center;">
 
 				<h2>Stai gestendo la Blacklist del canale:</h2>
-				<h1 id="canale">${canale}</h1>
+				<h1 id="canale">${nomecanale}</h1>
+				
 				<c:forEach var="riga" items="${righe}">
 
 					${riga}
 	
 				</c:forEach>
-
 			</div>
 		</div>
 	</div>

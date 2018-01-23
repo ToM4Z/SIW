@@ -16,10 +16,12 @@ import persistence.dao.UtenteDao;
 
 public class GestisciGruppo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
     
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
+		if(req.getSession().getAttribute("user") == null) {
+			resp.sendRedirect("login.html");
+			return;
+		}
 		String esito = req.getParameter("esito");
 		
 		if (esito.equals("cancellazione")) {

@@ -19,17 +19,10 @@ import persistence.dao.CommentoDao;
 
 public class EliminaCommento extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
 	
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		
-	}
-
-	
-	private class DelCommento{
-		
+	private class DelCommento{		
 		private String idCommento;
+		@SuppressWarnings("unused")
 		private String elimina;
 	}
 

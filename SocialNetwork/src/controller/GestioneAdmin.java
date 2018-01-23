@@ -26,6 +26,10 @@ public class GestioneAdmin extends HttpServlet {
        
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if(req.getSession().getAttribute("user") == null) {
+			resp.sendRedirect("login.html");
+			return;
+		}
 		
 		String nomeGruppo = req.getParameter("group");
 		String nomeCanale = req.getParameter("channel");
@@ -57,8 +61,8 @@ public class GestioneAdmin extends HttpServlet {
 		}
 		
 		req.setAttribute("righe", out);
-		req.setAttribute("gruppo", nomeGruppo);
-		req.setAttribute("canale", nomeCanale);
+		req.setAttribute("nomegruppo", nomeGruppo);
+		req.setAttribute("nomecanale", nomeCanale);
 		
 		req.getRequestDispatcher("gestioneAdmin.jsp").forward(req, resp);
 	}

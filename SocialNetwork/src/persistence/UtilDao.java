@@ -56,7 +56,7 @@ public class UtilDao {
 						+ "username varchar(255), \"password\" varchar(255), data_nascita date, data_iscrizione date);"
 					
 					+ "create table canale (nome varchar(255) primary key, descrizione text, "
-						+ "data_creazione date, email_admin varchar(255) REFERENCES utente(email), image text);"
+						+ "data_creazione date, email_admin varchar(255) REFERENCES utente(email));"
 					
 					+ "create table gruppo (nome varchar(255), data_creazione date, "
 						+ "canale varchar(255) REFERENCES canale(nome), PRIMARY KEY (nome,canale));"
@@ -75,7 +75,7 @@ public class UtilDao {
 					
 					+ "create table post (id_post bigint primary key, email_utente varchar(255) REFERENCES utente(email),"
 						+"contenuto text, canale varchar(255), gruppo varchar(255), FOREIGN KEY(gruppo,canale) REFERENCES gruppo(nome,canale),"
-						+" data_creazione timestamp, image text);"
+						+" data_creazione timestamp);"
 					
 					+"create table commento (id_commento bigint primary key, id_post bigint REFERENCES post(id_post),"
                     	+ "email_utente varchar(255) REFERENCES utente(email), contenuto text, data_creazione timestamp);"

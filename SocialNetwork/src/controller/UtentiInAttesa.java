@@ -17,9 +17,11 @@ import persistence.dao.GruppoDao;
 public class UtentiInAttesa extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-
-	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if(req.getSession().getAttribute("user") == null) {
+			resp.sendRedirect("login.html");
+			return;
+		}
 		
 		String nomeGruppo = req.getParameter("group");
 		String canale = req.getParameter("channel");
@@ -40,11 +42,4 @@ public class UtentiInAttesa extends HttpServlet {
 		
 		req.getRequestDispatcher("utentiInAttesa.jsp").forward(req, resp);
 	}
-
-	
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		doGet(req, resp);
-	}
-
 }

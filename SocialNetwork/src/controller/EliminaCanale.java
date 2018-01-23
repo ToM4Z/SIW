@@ -11,7 +11,6 @@ import persistence.DatabaseManager;
 import persistence.dao.CanaleDao;
 
 
-
 public class EliminaCanale extends HttpServlet {
 	private static final long serialVersionUID = 1L;
   
@@ -24,14 +23,7 @@ public class EliminaCanale extends HttpServlet {
 		
 		canaleDao.delete(canale);
 		
-		resp.sendRedirect("home.jsp");
+		resp.sendRedirect("home");
 
 	}
-
-	
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		doGet(req, resp);
-	}
-
 }

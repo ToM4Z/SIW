@@ -26,7 +26,7 @@ function getCanali(){
 	        		if (cont === 0){
 	        			canale = stringhe;
 	        			$("#listaCanali").append("<ul class=\"treeview\" id=\""+canale+"\">" +
-	        	                "<li><a href=\"canale?channel="+canale+"\">"+canale+"</a>"+
+	        	                "<li><a href=\"javascript:showChannel('"+canale+"')\">"+canale+"</a>"+
 	                        	"<ul>");
 	        		}else{
 	        			$("#listaCanali").find("ul#"+canale).find("ul").append("<li>" +
@@ -42,6 +42,13 @@ function getCanali(){
 	xmlhttp.open("GET", "barraCanali", true);
 	xmlhttp.send();	
 }
+
+function addChannel(name){
+	$("#listaCanali").append("<ul class=\"treeview\" id=\""+name+"\">" +
+            "<li><a href=\"javascript:showChannel('"+name+"')\">"+name+"</a>"+
+        	"<ul><li><a class=\"nav-link\" href=\"gruppo?group=home&channel="+name+"\">"
+			+"home</a></li></ul></ul>");
+}
 </script>
 </head>
 
@@ -51,12 +58,17 @@ function getCanali(){
 		<input type="submit" class="onload">
 	</form>
 	</div>
+	<jsp:include page="createChannel.jsp" />
+	<jsp:include page="showChannel.jsp" />
 	<div id="barraCanali" class="panel panel-default"
-		style="position:fixed; float: left; width: 25%; height: 100%; margin-top: 40px; margin-bottom: -20px">
+		style="position:fixed; float: left; width: 25%; height: 100%; margin-top: 40px; margin-bottom: -20px;">
 		
 		<div class="panel-heading" style="text-align: center"><h3>Canali</h3></div>
 		
-		<div class="panel-body" id="listaCanali"><h4><a href = "creaCanale">Crea Canale</a></h4></div>
+		<div class="panel-body" id="listaCanali" style="height: 83%; overflow-y: scroll;">
+			<h4><a href = "javascript:showCreateChannelModal()">Crea Canale</a>
+			</h4>
+		</div>
 	</div>
 
 </body>

@@ -18,14 +18,8 @@ import persistence.dao.PostDao;
 
 public class EliminaPost extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-	}
-	
-	private class Elimina{
-		
+       	
+	private class Elimina{		
 		private String idPost;
 	}
 	

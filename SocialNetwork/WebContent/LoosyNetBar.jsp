@@ -94,7 +94,7 @@ function getNotifiche(){
 					if(data != "[]"){
 						var liste = JSON.parse(data);
 						$("#numNotifiche").text(liste.length);
-						$("#emptylistNotify").remove();
+						$("#emptylistNotify").hide();
 						$("#listaNotifiche").append(liste);
 						$("#listaNotifiche").find('li').addClass('notify');
 					}
@@ -178,16 +178,22 @@ function onbeforeunloadLoosyNetBar(){
 }
 
 function eliminaNotifica(idNotifica){
-	
-	  var json = JSON.stringify({"idNotifica": idNotifica});
-	  alert(idNotifica);
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","eliminaNotifica", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  $("#notifica"+idNotifica).remove();
-	  xhr.send(json);
+	  $.ajax({
+		  type:"POST",
+		  url: "eliminaNotifica",
+		  datatype: "json",
+		  data: JSON.stringify({"idNotifica": idNotifica})
+	  });
+
+	$("#notifica"+idNotifica).remove();
+	var n = $("#listaNotifiche li").length-1;
+	if(n > 0)
+		$("#numNotifiche").text(n);
+	else{
+		$("#numNotifiche").text("");
+		$("#emptylistNotify").show();
+		$("#listaNotifiche").hide();
+	}
 }
 
 </script>

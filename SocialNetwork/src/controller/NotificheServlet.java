@@ -20,9 +20,12 @@ public class NotificheServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
       
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setCharacterEncoding("UTF-8");
 		Utente utente = (Utente) req.getSession().getAttribute("user");
-		if(utente == null)
+		if(utente == null) {
+			resp.sendRedirect("login.html");
 			return;
+		}
 
 		NotificaDao notificadao = DatabaseManager.getInstance().getDaoFactory().getNotificaDAO();
 		String tmp = (String) req.getSession().getAttribute("lastNotifyID");
