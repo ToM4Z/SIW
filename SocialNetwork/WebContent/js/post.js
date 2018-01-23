@@ -1,4 +1,5 @@
 
+
 function inviaNotificaSegnalazione(idPost){
 	
 	  var tipo = "segnalazione";

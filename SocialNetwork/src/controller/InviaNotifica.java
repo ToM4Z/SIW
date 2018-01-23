@@ -148,7 +148,7 @@ public class InviaNotifica extends HttpServlet {
 			Post post = postDao.findByPrimaryKey(Long.parseLong(t.idPost));
 			
 			String contenuto = "<a href = commenti?idPost="+t.idPost +">Il post nel gruppo "+post.getGruppo().getNome()
-					+"del canale "+post.getCanale().getNome()+"è stato segnalato.</a>";
+					+" del canale "+post.getCanale().getNome()+" è stato segnalato.</a>";
 			
 			GruppoDao gruppoDao = DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
 			Gruppo gruppo = gruppoDao.findByPrimaryKey(post.getGruppo().getNome(), post.getCanale().getNome());

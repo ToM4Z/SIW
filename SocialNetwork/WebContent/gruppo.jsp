@@ -40,15 +40,16 @@ window.fbAsyncInit = function() {
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
   
-
   function shareOnFacebook(x){
-    FB.ui({
-      method: 'share',
-      display: 'popup',
-      href: 'http://i67.tinypic.com/144bkzr.png',
-      quote: x,
-    }, function(response){});
-  }
+	    FB.ui({
+	      method: 'share',
+	      display: 'popup',
+	      href: 'http://i67.tinypic.com/144bkzr.png',
+	      quote: x,
+	    }, function(response){});
+	  }
+
+
 
 function creaPost(){
 	  var gruppo = $("#nomeGruppo").text();
@@ -202,8 +203,10 @@ function unload(){
 				        <a href = "javascript:showUser('${post.creatore.email}')">${post.creatore.username}</a>
 				    </div>
 				    <div class="post-header-right">
+				    <a onclick = "javascript:inviaNotificaSegnalazione('${post.id}')"><i class="fa fa-exclamation-triangle" style="font-size:20px"></i></a>
+				    <a onclick="javascript:shareOnFacebook('${post.contenuto}')"><i class="fa fa-facebook-square" style="font-size:22px"></i></a>
 				      <c:if test = "${post.creatore.email == user.email}">
-				      <a onclick="javascript:shareOnFacebook('${post.contenuto}')"><i class="fa fa-facebook-square" style="font-size:22px"></i></a>
+				      
 				      <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
 				      
 				      </c:if>
