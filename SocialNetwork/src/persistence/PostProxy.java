@@ -52,7 +52,61 @@ public class PostProxy extends Post{
 		this.setCommenti(commenti);
 		return super.getCommenti(); 
 	}
-
 	
+	public Set<String> getLike(){
+		
+		Connection connection = this.dataSource.getConnection();
+		Set<String> like = new HashSet<>();
+		try {
+			PreparedStatement statement;
+			statement = connection.prepareStatement("select * from likes where id_post = ?");
+			statement.setLong(1, this.getId());
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				
+				like.add(result.getString("email_utente"));
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		
+		this.setLike(like);
+		return super.getLike();
+	}
+
+	public Set<String> getDislike(){
+		
+		Connection connection = this.dataSource.getConnection();
+		Set<String> like = new HashSet<>();
+		try {
+			PreparedStatement statement;
+			statement = connection.prepareStatement("select * from dislikes where id_post = ?");
+			statement.setLong(1, this.getId());
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				
+				like.add(result.getString("email_utente"));
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		
+		this.setDislike(like);
+		return super.getDislike();
+	}
 	
 }

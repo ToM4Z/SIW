@@ -92,8 +92,7 @@ function load(){
 	$("input.onload").each(function(){
 		$(this).trigger("click");
 	});
-}
-
+};
 function unload(){
 	$("input.onbeforeunload").each(function(){
 		$(this).trigger("click");
@@ -123,13 +122,24 @@ function unload(){
 				<h1 id="nomeGruppo">${gruppo.nome}</h1>
 				<h1 id="nomeCanale" style="display:none">${gruppo.canale.nome}</h1>
 				
+				<c:if test="${gruppo.nome != null}">
+					<script type="text/javascript">
+					startUpdate();
+				</script>
+				</c:if>
+				<c:if test="${gruppo.nome == null}">
+					<script type="text/javascript">
+					stopUpdate();
+				</script>
+				</c:if>
+				
 				<c:if test = "${admin == true }">
 					<h5><a onclick="seiSicuroGruppo()">Elimina gruppo</a></h5>
 					<h5><a href = utentiInAttesa?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Visualizza utenti in attesa</a></h5>
 					<h5><a href = gestioneAdmin?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci admin</a></h5>
 					<h5><a href = gestioneMembri?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci membri</a></h5>
 				</c:if>
-
+					<h3 onclick = "javascript:update()">prova</h3>
 				<c:choose>
 					<c:when test="${iscritto == true }">
 						<h4>
@@ -159,10 +169,11 @@ function unload(){
 				    </div>
 				    <div class="post-header-right">
 				      <c:if test = "${post.creatore.email == user.email}">
-				       <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
+				      <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
 				      </c:if>
 				      <c:if test = "${post.creatore.email == user.email || admin==true}">
-				       <a onclick="javascript:eliminaPosts(${post.id})"><span class="glyphicon glyphicon-trash"></span></a>
+			    
+			       <a onclick="javascript:eliminaPosts(${post.id})"><span class="glyphicon glyphicon-trash"></span></a>
 				      </c:if>
 				    </div>
 
@@ -173,10 +184,16 @@ function unload(){
 				    <div class="post-footer">
 				      <p class="date" id="${post.id}"><small><script>convertDatePost('${post.id}','${post.dataCreazione}');</script></small></p>
 				      <hr class="post-hr">
-				      <div style="display:inline" class="row">
-				         <span class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">10</span>
-				        <span class="glyphicon glyphicon-thumbs-down" style="font-size:1.5em;padding-right:10%">10</span>
+				      
+				      <div id = reaction${post.id} style="display:inline" class="row">
+				        <a onclick="javascript:addLike(${post.id})">
+				        	<span id="like" class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">-</span>
+				        </a>
+				        <a onclick="javascript:addDislike(${post.id})">
+				        	<span id = "dislike" class="glyphicon glyphicon-thumbs-down" style="font-size:1.5em;padding-right:10%">-</span>
+				        </a>
 				      </div>
+				      
 				      <hr class="post-hr">
 				        <a href = "commenti?idPost=${post.id}" style="font-size:1em">mostra commenti</a>
 				        <div style="display:inline">

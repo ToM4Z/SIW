@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import model.Post;
+import model.Utente;
 import persistence.dao.PostDao;
 
 public class PostDaoJDBC implements PostDao {
@@ -40,6 +41,9 @@ public class PostDaoJDBC implements PostDao {
 			statement.setString(5, post.getGruppo().getNome());
 			statement.setTimestamp(6, new Timestamp(post.getDataCreazione().getTime()));
 			statement.executeUpdate();
+			
+			this.updateLike(post, connection);
+			this.updateDislike(post, connection);
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		} finally {
@@ -50,6 +54,44 @@ public class PostDaoJDBC implements PostDao {
 			}
 		}
 		
+	}
+	
+	public void updateLike(Post post, Connection connection) throws SQLException {
+		
+		for (String email : post.getLike()) {
+
+			String like = "select * from likes where id_post = ? and email_utente = ? ";
+			PreparedStatement statement = connection.prepareStatement(like);
+			statement.setLong(1, post.getId());
+			statement.setString(2, email);
+			ResultSet result = statement.executeQuery();
+			if (!result.next()) {
+				String inserisci = "insert into likes (id_post, email_utente) values (?,?)";
+				statement = connection.prepareStatement(inserisci);
+				statement.setLong(1, post.getId());
+				statement.setString(2, email);
+				statement.executeUpdate();
+			}
+		}
+	}
+	
+	private void updateDislike(Post post, Connection connection) throws SQLException {
+		
+		for (String email : post.getLike()) {
+
+			String dislike = "select * from dislikes where id_post = ? and email_utente = ? ";
+			PreparedStatement statement = connection.prepareStatement(dislike);
+			statement.setLong(1, post.getId());
+			statement.setString(2, email);
+			ResultSet result = statement.executeQuery();
+			if (!result.next()) {
+				String inserisci = "insert into dislikes (id_post, email_utente) values (?,?)";
+				statement = connection.prepareStatement(inserisci);
+				statement.setLong(1, post.getId());
+				statement.setString(2, email);
+				statement.executeUpdate();
+			}
+		}
 	}
 
 	@Override
@@ -133,6 +175,8 @@ public class PostDaoJDBC implements PostDao {
 			statement.setLong(2, post.getId());
 
 			statement.executeUpdate();
+			this.updateLike(post, connection);
+			this.updateDislike(post, connection);
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
@@ -156,14 +200,19 @@ public class PostDaoJDBC implements PostDao {
 		
 		Connection connection = this.dataSource.getConnection();
 		try {
+			
 			String delete = "delete FROM post WHERE id_post = ?";
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.setLong(1, post.getId());
 
 			connection.setAutoCommit(false);
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			
+			
 			this.removeAllCommentsFromPost(post, connection);
-
+			this.deleteLike(post, connection);
+			this.deleteDislike(post, connection);
+			
 			statement.executeUpdate();
 			connection.commit();
 		} catch (SQLException e) {
@@ -176,6 +225,157 @@ public class PostDaoJDBC implements PostDao {
 			}
 		}
 
+	}
+	
+	private void deleteLike(Post post, Connection connection) {
+		
+		try {
+			String delete = "delete FROM likes WHERE id_post = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setLong(1, post.getId());
+
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} 
+		
+	}
+	
+	private void deleteDislike(Post post, Connection connection) {
+		
+		try {
+			String delete = "delete FROM dislikes WHERE id_post = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setLong(1, post.getId());
+
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} 
+	}
+	
+	public void addLike(Post post, Utente utente) {
+		
+		Connection connection = dataSource.getConnection();
+		this.removeDislike(post, utente);
+		try {
+			PreparedStatement statement = connection.prepareStatement("Select * from likes where id_post = ? and email_utente = ?");
+			statement.setLong(1, post.getId());
+			statement.setString(2, utente.getEmail());
+			ResultSet result = statement.executeQuery();
+			
+			if(!result.next()) {
+				
+				String insert = "insert into likes(id_post, email_utente) values (?,?)";
+				statement = connection.prepareStatement(insert);
+				statement.setLong(1, post.getId());
+				statement.setString(2, utente.getEmail());
+				statement.executeUpdate();
+			}
+
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		
+	}
+	
+	public void removeLike(Post post, Utente utente) {
+		
+		Connection connection = dataSource.getConnection();
+		try {
+			String delete = "delete FROM likes WHERE id_post = ? and email_utente = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setLong(1, post.getId());
+			statement.setString(2, utente.getEmail());
+
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
+	
+	public void addDislike(Post post, Utente utente) {
+		
+		Connection connection = dataSource.getConnection();
+		this.removeLike(post, utente);
+		try {
+			PreparedStatement statement = connection.prepareStatement("Select * from dislikes where id_post = ? and email_utente = ?");
+			statement.setLong(1, post.getId());
+			statement.setString(2, utente.getEmail());
+			ResultSet result = statement.executeQuery();
+			
+			if(!result.next()) {
+				
+				String insert = "insert into dislikes(id_post, email_utente) values (?,?)";
+				statement = connection.prepareStatement(insert);
+				statement.setLong(1, post.getId());
+				statement.setString(2, utente.getEmail());
+				statement.executeUpdate();
+			}
+
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		
+	}
+	
+	public void removeDislike(Post post, Utente utente) {
+		
+		Connection connection = dataSource.getConnection();
+		try {
+			String delete = "delete FROM dislikes WHERE id_post = ? and email_utente = ?";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setLong(1, post.getId());
+			statement.setString(2, utente.getEmail());
+
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			if (connection != null)
+				try {
+					connection.rollback();
+				} catch (SQLException excep) {
+					throw new PersistenceException(e.getMessage());
+				}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
 	}
 
 }

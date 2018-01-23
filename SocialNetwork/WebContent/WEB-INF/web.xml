@@ -256,8 +256,7 @@
     <servlet-name>GestioneMembri</servlet-name>
     <url-pattern>/gestioneMembri</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <servlet-name>EliminaNotifica</servlet-name>
     <servlet-class>controller.EliminaNotifica</servlet-class>
   </servlet>
@@ -265,5 +264,23 @@
     <servlet-name>EliminaNotifica</servlet-name>
     <url-pattern>/eliminaNotifica</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>Reaction</servlet-name>
+    <servlet-class>controller.Reaction</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Reaction</servlet-name>
+    <url-pattern>/reaction</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>UpdateReaction</servlet-name>
+    <servlet-class>controller.UpdateReaction</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UpdateReaction</servlet-name>
+    <url-pattern>/updateReaction</url-pattern>
+  </servlet-mapping>
+  
   
 </web-app>

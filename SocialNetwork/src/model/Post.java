@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Post {
@@ -12,8 +13,14 @@ public class Post {
 	private Gruppo gruppo;
 	private Canale canale;
 	private Date dataCreazione;	
+	private Set<String> like;
+	private Set<String> dislike;
 
-	public Post(){}
+	public Post(){
+		commenti = new HashSet<>();
+		like = new HashSet<>();
+		dislike = new HashSet<>();
+	}
 	
 	public Post(Utente cr, String co, Canale c, Gruppo g, Date data){
 		
@@ -22,6 +29,9 @@ public class Post {
 		canale = c;
 		gruppo = g;
 		dataCreazione = data;
+		commenti = new HashSet<>();
+		like = new HashSet<>();
+		dislike = new HashSet<>();
 	}
 
 	public Utente getCreatore() {
@@ -90,4 +100,19 @@ public class Post {
 		this.dataCreazione = dataCreazione;
 	}
 
+	public Set<String> getLike() {
+		return like;
+	}
+
+	public void setLike(Set<String> like) {
+		this.like = like;
+	}
+
+	public Set<String> getDislike() {
+		return dislike;
+	}
+
+	public void setDislike(Set<String> dislike) {
+		this.dislike = dislike;
+	}
 }
