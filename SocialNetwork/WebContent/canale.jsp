@@ -125,6 +125,18 @@ function confermaModifica(){
 							<h4>
 								<a href=creaGruppo?channel=${canale.nome}>Crea Gruppo</a>
 							</h4>
+
+							<div id=gruppi>
+								<h3>Gruppi:</h3>
+								<c:forEach var="gruppo" items="${canale.gruppi}">
+									<h4>
+										<a href=gruppo?group=${gruppo.nome}&channel=${canale.nome}>${gruppo.nome}</a>
+									</h4>
+									<small><small>${gruppo.data_creazione}</small></small>
+
+								</c:forEach>
+							</div>
+
 						</c:when>
 						<c:when test="${iscritto == false && blacklist == false}">
 							<h4>
@@ -134,17 +146,8 @@ function confermaModifica(){
 						</c:when>
 					</c:choose>
 				</c:if>
-
-				<div id=gruppi>
-					<h3>Gruppi:</h3>
-					<c:forEach var="gruppo" items="${canale.gruppi}">
-						<h4>
-							<a href=gruppo?group=${gruppo.nome}&channel=${canale.nome}>${gruppo.nome}</a>
-						</h4>
-						<small><small>${gruppo.data_creazione}</small></small>
-
-					</c:forEach>
-				</div>
+				
+				
 			</div>
 		</div>
 	</div>

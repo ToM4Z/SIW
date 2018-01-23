@@ -296,7 +296,7 @@ var intervalUp;
 
 function startUpdate(){
 	update();
-	intervalUp = setInterval(update,20000);
+	intervalUp = setInterval(update,40000);
 }
 
 function stopUpdate(){
