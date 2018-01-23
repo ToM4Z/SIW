@@ -140,7 +140,9 @@ function unload(){
 			<jsp:include page="barraCanali.jsp" />
 		</div>		
 		<div class="col-bg-6 brd">
+			<c:if test="${iscritto == true }">
 			<jsp:include page="chatGruppo.jsp" />
+			</c:if>
 		</div>
 		<div class="col-bg-6 brd">
 			<div id="switchPanel">
@@ -193,7 +195,7 @@ function unload(){
 					<input id="contenuto" autocomplete="off" type="text" name="contenuto" >
 					<input type = "submit" value = "Pubblica">
 				</form>
-	
+				<c:if test = "${iscritto == true}">
 				<c:forEach var = "post" items = "${gruppo.post}">
 				<div id = post_${post.id}> 
 				  <div class="row">
@@ -248,7 +250,8 @@ function unload(){
 				</div>
 				</div>
 				</div>		
-				</c:forEach>	
+				</c:forEach>
+				</c:if>
 			</div>
 		</div>
 	</div>	
