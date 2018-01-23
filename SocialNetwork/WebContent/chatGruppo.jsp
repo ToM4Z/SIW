@@ -29,23 +29,38 @@ function sendMessage(){
 }
 
 var querying = false;
+var numberMessageSession;
 function loadMessaggi(){
 	$.ajax({
 		type:"POST",
 		url:"receiveMessage",
-		datatype: "json",
-		data: {first: 'true', gruppo : $("#nomeGruppo").text(), canale : $("#nomeCanale").text()},
+		data: {first: '1', gruppo : $("#nomeGruppo").text(), canale : $("#nomeCanale").text()},
 		success: function(data){
 			if(data != "[]" && data != "error"){
-				var liste = JSON.parse(data);
-				$("#listchat").append(liste);
-				$("#chat").animate({scrollTop:$("#chat").get(0).scrollHeight}, 'slow');
+				var json = JSON.parse(data);
+				var liste = json.messaggi;
+				numberMessageSession = json.numberMessageSession;
+				appendMessages(liste);
 			}else if(data == "error"){
 				console.log("error");
 			}
 			getMessaggi();
 		}
 	});
+}
+
+function appendMessages(messaggi){
+	messaggi.forEach(function(item,index){
+		$("#listchat").append(
+		"<div class=\"mexContainer "+(item.right? "right":"left")+"\">"
+		  + "<div class=\"row\">"
+		  + "<img src=\"images/users/"+item.email+".jpg\" alt=\"Avatar\" onerror=\"this.src='images/users/unknown.jpg';\""+(item.right? "class=\"right\"":"")+">"
+		  + "<span id=\"Name\""+(item.right? "class=\"right\"":"")+"><a href=\"javascript:showUser('"+item.email+"')\">"+item.username+"</a></span>"
+		  + "<span class=\"time-"+(item.right? "left":"right")+"\">"+item.data+"</span>"	  
+		  + "</div><hr><p style=\"float:"+(item.right? "right":"left")+"\">"+item.contenuto+"</p>"
+		  + "</div>");
+	});
+	$("#chat").animate({scrollTop:$("#chat").get(0).scrollHeight}, 'slow');
 }
 
 var intervalMex;
@@ -57,14 +72,13 @@ function getMessaggi(){
 				type:"POST",
 				url:"receiveMessage",
 				datatype: "json",
-				data: {first: 'false'},
+				data: {first: '0', attrSession : $("#nomeGruppo").text()+$("#nomeCanale").text()+numberMessageSession},
 				success: function(data){
 					if(data != "[]" && data != "error"){
 						var liste = JSON.parse(data);
-						$("#chat").append(liste);
-						$("#chat").animate({scrollTop:$("#chat").get(0).scrollHeight}, 'slow');
+						appendMessages(liste);
 					}else if(data == "error"){
-						alert("error");
+						console.log("error");
 					}
 					querying=false;
 				},
@@ -84,7 +98,8 @@ function onbeforeunloadChat(){
 	stopChat();
     $.ajax({
     	type: "GET",
-		url:"receiveMessage"
+		url:"receiveMessage",
+		data: {"attrSession": $("#nomeGruppo").text()+$("#nomeCanale").text()+numberMessageSession}
     });
 }
 </script>

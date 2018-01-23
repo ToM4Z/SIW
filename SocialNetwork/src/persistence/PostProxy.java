@@ -77,6 +77,7 @@ public class PostProxy extends Post{
 			}
 		}
 		
+		setNumLikes(like.size());
 		this.setLike(like);
 		return super.getLike();
 	}
@@ -84,7 +85,7 @@ public class PostProxy extends Post{
 	public Set<String> getDislike(){
 		
 		Connection connection = this.dataSource.getConnection();
-		Set<String> like = new HashSet<>();
+		Set<String> dislike = new HashSet<>();
 		try {
 			PreparedStatement statement;
 			statement = connection.prepareStatement("select * from dislikes where id_post = ?");
@@ -93,7 +94,7 @@ public class PostProxy extends Post{
 
 			while (result.next()) {
 				
-				like.add(result.getString("email_utente"));
+				dislike.add(result.getString("email_utente"));
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -105,7 +106,8 @@ public class PostProxy extends Post{
 			}
 		}
 		
-		this.setDislike(like);
+		setNumDislikes(dislike.size());
+		this.setDislike(dislike);
 		return super.getDislike();
 	}
 	

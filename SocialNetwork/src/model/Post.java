@@ -15,15 +15,17 @@ public class Post {
 	private Date dataCreazione;	
 	private Set<String> like;
 	private Set<String> dislike;
+	private int numLikes,numDislikes;
 
 	public Post(){
 		commenti = new HashSet<>();
 		like = new HashSet<>();
 		dislike = new HashSet<>();
+		numLikes=0;
+		numDislikes=0;
 	}
 	
-	public Post(Utente cr, String co, Canale c, Gruppo g, Date data){
-		
+	public Post(Utente cr, String co, Canale c, Gruppo g, Date data){		
 		creatore = cr;
 		contenuto = co;
 		canale = c;
@@ -32,6 +34,8 @@ public class Post {
 		commenti = new HashSet<>();
 		like = new HashSet<>();
 		dislike = new HashSet<>();
+		numLikes=0;
+		numDislikes=0;
 	}
 
 	public Utente getCreatore() {
@@ -114,5 +118,21 @@ public class Post {
 
 	public void setDislike(Set<String> dislike) {
 		this.dislike = dislike;
+	}
+
+	public int getNumLikes() {
+		return numLikes;
+	}
+
+	public void setNumLikes(int numLikes) {
+		this.numLikes = numLikes;
+	}
+
+	public int getNumDislikes() {
+		return numDislikes;
+	}
+
+	public void setNumDislikes(int numDislikes) {
+		this.numDislikes = numDislikes;
 	}
 }

@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<script src="js/eliminaPost.js"></script>
 <script src="js/ResizeScreen.js"></script>
 <link rel="stylesheet" href="css/ResizeScreen.css">
 <script src="js/post.js"></script>
@@ -76,9 +75,13 @@ function unload(){
 				    <div class="post-footer">
 				      <p class="date" id="${post.id}"><small>${post.dataCreazione}</small></p>
 				      <hr class="post-hr">
-				      <div style="display:inline" class="row">
-				         <span class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">10</span>
-				        <span class="glyphicon glyphicon-thumbs-down" style="font-size:1.5em;padding-right:10%">10</span>
+				      <div id = reaction${post.id} style="display:inline" class="row">
+				        <a onclick="javascript:addLike(${post.id})">
+				        	<span id="like" class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">${post.numLikes}</span>
+				        </a>
+				        <a onclick="javascript:addDislike(${post.id})">
+				        	<span id = "dislike" class="glyphicon glyphicon-thumbs-down" style="font-size:1.5em;padding-right:10%">${post.numDislikes}</span>
+				        </a>
 				      </div>
 				      <hr class="post-hr">
 				        <a href = "commenti?idPost=${post.id}" style="font-size:1em">mostra commenti</a>

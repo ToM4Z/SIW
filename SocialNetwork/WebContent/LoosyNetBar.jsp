@@ -48,7 +48,13 @@
   }
 }
 .notify{
-margin-left:10px;
+	margin-left:10px;
+}
+.notify p{
+	float: left;
+}
+.notify a{
+	float:right;
 }
 </style>
 
@@ -83,29 +89,46 @@ function collapseButton(){
 }
 var timerNotifiche;
 var notificheLock = false;
+var numberNotifySession;
 function getNotifiche(){
-	timerNotifiche = setInterval(function(){
-		if(!notificheLock){
-			notificheLock = true;
-			$.ajax({
-				type:"POST",
-				url:"notifiche",
-				success: function(data){
-					if(data != "[]"){
-						var liste = JSON.parse(data);
-						$("#numNotifiche").text(liste.length);
-						$("#emptylistNotify").hide();
-						$("#listaNotifiche").append(liste);
-						$("#listaNotifiche").find('li').addClass('notify');
-					}
-					notificheLock = false;
-				},
-				error: function(){
-					notificheLock = false;
+	$.ajax({
+		type:"GET",
+		url: "notifiche",
+		data: {"initNotify" : "1"},
+		success: function(data){
+			numberNotifySession = data;
+			
+			timerNotifiche = setInterval(function(){
+				if(!notificheLock){
+					notificheLock = true;
+					$.ajax({
+						type:"POST",
+						url:"notifiche?numberNotifySession="+numberNotifySession,
+						success: function(data){
+							if(data != "[]" && data!="error"){
+								var liste = JSON.parse(data);
+								$("#numNotifiche").text(liste.length);
+								$("#emptylistNotify").hide();								
+								liste.forEach(function(item,index){
+									$("#listaNotifiche").append(
+											"<li id=\"notifica"+item.id+"\" class=\"notify\"><p>"+item.contenuto
+											+"</p><a onclick=\"javascript:eliminaNotifica("+item.id+")\">"
+											+"<span class=\"glyphicon glyphicon-trash\"></span></a></li>");
+									
+								});
+							}else if(data == "error")
+								stopLoosyNetBar();
+							notificheLock = false;
+						},
+						error: function(){
+							stopLoosyNetBar();
+							notificheLock = false;
+						}
+					});
 				}
-			});
+			},1000);
 		}
-	},1000);
+	});
 }
 
 function showNotify(){
@@ -173,8 +196,9 @@ function onbeforeunloadLoosyNetBar(){
 	alert("stop");
 	 $.ajax({
 	    	type: "GET",
-			url:"notifiche"
-	    });
+	    	url: "notifiche",
+	    	data: {"initNotify" : "0","numberNotifySession": numberNotifySession },
+		});
 }
 
 function eliminaNotifica(idNotifica){

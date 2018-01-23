@@ -143,15 +143,21 @@ public class NotificaDaoJDBC implements NotificaDao{
 		
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String delete = "delete FROM notifica WHERE id_notifica = ?";
-			PreparedStatement statement = connection.prepareStatement(delete);
+			PreparedStatement statement = connection.prepareStatement("select id_notifica from notifica where id_notifica = ?");
 			statement.setLong(1, notifica.getId());
-
-			connection.setAutoCommit(false);
-			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-
-			statement.executeUpdate();
-			connection.commit();
+			ResultSet result = statement.executeQuery();
+			
+			if(result.next()) {
+				String delete = "delete FROM notifica WHERE id_notifica = ?";
+				statement = connection.prepareStatement(delete);
+				statement.setLong(1, notifica.getId());
+	
+				connection.setAutoCommit(false);
+				connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+	
+				statement.executeUpdate();
+				connection.commit();
+			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		} finally {

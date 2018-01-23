@@ -75,7 +75,7 @@ public class UtilDao {
 					
 					+ "create table post (id_post bigint primary key, email_utente varchar(255) REFERENCES utente(email),"
 						+"contenuto text, canale varchar(255), gruppo varchar(255), FOREIGN KEY(gruppo,canale) REFERENCES gruppo(nome,canale),"
-						+" data_creazione timestamp);"
+						+" data_creazione timestamp,numlikes int, numdislikes int);"
 					
 					+"create table commento (id_commento bigint primary key, id_post bigint REFERENCES post(id_post),"
                     	+ "email_utente varchar(255) REFERENCES utente(email), contenuto text, data_creazione timestamp);"

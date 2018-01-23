@@ -207,7 +207,8 @@ class UtenteDaoJDBC implements UtenteDao {
 				post.setCanale(new CanaleDaoJDBC(dataSource).findByPrimaryKey(result.getString("canale")));
 				post.setGruppo(new GruppoDaoJDBC(dataSource).findByPrimaryKey(result.getString("gruppo"), post.getCanale().getNome()));
 				post.setDataCreazione(new Timestamp(result.getTimestamp("data_creazione").getTime()));
-
+				post.setNumLikes(result.getInt("numlikes"));
+				post.setNumDislikes(result.getInt("numdislikes"));
 				allPost.add(post);
 			}
 			

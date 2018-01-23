@@ -57,8 +57,6 @@ public class MainJDBC {
 		
 		postdao.save(a);
 		
-		postdao.removeLike(a, u1);
-		
 		Utente u2 = new Utente("danielesalim@outlook.it","Daniele","Salimonti","ds.hitman",cal.getTime(),Calendar.getInstance().getTime());
 		
 		c1.addMembro(u1);
