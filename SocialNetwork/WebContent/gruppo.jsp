@@ -12,6 +12,7 @@
 <title>LoosyNet</title>
 
 <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script src="js/dateConverter.js"></script>
@@ -21,6 +22,35 @@
 <link rel="stylesheet" href="css/ResizeScreen.css">
 
 <script>
+
+window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '165758527482837',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.11'
+    });      
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+  
+  function shareOnFacebook(x){
+	    FB.ui({
+	      method: 'share',
+	      display: 'popup',
+	      href: 'http://i67.tinypic.com/144bkzr.png',
+	      quote: x,
+	    }, function(response){});
+	  }
+
+
+
 function creaPost(){
 	  var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
@@ -118,6 +148,9 @@ function unload(){
 				<span class="glyphicon glyphicon-chevron-right" style="font-size:2em;left:500%;" onclick="javascript:shiftRight()"></span>
 			</div>
 			<div id="homePost" style="margin-top:60px; text-align: center;">
+			
+			<div class="page-header">
+
 				
 				<h1 id="nomeGruppo">${gruppo.nome}</h1>
 				<h1 id="nomeCanale" style="display:none">${gruppo.canale.nome}</h1>
@@ -133,6 +166,8 @@ function unload(){
 				</script>
 				</c:if>
 				
+				<h2 onclick = "javascript:post()">prova pubblicazione</h2>
+				
 				<c:if test = "${admin == true }">
 					<h5><a onclick="seiSicuroGruppo()">Elimina gruppo</a></h5>
 					<h5><a href = utentiInAttesa?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Visualizza utenti in attesa</a></h5>
@@ -141,7 +176,7 @@ function unload(){
 				</c:if>
 					<h3 onclick = "javascript:update()">prova</h3>
 				<c:choose>
-					<c:when test="${iscritto == true }">
+					<c:when test="${iscritto == true && canaleAdmin == false}">
 						<h4>
 							<a href=gestisciGruppo?channel=${gruppo.canale.nome}&group=${gruppo.nome}&esito=cancellazione>Cancellati dal gruppo</a>
 						</h4>
@@ -168,8 +203,12 @@ function unload(){
 				        <a href = "javascript:showUser('${post.creatore.email}')">${post.creatore.username}</a>
 				    </div>
 				    <div class="post-header-right">
+				    <a onclick = "javascript:inviaNotificaSegnalazione('${post.id}')"><i class="fa fa-exclamation-triangle" style="font-size:20px"></i></a>
+				    <a onclick="javascript:shareOnFacebook('${post.contenuto}')"><i class="fa fa-facebook-square" style="font-size:22px"></i></a>
 				      <c:if test = "${post.creatore.email == user.email}">
+				      
 				      <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
+				      
 				      </c:if>
 				      <c:if test = "${post.creatore.email == user.email || admin==true}">
 			    
@@ -213,5 +252,6 @@ function unload(){
 			</div>
 		</div>
 	</div>	
+	</div>
 </body>
 </html>

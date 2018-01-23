@@ -388,6 +388,9 @@ public class GruppoDaoJDBC implements GruppoDao {
 			statement.setString(3, utente.getEmail());
 
 			statement.executeUpdate();
+			
+			this.removeUserFromAdmin(gruppo, utente);
+			
 		} catch (SQLException e) {
 			if (connection != null)
 				try {

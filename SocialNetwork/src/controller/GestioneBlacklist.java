@@ -40,6 +40,9 @@ public class GestioneBlacklist extends HttpServlet {
 		for (Utente u : canale.getMembri()) {
 			boolean blacklist = false;
 			
+			if (u.getEmail().equals(canale.getAdmin().getEmail()))
+				continue;
+			
 			for (Utente u1 : canale.getBlacklist())				
 				if (u.getEmail().equals(u1.getEmail())) {
 					blacklist = true;
