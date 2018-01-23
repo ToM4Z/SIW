@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.Gruppo;
 import model.Utente;
 import persistence.DatabaseManager;
+import persistence.dao.CanaleDao;
 import persistence.dao.GruppoDao;
 
 public class GruppoServlet extends HttpServlet {
@@ -42,6 +43,14 @@ public class GruppoServlet extends HttpServlet {
 		
 		req.setAttribute("admin", admin);
 		req.setAttribute("iscritto", iscritto);
+		
+		boolean canaleAdmin = false;
+		
+		if (utente.getEmail().equals(gruppo.getCanale().getAdmin().getEmail()))
+			canaleAdmin = true;
+		
+		req.setAttribute("canaleAdmin", canaleAdmin);
+		
 		
 		req.getRequestDispatcher("gruppo.jsp").forward(req, resp);
 	}

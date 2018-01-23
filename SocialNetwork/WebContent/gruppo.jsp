@@ -175,7 +175,7 @@ function unload(){
 				</c:if>
 					<h3 onclick = "javascript:update()">prova</h3>
 				<c:choose>
-					<c:when test="${iscritto == true }">
+					<c:when test="${iscritto == true && canaleAdmin == false}">
 						<h4>
 							<a href=gestisciGruppo?channel=${gruppo.canale.nome}&group=${gruppo.nome}&esito=cancellazione>Cancellati dal gruppo</a>
 						</h4>

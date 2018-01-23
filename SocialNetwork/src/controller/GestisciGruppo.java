@@ -35,7 +35,9 @@ public class GestisciGruppo extends HttpServlet {
 			GruppoDao gruppoDao =  DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
 			Gruppo gruppo = gruppoDao.findByPrimaryKey(nomeGruppo, nomeCanale);
 			
+			
 			gruppoDao.removeUserFromGroup(gruppo, utente);
+			
 			
 			resp.sendRedirect("canale?channel="+nomeCanale);
 			

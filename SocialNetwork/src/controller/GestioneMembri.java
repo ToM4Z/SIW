@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
@@ -30,6 +31,10 @@ public class GestioneMembri extends HttpServlet {
 			resp.sendRedirect("login.html");
 			return;
 		}
+		
+		HttpSession session = req.getSession();
+		Utente user = (Utente) session.getAttribute("user");
+		
 		String nomeGruppo = req.getParameter("group");
 		String nomeCanale = req.getParameter("channel");
 		GruppoDao gruppoDao =DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
@@ -43,6 +48,9 @@ public class GestioneMembri extends HttpServlet {
 		
 		for (Utente u : canale.getMembri()) {
 			boolean in = false;
+			
+			if (u.getEmail().equals(user.getEmail()) || u.getEmail().equals(canale.getAdmin().getEmail()))
+				continue;
 			
 			for (Utente u1 : gruppo.getMembri()) {
 				

@@ -13,10 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-
+import model.Canale;
 import model.Gruppo;
 import model.Utente;
 import persistence.DatabaseManager;
+import persistence.dao.CanaleDao;
 import persistence.dao.GruppoDao;
 import persistence.dao.UtenteDao;
 
@@ -34,9 +35,9 @@ public class GestioneAdmin extends HttpServlet {
 		String nomeGruppo = req.getParameter("group");
 		String nomeCanale = req.getParameter("channel");
 		GruppoDao gruppoDao =DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
-		
+		CanaleDao canaleDao =DatabaseManager.getInstance().getDaoFactory().getCanaleDAO();
 		Gruppo gruppo = gruppoDao.findByPrimaryKey(nomeGruppo, nomeCanale);
-		
+		Canale canale = canaleDao.findByPrimaryKey(nomeCanale);
 		List<String> out = new LinkedList<>();
 		
 		System.out.println("membri "+gruppo.getMembri().size());
@@ -44,6 +45,9 @@ public class GestioneAdmin extends HttpServlet {
 		
 		for (Utente u : gruppo.getMembri()) {
 			boolean admin = false;
+			
+			if (u.getEmail().equals(canale.getAdmin().getEmail()))
+				continue;
 			
 			for (Utente u1 : gruppo.getAdmins()) {
 				
