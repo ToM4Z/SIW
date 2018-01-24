@@ -44,7 +44,7 @@ function loadMessaggi(){
 				console.log("session "+numberMessageSession);
 				appendMessages(liste);
 			}else if(data == "error"){
-				console.log("error");
+				stopChat();
 			}
 			getMessaggi();
 		}
@@ -56,7 +56,7 @@ function appendMessages(messaggi){
 		$("#listchat").append(
 		"<div class=\"mexContainer "+(item.right? "right":"left")+"\">"
 		  + "<div class=\"row\">"
-		  + "<img src=\"images/users/"+item.email+".jpg\" alt=\"Avatar\" onerror=\"this.src='images/users/unknown.jpg';\""+(item.right? "class=\"right\"":"")+">"
+		  + "<img src=\"images/users/"+item.email+".jpg\" alt=\"Avatar\" onerror=\"this.src='images/users/unknown.jpg';\" onclick='showImageModal(this.src);'"+(item.right? "class=\"right\"":"")+">"
 		  + "<span id=\"Name\""+(item.right? "class=\"right\"":"")+"><a href=\"javascript:showUser('"+item.email+"')\">"+item.username+"</a></span>"
 		  + "<span class=\"time-"+(item.right? "left":"right")+"\">"+item.data+"</span>"	  
 		  + "</div><hr><p style=\"float:"+(item.right? "right":"left")+"\">"+item.contenuto+"</p>"
@@ -101,7 +101,8 @@ function stopChat(){
 
 function onbeforeunloadChat(){
 	stopChat();
-	ajaxMex.abort();
+	if(ajaxMex != undefined)
+		ajaxMex.abort();
 	console.log("closing");
     $.ajax({
     	type: "GET",

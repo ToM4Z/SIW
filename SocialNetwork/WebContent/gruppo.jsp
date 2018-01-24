@@ -134,6 +134,7 @@ function unload(){
 	<c:if test="${empty user.username}">
 		<c:redirect url="login.html" />
 	</c:if>
+	<jsp:include page="imageModal.jsp" />
 	<jsp:include page="LoosyNetBar.jsp" />
 	<div class="row">
 		<div class="col-bg-6 brd">
@@ -168,15 +169,12 @@ function unload(){
 				</script>
 				</c:if>
 				
-				<h2 onclick = "javascript:post()">prova pubblicazione</h2>
-				
 				<c:if test = "${admin == true }">
 					<h5><a onclick="seiSicuroGruppo()">Elimina gruppo</a></h5>
 					<h5><a href = utentiInAttesa?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Visualizza utenti in attesa</a></h5>
 					<h5><a href = gestioneAdmin?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci admin</a></h5>
 					<h5><a href = gestioneMembri?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci membri</a></h5>
 				</c:if>
-					<h3 onclick = "javascript:update()">prova</h3>
 				<c:choose>
 					<c:when test="${iscritto == true && canaleAdmin == false}">
 						<h4>
@@ -221,6 +219,7 @@ function unload(){
 				    <div class="post-body${post.id}">
 				      <hr class="post-hr">
 				      <p class="contenuto">${post.contenuto}</p>
+				      <img src="images/posts/${post.id}.jpg" alt="" width=100% onError="this.remove();" onclick='showImageModal(this.src);'>
 				    </div>
 				    <div class="post-footer">
 				      <p class="date" id="${post.id}"><small><script>convertDatePost('${post.id}','${post.dataCreazione}');</script></small></p>

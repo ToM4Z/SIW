@@ -45,7 +45,7 @@ function showChannel(channel){
 									: "" ) 
 							+"</td><td>"+ (json.iscritto ? "<button id=\"showCreateGroupButton\" onclick=\"showCreateGroup()\">Crea Gruppo</button>"
 									+"<form id=\"createGroupForm\" action=\"javascript:createGroup('"+json.canale.nome+"')\" style=\"display:none\">"
-									+"<input type=\"text\" id=\"nomeGruppo\" placeHolder=\"Nome\">"
+									+"<input type=\"text\" id=\"nomeNewGruppo\" placeHolder=\"Nome\">"
 									+"<input type=\"submit\" value=\"Crea\"></form>"
 							 		: "")+"</td></tr>"
 					+"<tr><td>"+ (json.canale.admin.username == "${sessionScope.user.username}" ? "<form action=\"gestioneBlacklist\" method=\"get\">"
@@ -63,12 +63,12 @@ function createGroup(channel){
 		type: "post",
 		url: "creaGruppo",
 		datatype: "json",
-		data: JSON.stringify({nomeCanale: channel, nomeGruppo: $("#nomeGruppo").val()}),
+		data: JSON.stringify({nomeCanale: channel, nomeGruppo: $("#nomeNewGruppo").val()}),
 		success: function(data){
 			if(data == "AlreadyExists"){
-				$("#MessageErrorCreateGroupModal").text("Il gruppo "+$("#nomeGruppo").val()+" è già esistente!").slideDown().show();
+				$("#MessageErrorCreateGroupModal").text("Il gruppo "+$("#nomeNewGruppo").val()+" è già esistente!").slideDown().show();
 			}else
-				window.location.href = "gruppo?group="+$("#nomeGruppo").val()+"&channel="+channel;
+				window.location.href = "gruppo?group="+$("#nomeNewGruppo").val()+"&channel="+channel;
 		}
 	});
 }
@@ -143,14 +143,8 @@ function sendChannelImage(){
 function removeChannelInfo(){
 	$("#MessaggeErrorChannelModal").slideUp().hide();
 }
-/*function onLoadShowChannel(){
-    $('[data-toggle="popover"]').popover();
-}*/
 </script>
 <body>
-	<!--<form action="javascript:onLoadShowChannel()" style="display:none">
-		<input type="submit" class="onload">
-	</form>-->
 <div class="modal fade" id="channelModal" role="dialog">
     <div class="modal-dialog">    
       <div class="modal-content">
