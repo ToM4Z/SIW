@@ -358,13 +358,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 		Connection connection = dataSource.getConnection();	
 			try {	
 				for (Gruppo gruppo : canale.getGruppi()) {
-					PreparedStatement statement1 = connection.prepareStatement("Select email_utente from iscrizione where canale=? and gruppo=? and email_utente=?");
-					statement1.setString(1, canale.getNome());
-					statement1.setString(2, gruppo.getNome());
-					statement1.setString(3, utente.getEmail());
-					ResultSet result = statement1.executeQuery();
 					
-					if (result.next()) {
 						String delete = "delete FROM iscrizione WHERE canale = ? and gruppo = ? and email_utente = ?";
 						
 						PreparedStatement statement = connection.prepareStatement(delete);
@@ -379,7 +373,7 @@ public class CanaleDaoJDBC implements CanaleDao {
 						
 						connection.commit();
 					}
-				}
+				
 				
 			} catch (SQLException e) {
 				if (connection != null)

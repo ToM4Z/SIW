@@ -59,7 +59,7 @@ public class GestioneBlacklist extends HttpServlet {
 			}
 		}
 		for (Utente u : canale.getBlacklist()) {
-			out.add("<h4>"+u.getNome()+" "+u.getCognome()+"<a onclick = javascript:rimuoviBlacklist('"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4>");
+			out.add("<div id=\"bl"+u.getUsername()+"\"><h4>"+u.getNome()+" "+u.getCognome()+"<a onclick = javascript:rimuoviBlacklist('"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4></div>");
 		}
 		System.out.println(out.toString());
 		req.setAttribute("righe", out);
