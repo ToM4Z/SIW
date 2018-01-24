@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import model.Gruppo;
 import model.Utente;
 import persistence.DatabaseManager;
-import persistence.dao.CanaleDao;
 import persistence.dao.GruppoDao;
 
 public class GruppoServlet extends HttpServlet {
