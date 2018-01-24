@@ -194,7 +194,6 @@ function stopLoosyNetBar(){
 }
 function onbeforeunloadLoosyNetBar(){
 	stopLoosyNetBar();
-	alert("stop");
 	 $.ajax({
 	    	type: "GET",
 	    	url: "notifiche",

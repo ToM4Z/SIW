@@ -31,15 +31,17 @@ function sendMessage(){
 var querying = false;
 var numberMessageSession;
 function loadMessaggi(){
+	console.log("first "+$("#nomeGruppo").text()+" "+$("#nomeCanale").text());
 	$.ajax({
 		type:"POST",
 		url:"receiveMessage",
-		data: {first: '1', gruppo : $("#nomeGruppo").text(), canale : $("#nomeCanale").text()},
+		data: {first: "1", gruppo : $("#nomeGruppo").text(), canale : $("#nomeCanale").text()},
 		success: function(data){
 			if(data != "[]" && data != "error"){
 				var json = JSON.parse(data);
 				var liste = json.messaggi;
 				numberMessageSession = json.numberMessageSession;
+				console.log("session "+numberMessageSession);
 				appendMessages(liste);
 			}else if(data == "error"){
 				console.log("error");
@@ -64,16 +66,19 @@ function appendMessages(messaggi){
 }
 
 var intervalMex;
+var ajaxMex;
 function getMessaggi(){
 	intervalMex = setInterval(function(){
 		if(!querying){
 			querying = true;
-			$.ajax({
+			console.log($("#nomeGruppo").text()+$("#nomeCanale").text()+numberMessageSession);
+			ajaxMex = $.ajax({
 				type:"POST",
 				url:"receiveMessage",
 				datatype: "json",
-				data: {first: '0', attrSession : $("#nomeGruppo").text()+$("#nomeCanale").text()+numberMessageSession},
+				data: {first: "0", attrSession : $("#nomeGruppo").text()+$("#nomeCanale").text()+numberMessageSession},
 				success: function(data){
+					console.log("getMessaggi: "+data);
 					if(data != "[]" && data != "error"){
 						var liste = JSON.parse(data);
 						appendMessages(liste);
@@ -96,6 +101,8 @@ function stopChat(){
 
 function onbeforeunloadChat(){
 	stopChat();
+	ajaxMex.abort();
+	console.log("closing");
     $.ajax({
     	type: "GET",
 		url:"receiveMessage",
