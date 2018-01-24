@@ -93,7 +93,7 @@ function unload(){
 				      <c:if test = "${post.creatore.email == user.email}">
 				       <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
 				      </c:if>
-				      <c:if test = "${post.creatore.email == user.email || admin==true}">
+				      <c:if test = "${post.creatore.email == user.email || admin==\"true\"}">
 				       <a onclick="javascript:eliminaPosts(${post.id})"><span class="glyphicon glyphicon-trash"></span></a>
 				      </c:if>
 				    </div>
