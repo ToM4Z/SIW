@@ -44,6 +44,13 @@ window.fbAsyncInit = function() {
 	      quote: x,
 	    }, function(response){});
 	  }
+  
+function shareOnTwitter(x){
+	  
+	  var url = "https://twitter.com/intent/tweet";
+	  var via = "userName";
+	  window.open(url+"?text="+x,"","width=500,height=300");
+}
 
 function load(){
 	$("input.onload").each(function(){
@@ -89,6 +96,7 @@ function unload(){
 				    </div>
 				    <div class="post-header-right">
 				    <a onclick = "javascript:inviaNotificaSegnalazione('${post.id}')"><i class="fa fa-exclamation-triangle" style="font-size:20px"></i></a>
+				    <a onclick="javascript:shareOnTwitter('${post.contenuto}')"><i class="fa fa-twitter" style="font-size:24px"></i></a>
 				    <a onclick="javascript:shareOnFacebook('${post.contenuto}')"><i class="fa fa-facebook-square" style="font-size:22px"></i></a>
 				      <c:if test = "${post.creatore.email == user.email}">
 				       <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>

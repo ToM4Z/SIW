@@ -1,5 +1,6 @@
 
 
+
 function inviaNotificaSegnalazione(idPost){
 	
 	  var tipo = "segnalazione";
@@ -41,6 +42,8 @@ function inviaNotificaCommento(idPost){
 	  xhr.send(json);
 	  
 }
+
+
 
 function eseguiModifica(x){
 	  

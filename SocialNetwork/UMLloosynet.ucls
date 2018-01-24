@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.0" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="model.Post" project="SocialNetwork" file="/SocialNetwork/src/model/Post.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="363" y="315"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="model.Utente" project="SocialNetwork" file="/SocialNetwork/src/model/Utente.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="925" y="357"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="model.Gruppo" project="SocialNetwork" file="/SocialNetwork/src/model/Gruppo.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="628" y="946"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="model.Canale" project="SocialNetwork" file="/SocialNetwork/src/model/Canale.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1269" y="474"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="model.Notifica" project="SocialNetwork" 
+    file="/SocialNetwork/src/model/Notifica.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="593" y="415"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="model.Commento" project="SocialNetwork" 
+    file="/SocialNetwork/src/model/Commento.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="673" y="-111"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="model.Messaggio" project="SocialNetwork" 
+    file="/SocialNetwork/src/model/Messaggio.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1053" y="1038"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="8">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="9" name="post"/>      
+      <multiplicity id="10" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="11">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="12" name="utente"/>      
+      <multiplicity id="13" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="14">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="15" name="creatore"/>      
+      <multiplicity id="16" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="17">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="18" name="membri"/>      
+      <multiplicity id="19" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="20">    
+    <bendpoint x="777" y="49"/>    
+    <bendpoint x="1088" y="107"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="21" name="canale"/>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="23">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="24" name="commenti"/>      
+      <multiplicity id="25" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="26">    
+    <bendpoint x="558" y="265"/>    
+    <bendpoint x="737" y="169"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="27" name="creatore"/>      
+      <multiplicity id="28" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="29">    
+    <bendpoint x="1062" y="601"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="30" name="mittente"/>      
+      <multiplicity id="31" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="32">    
+    <bendpoint x="1187" y="791"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="33" name="canale"/>      
+      <multiplicity id="34" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="35">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="36" name="gruppo"/>      
+      <multiplicity id="37" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="38">    
+    <bendpoint x="835" y="626"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="39" name="admins"/>      
+      <multiplicity id="40" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="41">    
+    <bendpoint x="569" y="705"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="42" name="gruppo"/>      
+      <multiplicity id="43" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="44">    
+    <bendpoint x="1149" y="331"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="45" name="blacklist"/>      
+      <multiplicity id="46" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="47">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="48" name="chat"/>      
+      <multiplicity id="49" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="50">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="51" name="post"/>      
+      <multiplicity id="52" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="53">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="54" name="notifiche"/>      
+      <multiplicity id="55" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="56">    
+    <bendpoint x="1138" y="397"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="57" name="membri"/>      
+      <multiplicity id="58" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="59">    
+    <bendpoint x="1009" y="672"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="60" name="utentiInAttesa"/>      
+      <multiplicity id="61" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="62">    
+    <bendpoint x="1124" y="466"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="63" name="admin"/>      
+      <multiplicity id="64" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="65">    
+    <bendpoint x="1068" y="706"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="66" name="gruppi"/>      
+      <multiplicity id="67" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
