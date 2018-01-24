@@ -33,7 +33,6 @@ public class GruppoServlet extends HttpServlet {
 		
 		for(Utente u : gruppo.getAdmins())			
 			if (u.getEmail().equals(utente.getEmail()))
-
 				admin = true;
 		
 		for (Utente u : gruppo.getMembri())			

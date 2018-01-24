@@ -45,12 +45,14 @@ window.fbAsyncInit = function() {
 	    }, function(response){});
 	  }
   
+
 function shareOnTwitter(x){
 	  
 	  var url = "https://twitter.com/intent/tweet";
 	  var via = "userName";
 	  window.open(url+"?text="+x,"","width=500,height=300");
 }
+
 
 function load(){
 	$("input.onload").each(function(){
@@ -68,6 +70,7 @@ function unload(){
 	<c:if test="${empty user.username}">		
 		<c:redirect url="login.html" />
 	</c:if>
+	<jsp:include page="imageModal.jsp" />
 	<jsp:include page="LoosyNetBar.jsp" />
 	<div class="row">
 		<div class="col-bg-6 brd">
@@ -84,9 +87,8 @@ function unload(){
 				<span class="glyphicon glyphicon-chevron-right" style="font-size:2em;left:500%;" onclick="javascript:shiftRight()"></span>
 			</div>
 				<c:forEach var = "post" items = "${posts}">
-				<div id = post_${post.id}> 
-				  <div class="row">
-				  <div class="post">
+				<div class="row">
+				  <div class="post" id="post_${post.id}">
 				    <div class="post-header">
 				    <div class="post-header-left">
 				        <a href = "javascript:showUser('${post.creatore.email}')">${post.creatore.username}</a> > 
@@ -101,19 +103,20 @@ function unload(){
 				      <c:if test = "${post.creatore.email == user.email}">
 				       <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
 				      </c:if>
-				      <c:if test = "${post.creatore.email == user.email || admin==true}">
+				      <c:if test = "${post.creatore.email == user.email || admin==\"true\"}">
 				       <a onclick="javascript:eliminaPosts(${post.id})"><span class="glyphicon glyphicon-trash"></span></a>
 				      </c:if>
 				    </div>
 
-				    <div class="post-body${post.id}">
+				    <div class="post-body">
 				      <hr class="post-hr">
 				      <p class="contenuto">${post.contenuto}</p>
+				      <img src="images/posts/${post.id}.jpg" alt="" width=100% onError="this.remove();"  onclick='showImageModal(this.src);'>
 				    </div>
 				    <div class="post-footer">
 				      <p class="date" id="${post.id}"><small>${post.dataCreazione}</small></p>
 				      <hr class="post-hr">
-				      <div id = reaction${post.id} style="display:inline" class="row">
+				      <div id ="reaction${post.id}" style="display:inline" class="row">
 				        <a onclick="javascript:addLike(${post.id})">
 				        	<span id="like" class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">${post.numLikes}</span>
 				        </a>
@@ -134,27 +137,8 @@ function unload(){
 				    </div>
 				  </div>
 				</div>
-				</div>
 				</div>		
 				</c:forEach>
-			
-			
-			
-			<!-- 
-				<c:forEach var="post" items="${posts}">
-					<h4>
-						<a href="javascript:showUser('${post.creatore.email}')">
-							${post.creatore.username}</a> > <a href="javascript:showChannel('${post.canale.nome}')">${post.canale.nome}</a>
-						/ <a href=gruppo?group=${post.gruppo.nome}&channel=${post.canale.nome}>${post.gruppo.nome}</a>
-					</h4>
-		
-					<c:if test = "${post.creatore.email == user.email}">
-						<h6 onclick = "seiSicuro(${post.id})">Elimina post</h6>
-					</c:if>
-					
-					<p>${post.contenuto}</p>
-					<small><small>${post.dataCreazione}</small></small>
-				</c:forEach>-->
 			</div>
 		</div>
 	</div>
