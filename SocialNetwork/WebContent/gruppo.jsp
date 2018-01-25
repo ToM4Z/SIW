@@ -219,10 +219,10 @@ function unload(){
 				      
 				      <div id = reaction${post.id} style="display:inline" class="row">
 				        <a onclick="javascript:addLike(${post.id})">
-				        	<span id="like" class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">-</span>
+				        	<span id="like" class="glyphicon glyphicon-thumbs-up" style="font-size:1.5em;padding-left:10%;padding-right:20%">${post.numLikes}</span>
 				        </a>
 				        <a onclick="javascript:addDislike(${post.id})">
-				        	<span id = "dislike" class="glyphicon glyphicon-thumbs-down" style="font-size:1.5em;padding-right:10%">-</span>
+				        	<span id = "dislike" class="glyphicon glyphicon-thumbs-down" style="font-size:1.5em;padding-right:10%">${post.numDislikes}</span>
 				        </a>
 				      </div>
 				      
@@ -233,7 +233,7 @@ function unload(){
 				        <input id="commento${post.id}" type="text" class="form-control"
 											placeholder="Commenta"
 											name = "commento${post.id}">
-				        <button type="button" class="btn btn-default" style="position:absolute;right:7;bottom:16px;height:33px"><span class="glyphicon glyphicon-send" style="font-size:1.2em;margin:-2px"></span></button>
+				        <button type="submit" class="btn btn-default" style="position:absolute;right:7;bottom:16px;height:33px"><span class="glyphicon glyphicon-send" style="font-size:1.2em;margin:-2px"></span></button>
 				      </form>
 				    </div>
 				    </div>
