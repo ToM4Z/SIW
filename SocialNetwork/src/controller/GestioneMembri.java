@@ -97,7 +97,7 @@ public class GestioneMembri extends HttpServlet {
         	GruppoDao gruppoDao =DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
         	Utente utente = utenteDao.findByPrimaryKey(m.user);
         	Gruppo gruppo = gruppoDao.findByPrimaryKey(m.nomeGruppo, m.nomeCanale);
-
+        	System.out.println("nomeGruppo: "+m.nomeGruppo+" nomeCanale:"+m.nomeCanale);
         	gruppoDao.addUserToGroup(gruppo, utente);
         	System.out.println("aggiunto ai membri");
         	resp.getWriter().write(new Gson().toJson(utente.getUsername()));
@@ -109,7 +109,7 @@ public class GestioneMembri extends HttpServlet {
         	GruppoDao gruppoDao =DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
         	Utente utente = utenteDao.findByPrimaryKey(m.user);
         	Gruppo gruppo = gruppoDao.findByPrimaryKey(m.nomeGruppo, m.nomeCanale);
-
+        	System.out.println("nomeGruppo: "+m.nomeGruppo+" nomeCanale:"+m.nomeCanale);
         	gruppoDao.removeUserFromGroup(gruppo, utente);
         	resp.getWriter().write(new Gson().toJson(utente.getUsername()));
         }
