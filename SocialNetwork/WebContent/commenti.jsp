@@ -77,7 +77,7 @@ function unload(){
 					<div id=commento_${commento.id}>
 					<li>
 						<h4>${commento.creatore.username}</h4>
-						<c:if test = "${commento.creatore.email == user.email || post.creatore.email == user.email}">
+						<c:if test = "${commento.creatore.email == user.email || post.creatore.email == user.email || admin == true}">
 							<small onclick = "javascript:deleteCommento(${commento.id})">Elimina commento</small>
 						</c:if>
 						<h4>${commento.contenuto}</h4>
