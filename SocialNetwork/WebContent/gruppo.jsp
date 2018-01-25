@@ -146,44 +146,61 @@ function unload(){
 			<div id="homePost" style="margin-top:60px; text-align: center;">
 			
 			<div class="page-header">
-
-				
-				<h1 id="nomeGruppo">${gruppo.nome}</h1>
-				<h1 id="nomeCanale" style="display:none">${gruppo.canale.nome}</h1>
-				
-				<c:if test="${gruppo.nome != null}">
-					<script type="text/javascript">
-					startUpdate();
-				</script>
-				</c:if>
-				<c:if test="${gruppo.nome == null}">
-					<script type="text/javascript">
-					stopUpdate();
-				</script>
-				</c:if>
-				
-				<c:if test = "${admin == true }">
-					<h5><a onclick="seiSicuroGruppo()">Elimina gruppo</a></h5>
-					<h5><a href = utentiInAttesa?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Visualizza utenti in attesa</a></h5>
-					<h5><a href = gestioneAdmin?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci admin</a></h5>
-					<h5><a href = gestioneMembri?group=${gruppo.nome}&channel=${gruppo.canale.nome}>Gestisci membri</a></h5>
-				</c:if>
-				<c:choose>
-					<c:when test="${iscritto == true && canaleAdmin == false}">
-						<h4>
-							<a href=gestisciGruppo?channel=${gruppo.canale.nome}&group=${gruppo.nome}&esito=cancellazione>Cancellati dal gruppo</a>
-						</h4>
-
-					</c:when>
-					<c:when test="${iscritto == false }">
-						<h4 onclick = "javascript:inviaNotificaRichiesta()">
-							Richiedi iscrizione al gruppo  
-						</h4>
-					</c:when>
-				</c:choose>
+				<div style="display:none">
+		    		<h4 id="nomeCanale">${gruppo.canale.nome}</h4>
+		    		<h4 id="nomeGruppo">${gruppo.nome}</h4>
+				</div>
+				<div class="row">
+				  <div class="post">
+				    <div class="post-header">
+				    	<div class="post-header-left">
+				    		<h4 style="margin-top:0px;">${gruppo.canale.nome} > ${gruppo.nome}</h4>
+				    	</div>
+				    	<div class="post-header-right">
+				    		<c:choose>
+				    			<c:when test="${iscritto == true}">
+									<a onclick="showCreatePost()" style="position:relative;right:70px;top:-2px;">Crea post</a>
+							    	<div class="dropdown" style="position:relative; top:-31px; right:-10px;">
+									  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
+									  		data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+									    <i class="glyphicon glyphicon-cog" style="font-size:20px"></i>
+									  </button>
+									  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									  	<ul style="margin-left:-30px;">
+						    			<c:if test = "${admin == true }">
+										    <li style="list-style-type: none;"><a onclick="seiSicuroGruppo()" class="dropdown-item">Elimina gruppo</a></li>
+											<li style="list-style-type: none;"><a href = utentiInAttesa?group=${gruppo.nome}&channel=${gruppo.canale.nome} class="dropdown-item" style="width:100%">Gestisci iscrizioni</a></li>
+											<li style="list-style-type: none;"><a href = gestioneAdmin?group=${gruppo.nome}&channel=${gruppo.canale.nome} class="dropdown-item">Gestisci admin</a></li>
+											<li style="list-style-type: none;"><a href = gestioneMembri?group=${gruppo.nome}&channel=${gruppo.canale.nome} class="dropdown-item">Gestisci membri</a></li>
+										</c:if>
+										<c:if test="${canaleAdmin == false}">
+											<li style="list-style-type: none;"><a href=gestisciGruppo?channel=${gruppo.canale.nome}&group=${gruppo.nome}&esito=cancellazione class="dropdown-item">Disiscriviti dal gruppo</a></li>
+										</c:if>
+										</ul>
+									  </div>
+									</div>
+								</c:when>
+								<c:when test="${iscritto == false }">
+									<a onclick = "javascript:inviaNotificaRichiesta()">Iscriviti</a>
+								</c:when>
+							</c:choose>
+						</div>
+			    	</div>
+		    	  </div>
+		    	</div>
 				
 				<c:if test = "${iscritto == true}">
-					<a onclick="showCreatePost()">crea post</a>
+					<c:if test="${gruppo.nome != null}">
+					<script type="text/javascript">
+					startUpdate();
+					</script>
+					</c:if>
+					<c:if test="${gruppo.nome == null}">
+						<script type="text/javascript">
+						stopUpdate();
+					</script>
+					</c:if>
+				
 				
 				<c:forEach var = "post" items = "${gruppo.post}">
 				<div id = post_${post.id}> 
@@ -195,8 +212,8 @@ function unload(){
 				    </div>
 				    <div class="post-header-right">
 				    <a onclick = "javascript:inviaNotificaSegnalazione('${post.id}')"><i class="fa fa-exclamation-triangle" style="font-size:20px"></i></a>
-				    <a onclick="javascript:shareOnTwitter('${post.contenuto}')"><i class="fa fa-twitter" style="font-size:24px"></i></a>
-				    <a onclick="javascript:shareOnFacebook('${post.contenuto}')"><i class="fa fa-facebook-square" style="font-size:22px"></i></a>
+				    <a onclick="javascript:shareOnTwitter('${post.contenuto}')"><i class="fa fa-twitter" style="font-size:24px;"></i></a>
+				    <a onclick="javascript:shareOnFacebook('${post.contenuto}')"><i class="fa fa-facebook-square" style="font-size:22px;"></i></a>
 				      <c:if test = "${post.creatore.email == user.email}">
 				      
 				      <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>

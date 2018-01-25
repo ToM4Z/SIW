@@ -45,7 +45,7 @@ function showChannel(channel){
 									: "" ) 
 							+"</td><td>"+ (json.iscritto ? "<button id=\"showCreateGroupButton\" onclick=\"showCreateGroup()\">Crea Gruppo</button>"
 									+"<form id=\"createGroupForm\" action=\"javascript:createGroup('"+json.canale.nome+"')\" style=\"display:none\">"
-									+"<input type=\"text\" id=\"nomeNewGruppo\" placeHolder=\"Nome\">"
+									+"<input type=\"text\" id=\"nomeNewGruppo\" placeHolder=\"Nome\" autoComplete=\"off\">"
 									+"<input type=\"submit\" value=\"Crea\"></form>"
 							 		: "")+"</td></tr>"
 					+"<tr><td>"+ (json.canale.admin.username == "${sessionScope.user.username}" ? "<form action=\"gestioneBlacklist\" method=\"get\">"
