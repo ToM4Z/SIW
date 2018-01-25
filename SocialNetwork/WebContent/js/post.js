@@ -52,7 +52,7 @@ function inviaNotificaCommento(idPost){
 		datatype: "json",
 		data: JSON.stringify({"idPost": idPost, "tipo" : tipo, "nomeGruppo": "", "nomeCanale" : ""}),
 		success: function(data){
-			alert("notifica commento inviata");
+			//alert("notifica commento inviata");
 
 	    	}
 	});
