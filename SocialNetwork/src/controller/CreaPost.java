@@ -41,18 +41,15 @@ public class CreaPost extends HttpServlet {
 		GruppoDao gruppoDao = DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-		String linea = br.readLine();
-		//System.out.println(linea);
-        CanaleGruppo cg = new Gson().fromJson(linea, CanaleGruppo.class);
+		CanaleGruppo cg = new Gson().fromJson(br.readLine(), CanaleGruppo.class);
 		
         Canale canale = canaleDao.findByPrimaryKey(cg.canale);
         Gruppo gruppo = gruppoDao.findByPrimaryKey(cg.gruppo, cg.canale);
 		
 		Post post = new Post(utente, cg.contenuto, canale, gruppo, Calendar.getInstance().getTime());
-		
-		
+				
 		postDao.save(post);
 		
-		resp.getWriter().write("true");
+		resp.getWriter().write(""+post.getId());
 	}
 }

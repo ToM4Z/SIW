@@ -51,23 +51,6 @@ window.fbAsyncInit = function() {
 
 
 
-function creaPost(){
-	  var gruppo = $("#nomeGruppo").text();
-	  var canale = $("#nomeCanale").text();
-	  var json = JSON.stringify({"gruppo": gruppo,"canale" : canale, "contenuto": $("#contenuto").val()});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","creaPost", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  window.location.replace("gruppo?group="+gruppo+"&channel="+canale);
-	  		}else{
-	      }
-	  }
-	  xhr.send(json);
-}
 
 function seiSicuroGruppo(){
 	
@@ -122,6 +105,7 @@ function load(){
 	$("input.onload").each(function(){
 		$(this).trigger("click");
 	});
+	setTimeout(setYTPlayers(),1);
 };
 function unload(){
 	$("input.onbeforeunload").each(function(){
@@ -135,6 +119,7 @@ function unload(){
 		<c:redirect url="login.html" />
 	</c:if>
 	<jsp:include page="imageModal.jsp" />
+	<jsp:include page="createPost.jsp" />
 	<jsp:include page="LoosyNetBar.jsp" />
 	<div class="row">
 		<div class="col-bg-6 brd">
@@ -188,12 +173,10 @@ function unload(){
 						</h4>
 					</c:when>
 				</c:choose>
-
-				<form action = "javascript:creaPost()">
-					<input id="contenuto" autocomplete="off" type="text" name="contenuto" >
-					<input type = "submit" value = "Pubblica">
-				</form>
+				
 				<c:if test = "${iscritto == true}">
+					<a onclick="showCreatePost()">crea post</a>
+				
 				<c:forEach var = "post" items = "${gruppo.post}">
 				<div id = post_${post.id}> 
 				  <div class="row">
@@ -216,10 +199,11 @@ function unload(){
 				      </c:if>
 				    </div>
 
-				    <div class="post-body${post.id}">
+				    <div class="post-body" id="post-body${post.id}">
 				      <hr class="post-hr">
 				      <p class="contenuto">${post.contenuto}</p>
 				      <img src="images/posts/${post.id}.jpg" alt="" width=100% onError="this.remove();" onclick='showImageModal(this.src);'>
+				    <div id="player${post.id}"></div>
 				    </div>
 				    <div class="post-footer">
 				      <p class="date" id="${post.id}"><small><script>convertDatePost('${post.id}','${post.dataCreazione}');</script></small></p>

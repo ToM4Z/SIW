@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -26,16 +27,19 @@ public class EliminaPost extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-		String linea = br.readLine();
-		//System.out.println(linea);
-        Elimina e = new Gson().fromJson(linea, Elimina.class);
+		Elimina e = new Gson().fromJson(br.readLine(), Elimina.class);
 		
 		Long idPost = Long.parseLong(e.idPost);
 		PostDao postDao = DatabaseManager.getInstance().getDaoFactory().getPostDAO();
 		
 		Post post = postDao.findByPrimaryKey(idPost);
 		
+		File file = new File(new File(getServletContext().getResource("/images/posts").getPath()).getAbsolutePath()+"\\"+post.getId()+".jpg");
+		if(file.exists())
+			file.delete();
+		
 		postDao.delete(post);
+		
 		resp.getWriter().write("true");
 	}
 
