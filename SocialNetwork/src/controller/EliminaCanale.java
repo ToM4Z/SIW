@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.File;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +21,10 @@ public class EliminaCanale extends HttpServlet {
 		CanaleDao canaleDao = DatabaseManager.getInstance().getDaoFactory().getCanaleDAO();
 		
 		Canale canale = canaleDao.findByPrimaryKey(nomeCanale);
+		
+		File file = new File(new File(getServletContext().getResource("/images/channels").getPath()).getAbsolutePath()+"\\"+canale.getNome()+".jpg");
+		if(file.exists())
+			file.delete();
 		
 		canaleDao.delete(canale);
 		

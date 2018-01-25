@@ -58,6 +58,7 @@ function load(){
 	$("input.onload").each(function(){
 		$(this).trigger("click");
 	});
+	setTimeout(setYTPlayers(),1);
 };
 function unload(){
 	$("input.onbeforeunload").each(function(){
@@ -108,10 +109,11 @@ function unload(){
 				      </c:if>
 				    </div>
 
-				    <div class="post-body">
+				    <div class="post-body" id="post-body${post.id}">
 				      <hr class="post-hr">
 				      <p class="contenuto">${post.contenuto}</p>
 				      <img src="images/posts/${post.id}.jpg" alt="" width=100% onError="this.remove();"  onclick='showImageModal(this.src);'>
+				    <div id="player${post.id}"></div>
 				    </div>
 				    <div class="post-footer">
 				      <p class="date" id="${post.id}"><small>${post.dataCreazione}</small></p>

@@ -39,6 +39,10 @@ public class UpdateReaction extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		Utente utente = (Utente) req.getSession().getAttribute("user");
+		if(utente == null) {
+			resp.getWriter().write("error");
+			return;
+		}
 		List<Info> info = new LinkedList<>();
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));

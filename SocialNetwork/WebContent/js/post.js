@@ -1,4 +1,24 @@
 
+ function setYTPlayers(){
+	  $(".post-body").each(function(){
+		  var player = $(this).find("div:last-child");
+			  
+		  var url = getYTURL($(this).find("p.contenuto").text());
+		  if(url!="error")
+			  $(player).replaceWith('<hr class="post-hr"><iframe type="text/html" width=100% allowfullscreen="1" src="'+url+'" frameborder="0"/>');				  
+			  
+	  });
+  }
+
+function getYTURL(url) {
+    var regExp = /.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+
+    if (match && match[2].length == 11)
+        return "https://www.youtube.com/embed/"+match[2];
+    else
+        return 'error';
+}
 
 
 function inviaNotificaSegnalazione(idPost){
@@ -43,32 +63,31 @@ function inviaNotificaCommento(idPost){
 	  
 }
 
-
-
-function eseguiModifica(x){
-	  
-	  var mod =  $("#modifica").val();
-	  var json = JSON.stringify({"idPost":x, "modifica": mod});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","modificaPost", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-			  $("div.post-body"+x).replaceWith("<div class=\"post-body"+x+"\">"
-					  +"<hr style=\"margin:-0.5px; margin-bottom:7px; border-color:black\">"
-					  +"<p class=\"contenuto\">"+mod+"</p></div>");
-	  		}else{
-	      }
-	  }
-	  xhr.send(json);
+function eseguiModifica(x){	
+	$.ajax({
+		type: "post",
+		url: "modificaPost",
+		datatype: "json",
+		data: JSON.stringify({"idPost":x, "modifica": $("#modifica").val()}),
+		success: function(data){
+			if(data == "true"){
+				  $("div#post-body"+x).replaceWith("<div id=\"post-body"+x+"\" class=\"post-body\">"
+						  +"<hr class=\"post-hr\">"				      
+						  +"<p class=\"contenuto\">"+$("#modifica").val()+"</p>"
+						  +"<img src=\"images/posts/"+x+".jpg\" alt=\"\" width=100% onError=\"this.remove();\" onclick='showImageModal(this.src);'>"
+						  +"<div id=\"player"+x+"\"></div>"				    
+						  +"</div>");
+				  setYTPlayers();
+			}
+		}
+	});
 }
 
 function modificaPost(x){
-	$("div.post-body"+x).replaceWith("<div class=\"post-body"+x+"\">"
-		+"<hr style=\"margin:-0.5px; margin-bottom:7px; border-color:black\">"
-		+"<form action = \"javascript:eseguiModifica("+x+")\"><input id=\"modifica\" type=\"text\" name=\"modifica\" >"
+	$("div#post-body"+x).replaceWith("<div id=\"post-body"+x+"\" class=\"post-body\">"
+		+"<hr class=\"post-hr\">"				      
+		+"<form action = \"javascript:eseguiModifica("+x+")\">"
+		+"<textarea id=\"modifica\" rows=\"5\" style=\"width:100%\" required>"+$("div#post-body"+x+" p.contenuto").text()+"</textarea>"
 		+"<input type = \"submit\" value = \"Modifica\"></form></div>");
 }
 
@@ -252,6 +271,9 @@ function stopUpdate(){
 						}
 						
 					});
-			}
+			},
+		error: function(){
+			stopUpdate();
+		}
 		});
 	}

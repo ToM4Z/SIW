@@ -29,7 +29,7 @@ function showUser(utente){
 					+"<tr><td><h4><strong>Data di nascita:   </strong></h4></td><td><h4>"+convertDateUser(json.dataDiNascita)+"</h4></td></tr>"	
 					+"<tr><td><h4><strong>Data di iscrizione:</strong></h4></td><td><h4>"+convertDateUser(json.dataIscrizione)+"</h4></td></tr>"
 					+"</table>");
-			if(json.nome != '${sessionScope.user.username}')
+			if(json.username != '${sessionScope.user.username}')
 				$("#fileUserImage").hide();
 			$("#userModal").modal("show");
 		}
