@@ -23,43 +23,39 @@ function getYTURL(url) {
 
 function inviaNotificaSegnalazione(idPost){
 	
-	  var tipo = "segnalazione";
+	var tipo = "segnalazione";
 	  var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
-	  var json = JSON.stringify({"idPost": idPost, "tipo" : tipo, "nomeGruppo": gruppo, "nomeCanale" : canale});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","inviaNotifica", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("notifica segnalazione inviata");
-	  		}else{
-	  			
-	      }
-	  }
-	  xhr.send(json);
+	
+	$.ajax({
+		type: "POST",
+		url: "inviaNotifica",
+		datatype: "json",
+		data: JSON.stringify({"idPost": idPost, "tipo" : tipo, "nomeGruppo": gruppo, "nomeCanale" : canale}),
+		success: function(data){
+			alert("notifica segnalazione inviata");
+
+	    	}
+	});
+	
+	
 }
 
 
 function inviaNotificaCommento(idPost){
 	
-	  var tipo = "commento";
-	  var json = JSON.stringify({"idPost": idPost, "tipo" : tipo, "nomeGruppo": "", "nomeCanale" : ""});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","inviaNotifica", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("notifica commento inviata");
-	  		}else{
-	  			
-	      }
-	  }
-	  xhr.send(json);
+	var tipo = "commento";
+	$.ajax({
+		type: "POST",
+		url: "inviaNotifica",
+		datatype: "json",
+		data: JSON.stringify({"idPost": idPost, "tipo" : tipo, "nomeGruppo": "", "nomeCanale" : ""}),
+		success: function(data){
+			alert("notifica commento inviata");
+
+	    	}
+	});
+	
 	  
 }
 
@@ -124,37 +120,39 @@ function addCommento(idPost){
 function deleteCommento(idCommento){
 	
 	if (confirm("Sei sicuro di voler cancellare il post?") == true) {
+
 		  var idPost = $("#idPost").text();
 		  var elimina = "true";
-		  var json = JSON.stringify({"idCommento": idCommento, "elimina" : elimina});
-		  alert(json);
-		  var xhr = new XMLHttpRequest();
-		  xhr.open("post","eliminaCommenti", true);
-		  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-		  xhr.setRequestHeader("connection","close");
-		  xhr.setRequestHeader("Content-Type", "application/json");
-		  
-		  $("#commento_"+idCommento).remove();
-		  
-		  xhr.send(json);
+	$.ajax({
+		type: "POST",
+		url: "eliminaCommenti",
+		datatype: "json",
+		data: JSON.stringify({"idCommento": idCommento, "elimina" : elimina}),
+		success: function(data){
+			 $("#commento_"+idCommento).remove();
+
+	    	}
+		});
 	}
+	
 };
 
 function eliminaPosts(idPost){
 	
-	
 	if (confirm("Sei sicuro di voler cancellare il post?") == true) {
-	  var json = JSON.stringify({"idPost" : idPost});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","eliminaPost", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  	  
-	  $("#post_"+idPost).remove();
-	  
-	  xhr.send(json);
+		$.ajax({
+			type: "POST",
+			url: "eliminaPost",
+			datatype: "json",
+			data: JSON.stringify({"idPost" : idPost}),
+			success: function(data){
+				
+				$("#post_"+idPost).remove();
+		    	}
+			});
 	}
+	
+	
 }
 
 
@@ -178,7 +176,7 @@ function addLike(idPost, numLike, numDis){
 	});
 }
 
-function addDislike(idPost, numLike, numDis){
+function addDislike(idPost){
 	
 	var tipo = "addDislike";
 	$.ajax({
@@ -197,7 +195,7 @@ function addDislike(idPost, numLike, numDis){
 	});
 }
 
-function removeLike(idPost, numLike, numDis){
+function removeLike(idPost){
 	
 	var tipo = "removeLike";
 	$.ajax({

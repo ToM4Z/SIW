@@ -74,37 +74,38 @@ function seiSicuroGruppo(){
 
 function inviaNotificaEliminaGruppo(){
 	
-	  var gruppo = $("#nomeGruppo").text();
+	var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
-	  var tipo = "eliminazioneGruppo";
-	  var json = JSON.stringify({"nomeGruppo": gruppo,"nomeCanale" : canale, "tipo" : tipo, "idPost" : ""});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","inviaNotifica", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.send(json);
+	
+	$.ajax({
+		type: "POST",
+		url: "inviaNotifica",
+		datatype: "json",
+		data: JSON.stringify({"nomeGruppo": gruppo,"nomeCanale" : canale, "tipo" : tipo, "idPost" : ""}),
+		success: function(data){
+			
+
+	    	}
+	});
+	
 }
 
 function inviaNotificaRichiesta(){
 	
-	  var gruppo = $("#nomeGruppo").text();
+	var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
 	  var tipo = "richiestaIscrizione";
-	  var json = JSON.stringify({"nomeGruppo": gruppo,"nomeCanale" : canale, "tipo" : tipo, "idPost" : ""});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","inviaNotifica", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("richiesta inviata");
-	  		}else{
-	  			
-	      }
-	  }
-	  xhr.send(json);
+	
+	$.ajax({
+		type: "POST",
+		url: "inviaNotifica",
+		datatype: "json",
+		data: JSON.stringify({"nomeGruppo": gruppo,"nomeCanale" : canale, "tipo" : tipo, "idPost" : ""}),
+		success: function(data){
+			alert("richiesta inviata");
+
+	    	}
+	});
 	  
 }
 
