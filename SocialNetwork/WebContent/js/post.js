@@ -109,12 +109,18 @@ function addCommento(idPost){
 		success: function(data){
 			
 			var out = JSON.parse(data);
-			$("#listaCommenti").append("<li><div id=commento_"+out.idCommento+" style=\"display:none\">"
-						+"<h4>"+out.username+"</h4>"
-							+"<small onclick = \"javascript:deleteCommento("+out.idCommento+")\">Elimina commento</small>"
-						+"<h4>"+commento+"</h4>"
+			$("#listaCommenti").append(
+					"<li style=\"list-style-type: none;\">"
+						+"<hr class=\"post-hr\">"
+						+"<div id=commento_"+out.idCommento+" style=\"display:none\">"
+							+"<h4>"+out.username+"</h4>"
+							+"<a onclick=\"javascript:deleteCommento("+out.idCommento+")\"><span class=\"glyphicon glyphicon-trash\" style=\"float:right\"></span></a>"
+							+"<h4>"+commento+"</h4>"
+							+"<small id=\"date"+out.idCommento+"\" style=\"float:right\">"
+								+out.data
+							+"</small>"
 					+"</div>"
-				+"</li>");
+				+"</li>");	
 			$("#commento_"+out.idCommento).slideDown().show();
 			$("#commento"+idPost).val("");
 		}

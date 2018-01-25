@@ -80,7 +80,7 @@ function unload(){
 
 				<h2>Stai gestendo i membri del gruppo:</h2>
 				<h1 id="nomeGruppo">${nomegruppo}</h1>
-				<h1 id="nomeCanale" style="display:none">${nomecanale}</h1>
+				<h1 id="nomeCanaleMembri" style="display:none">${nomecanale}</h1>
 				<c:forEach var="riga" items="${righe}">
 	
 					${riga}

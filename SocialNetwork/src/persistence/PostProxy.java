@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class PostProxy extends Post{
 		List<Commento> commenti = new LinkedList<>();
 		try {
 			PreparedStatement statement;
-			statement = connection.prepareStatement("select * from commento where id_post = ?");
+			statement = connection.prepareStatement("select * from commento where id_post = ? ORDER BY id_commento DESC");
 			statement.setLong(1, this.getId());
 			ResultSet result = statement.executeQuery();
 
@@ -36,7 +37,7 @@ public class PostProxy extends Post{
 				commento.setCreatore(new UtenteDaoJDBC(dataSource).findByPrimaryKey(result.getString("email_utente")));;
 				commento.setContenuto(result.getString("contenuto"));
 				commento.setPost(new PostDaoJDBC(dataSource).findByPrimaryKey(result.getLong("id_post")));
-				commento.setDataCreazione(new java.util.Date(result.getDate("data_creazione").getTime()));
+				commento.setDataCreazione(new Date(result.getTimestamp("data_creazione").getTime()));
 
 				commenti.add(commento);
 			}

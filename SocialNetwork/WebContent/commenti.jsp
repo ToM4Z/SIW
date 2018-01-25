@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script src="js/dateConverter.js"></script>
 <script src="js/post.js"></script>
 <link rel="stylesheet" href="css/post.css">
 <script src="js/ResizeScreen.js"></script>
@@ -50,6 +51,9 @@ function shareOnTwitter(x){
 	  window.open(url+"?text="+x,"","width=500,height=300");
 }
 
+function convertDateComment(comment,date){
+	$("#date"+comment).text(convertDate(date,true));
+}
 
 function load(){
 	$("input.onload").each(function(){
@@ -126,14 +130,14 @@ function unload(){
 			       	 <div style="display:inline">	
 				      <form action = "javascript:addCommento(${post.id})" style="margin-bottom:0px;">
 				        <input id="commento${post.id}" type="text" class="form-control"
-											placeholder="Commenta"
+											placeholder="Commenta" autocomplete="off"
 											name = "commento${post.id}">
 				        <button type="submit" class="btn btn-default" style="position:relative;float:right;bottom:33.5px;height:34px"><span class="glyphicon glyphicon-send" style="font-size:1.2em;margin:-2px"></span></button>
 				      </form>
 				    </div>
-				    <ul id = "listaCommenti"  style="text-align:left;">
+				    <ul id = "listaCommenti"  style="text-align:left;margin-left:-42px;margin-bottom:30px;">
 						<c:forEach var="commento" items="${commenti}">
-							<li>
+							<li style="list-style-type: none;">
 								<hr class="post-hr">		
 								<div id=commento_${commento.id}>
 									<h4>${commento.creatore.username}</h4>
@@ -141,7 +145,9 @@ function unload(){
 										<a onclick="javascript:deleteCommento(${commento.id})"><span class="glyphicon glyphicon-trash" style="float:right"></span></a>
 				   					</c:if>
 									<h4>${commento.contenuto}</h4>
-									<small style="float:right">${commento.dataCreazione}</small>
+									<small id="date${commento.id}" style="float:right">
+										<script>convertDateComment('${commento.id}','${commento.dataCreazione}');</script>
+									</small>
 								</div>
 							</li>
 						</c:forEach>

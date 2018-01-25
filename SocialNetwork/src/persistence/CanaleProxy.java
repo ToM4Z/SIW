@@ -58,7 +58,7 @@ public class CanaleProxy extends Canale {
 		List<Gruppo> gruppi = new LinkedList<>();
 		Connection connection = dataSource.getConnection();
 		try {
-			PreparedStatement statement = connection.prepareStatement("select nome, data_creazione from gruppo where canale = ?");
+			PreparedStatement statement = connection.prepareStatement("select nome, data_creazione from gruppo where canale = ? ORDER BY nome");
 			statement.setString(1, getNome());
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {
