@@ -173,7 +173,7 @@ function unload(){
 											<li style="list-style-type: none;"><a href = gestioneAdmin?group=${gruppo.nome}&channel=${gruppo.canale.nome} class="dropdown-item">Gestisci admin</a></li>
 											<li style="list-style-type: none;"><a href = gestioneMembri?group=${gruppo.nome}&channel=${gruppo.canale.nome} class="dropdown-item">Gestisci membri</a></li>
 										</c:if>
-										<c:if test="${canaleAdmin == false}">
+										<c:if test="${canaleAdmin == false && gruppo.nome != 'home'}">
 											<li style="list-style-type: none;"><a href=gestisciGruppo?channel=${gruppo.canale.nome}&group=${gruppo.nome}&esito=cancellazione class="dropdown-item">Disiscriviti dal gruppo</a></li>
 										</c:if>
 										</ul>
