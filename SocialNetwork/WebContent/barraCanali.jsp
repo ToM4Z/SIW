@@ -13,6 +13,18 @@
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="css/tree.css">
 <link rel="stylesheet" href="css/loader.css">
+<style>
+img.avatarChannel{
+    float: left;
+    width: 100%;
+    max-width: 45px;
+    min-height: 45px;
+    max-height:45px;
+    margin-right: 0px;
+    margin-left: 0px;
+    border-radius: 50%;
+}
+</style>
 <script>
 function getCanali(){
 	var xmlhttp = new XMLHttpRequest();
@@ -27,9 +39,9 @@ function getCanali(){
 	        		$("div#loaderChannels.loader").remove();
 	        		if (cont === 0){
 	        			canale = stringhe;
-	        			$("#listaCanali").append("<ul class=\"treeview\" id=\""+canale+"\">" +
-	        	                "<li><a href=\"javascript:showChannel('"+canale+"')\">"+canale+"</a>"+
-	                        	"<ul>");
+	        			$("#listaCanali").append("<img src=\"images/channels/"+canale+".jpg\" class=\"avatarChannel\" alt=\"Avatar\" onclick='showImageModal(this.src);' onerror='this.src=\"images/channels/unknown.jpg\";'>"
+	        	                +"<ul class=\"treeview\" id=\""+canale+"\">"
+	        	               + "<li><a href=\"javascript:showChannel('"+canale+"')\">"+canale+"</a><ul>");
 	        		}else{
 	        			$("#listaCanali").find("ul#"+canale).find("ul").append("<li>" +
 	        									"<a class=\"nav-link\" href=\"gruppo?group="+stringhe+"&channel="+canale+"\">"
@@ -46,9 +58,10 @@ function getCanali(){
 }
 
 function addChannel(name){
-	$("#listaCanali").append("<ul class=\"treeview\" id=\""+name+"\">" +
-            "<li><a href=\"javascript:showChannel('"+name+"')\">"+name+"</a>"+
-        	"<ul><li><a class=\"nav-link\" href=\"gruppo?group=home&channel="+name+"\">"
+	$("#listaCanali").append("<img src=\"images/channels/"+name+".jpg\" class=\"avatarChannel\" alt=\"Avatar\" onclick='showImageModal(this.src);' onerror='this.src=\"images/channels/unknown.jpg\";'>"
+            +"<ul class=\"treeview\" id=\""+name+"\">"
+            +"<li><a href=\"javascript:showChannel('"+name+"')\">"+name+"</a>"
+        	+"<ul><li><a class=\"nav-link\" href=\"gruppo?group=home&channel="+name+"\">"
 			+"home</a></li></ul></ul>");
 }
 </script>
@@ -69,8 +82,9 @@ function addChannel(name){
 		
 		<div class="panel-heading" style="text-align: center"><h3>Canali</h3></div>
 		
-		<div class="panel-body" id="listaCanali" style="height: 83%; overflow-y: scroll;">
-			<h4><a href = "javascript:showCreateChannelModal()">Crea Canale</a>
+		<div class="panel-body" id="listaCanali" style="height: 83%; overflow-y: auto;">
+			<h4><a href = "javascript:showCreateChannelModal()" style="color:black;">
+				<span class="glyphicon glyphicon-plus-sign" style="font-size:1.5em;"></span>Crea Canale</a>
 			</h4>
 			
 			<div class="loader" id="loaderChannels"></div>

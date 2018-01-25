@@ -4,7 +4,7 @@ div.panel:first-child {
     margin-top:20px;
 }
 
-div.treeview {
+ul.treeview {
     min-width: 100px;
     min-height: 100px;
     
@@ -12,15 +12,16 @@ div.treeview {
     overflow:auto;
 	
 	padding: 4px;
+	padding-left:0px;
 	
 	margin-bottom: 20px;
 	
-	color: #369;
-	
-	border: solid 1px;
-	border-radius: 4px;
+	color: black;
+		
+	font-family: Tahoma, Geneva, Arial, sans-serif;
+	font-size: 1.1em;
 }
-div.treeview ul:first-child:before {
+ul.treeview ul:first-child:before {
     display: none;
 }
 .treeview, .treeview ul {
@@ -28,7 +29,7 @@ div.treeview ul:first-child:before {
     padding:0;
     list-style:none;
     
-	color: #369;
+	color: black;
 }
 .treeview ul {
     margin-left:1em;

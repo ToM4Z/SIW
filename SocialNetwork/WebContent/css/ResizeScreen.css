@@ -8,9 +8,6 @@
 		width: 100% !important;
 		bottom: 10px;
 	}
-	#switchPanel{
-		display:block !important;
-	}
 	.post{
 		left:10% !important;
 		width:70% !important;
@@ -21,14 +18,4 @@
 	#barraCanali, #chatGruppo, #homePost{
 		display:block !important;
 	}
-	#switchPanel{
-		display:none !important;
-	}
-}
-
-#switchPanel{
-	position:fixed;
-	top:60px;
-	left:10px;
-	display:none;
 }

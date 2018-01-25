@@ -18,8 +18,6 @@
 <script src="js/dateConverter.js"></script>
 <script src="js/post.js"></script>
 <link rel="stylesheet" href="css/post.css">
-<script src="js/ResizeScreen.js"></script>
-<link rel="stylesheet" href="css/ResizeScreen.css">
 
 <script>
 
@@ -139,10 +137,6 @@ function unload(){
 			</c:if>
 		</div>
 		<div class="col-bg-6 brd">
-			<div id="switchPanel">
-				<span class="glyphicon glyphicon-chevron-left" style="font-size:2em;" onclick="javascript:shiftLeft()"></span>
-				<span class="glyphicon glyphicon-chevron-right" style="font-size:2em;left:500%;" onclick="javascript:shiftRight()"></span>
-			</div>
 			<div id="homePost" style="margin-top:60px; text-align: center;">
 			
 			<div class="page-header">

@@ -12,6 +12,8 @@
 <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script src="js/ResizeScreen.js"></script>
+<link rel="stylesheet" href="css/ResizeScreen.css">
 
 <style>
 #search {
@@ -46,6 +48,17 @@
     bottom:-2px;
     left: -40px !important;
   }
+  #frecciaSinistra,#frecciaDestra{
+	  	display:block;
+	  }
+}
+@media screen and (min-width : 767px) {
+	#frecciaSinistra,#frecciaDestra{
+	  	display:none;
+	  }
+	  #LoosyNetBar{
+	  	height:54px;
+	  }
 }
 .notify{
 	margin-left:10px;
@@ -231,7 +244,8 @@ function eliminaNotifica(idNotifica){
 		<input type="submit" class="onload">
 	</form>
 	
-	<nav class="navbar navbar-default navbar-static-top navbar-fixed-top">
+	<nav id="LoosyNetBar" class="navbar navbar-default navbar-static-top navbar-fixed-top">
+				
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
@@ -242,7 +256,14 @@ function eliminaNotifica(idNotifica){
 					<span class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="home" style="margin-top:4px;margin-left:3%">LoosyNet</a>
+				<a class="navbar-brand" onclick="javascript:shiftLeft()">
+					<span id="frecciaSinistra" class="glyphicon glyphicon-chevron-left" style="position:absolute;left:30%;top:8px;font-size:2em;color:black"></span>
+				</a>
+				<a class="navbar-brand" onclick="javascript:shiftRight()">
+					<span id="frecciaDestra"class="glyphicon glyphicon-chevron-right" style="position:absolute;right:30%;top:8px;font-size:2em;color:black"></span>
+				</a>
 			</div>
+			
 
 			<div class="collapse navbar-collapse" id="myNavbar"	style="overflow-x: hidden">
 

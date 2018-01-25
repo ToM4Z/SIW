@@ -15,8 +15,6 @@
 <script src="js/dateConverter.js"></script>
 <script src="js/post.js"></script>
 <link rel="stylesheet" href="css/post.css">
-<script src="js/ResizeScreen.js"></script>
-<link rel="stylesheet" href="css/ResizeScreen.css">
 <script>
 window.fbAsyncInit = function() {
     FB.init({

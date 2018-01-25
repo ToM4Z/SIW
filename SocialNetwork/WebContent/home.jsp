@@ -13,8 +13,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<script src="js/ResizeScreen.js"></script>
-<link rel="stylesheet" href="css/ResizeScreen.css">
 <script src="js/post.js"></script>
 <link rel="stylesheet" href="css/post.css">
 <script>
@@ -81,12 +79,7 @@ function unload(){
 			<jsp:include page="chatGruppo.jsp" />
 		</div>
 		<div class="col-bg-6 brd">
-			<div id="homePost" style="margin-top:60px; text-align: center;">
-			
-			<div id="switchPanel">
-				<span class="glyphicon glyphicon-chevron-left" style="font-size:2em;" onclick="javascript:shiftLeft()"></span>
-				<span class="glyphicon glyphicon-chevron-right" style="font-size:2em;left:500%;" onclick="javascript:shiftRight()"></span>
-			</div>
+			<div id="homePost" style="margin-top:60px; text-align: center;">			
 				<c:forEach var = "post" items = "${posts}">
 				<div class="row">
 				  <div class="post" id="post_${post.id}">
