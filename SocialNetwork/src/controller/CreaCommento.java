@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-
 import model.Commento;
 import model.Post;
 import model.Utente;
@@ -26,6 +25,13 @@ public class CreaCommento extends HttpServlet {
 	private class JsonCommento{		
 		private String idPost;
 		private String commento;		
+	}
+	
+	private class InfoCommento{
+		
+		private String username;
+		private Long idCommento;
+		
 	}
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,7 +51,11 @@ public class CreaCommento extends HttpServlet {
 		
 		commentoDao.save(commento);
 		
-		resp.getWriter().write("true");
+		InfoCommento i = new InfoCommento();
+		i.username=utente.getUsername();
+		i.idCommento=commento.getId();
+		
+		resp.getWriter().write(new Gson().toJson(i));
 	}
 
 }

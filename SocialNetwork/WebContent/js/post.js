@@ -11,7 +11,7 @@
   }
 
 function getYTURL(url) {
-    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var regExp = /.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     var match = url.match(regExp);
 
     if (match && match[2].length == 11)
@@ -19,6 +19,7 @@ function getYTURL(url) {
     else
         return 'error';
 }
+
 
 function inviaNotificaSegnalazione(idPost){
 	
@@ -97,23 +98,29 @@ function convertDatePost(post,data){
 
 function addCommento(idPost){
 	
-	  alert($("#commento"+idPost).val());
+	//alert($("#commento"+idPost).val());
 	  var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
-	  var json = JSON.stringify({"gruppo": gruppo,"canale" : canale, "idPost":idPost, "commento": $("#commento"+idPost).val()});
-	  var xhr = new XMLHttpRequest();
-	  xhr.open("post","commento", true);
-	  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
-	  xhr.setRequestHeader("connection","close");
-	  xhr.setRequestHeader("Content-Type", "application/json");
-	  xhr.onreadystatechange = function(){
-		  if(xhr.responseText == "true"){
-		  	  alert("commento aggiunto")
-		  	  inviaNotificaCommento(idPost);
-	  		}else{
-	      }
-	  }
-	  xhr.send(json);
+	  var commento = $("#commento"+idPost).val();
+	$.ajax({
+		type: "POST",
+		url: "commento",
+		datatype: "json",
+		data: JSON.stringify({"gruppo": gruppo,"canale" : canale, "idPost":idPost, "commento": commento}),
+		success: function(data){
+			
+			var out = JSON.parse(data);
+			//alert(out.username);
+			$("#listaCommenti").append("<li><div id=commento_"+out.idCommento+">"
+						+"<h4>"+out.username+"</h4>"
+							+"<small onclick = \"javascript:deleteCommento("+out.idCommento+")\">Elimina commento</small>"
+						+"<h4>"+commento+"</h4>"
+					+"</div>"
+				+"</li>");
+		}
+	});
+	
+	 
 }
 
 function eliminaPosts(idPost){
