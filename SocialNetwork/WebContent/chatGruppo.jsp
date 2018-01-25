@@ -11,6 +11,7 @@
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="css/message.css">
+<link rel="stylesheet" href="css/loader.css">
 
 <script>
 function sendMessage(){
@@ -42,6 +43,7 @@ function loadMessaggi(){
 				var liste = json.messaggi;
 				numberMessageSession = json.numberMessageSession;
 				console.log("session "+numberMessageSession);
+				$("div#loaderChat.loader").remove();
 				appendMessages(liste);
 			}else if(data == "error"){
 				stopChat();
@@ -136,6 +138,7 @@ function onbeforeunloadChat(){
 					<ul id="listchat"
 						style="margin-left: auto; margin-right: auto;">
 					</ul>
+					<div class="loader" id="loaderChat"></div>
 				</div>
 			</c:if>
 			<c:if test="${gruppo.nome == null}">

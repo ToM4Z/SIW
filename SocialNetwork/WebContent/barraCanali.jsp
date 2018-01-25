@@ -12,6 +12,7 @@
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="css/tree.css">
+<link rel="stylesheet" href="css/loader.css">
 <script>
 function getCanali(){
 	var xmlhttp = new XMLHttpRequest();
@@ -23,6 +24,7 @@ function getCanali(){
 	        $.each(liste, function(i,lista){
 	        	cont = 0;
 	        	$.each(lista, function(i, stringhe){
+	        		$("div#loaderChannels.loader").remove();
 	        		if (cont === 0){
 	        			canale = stringhe;
 	        			$("#listaCanali").append("<ul class=\"treeview\" id=\""+canale+"\">" +
@@ -58,8 +60,10 @@ function addChannel(name){
 		<input type="submit" class="onload">
 	</form>
 	</div>
+	
 	<jsp:include page="createChannel.jsp" />
 	<jsp:include page="showChannel.jsp" />
+	
 	<div id="barraCanali" class="panel panel-default"
 		style="position:fixed; float: left; width: 25%; height: 100%; margin-top: 40px; margin-bottom: -20px;">
 		
@@ -68,6 +72,8 @@ function addChannel(name){
 		<div class="panel-body" id="listaCanali" style="height: 83%; overflow-y: scroll;">
 			<h4><a href = "javascript:showCreateChannelModal()">Crea Canale</a>
 			</h4>
+			
+			<div class="loader" id="loaderChannels"></div>
 		</div>
 	</div>
 
