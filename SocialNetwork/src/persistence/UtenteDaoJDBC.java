@@ -81,7 +81,7 @@ class UtenteDaoJDBC implements UtenteDao {
 		List<Utente> utenti = new LinkedList<>();
 		try {
 			PreparedStatement statement;
-			statement = connection.prepareStatement("select email,username from utente");
+			statement = connection.prepareStatement("select email,username from utente ORDER BY username");
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
@@ -230,7 +230,7 @@ class UtenteDaoJDBC implements UtenteDao {
 		List<Canale> canali = new LinkedList<>();
 		try {
 			PreparedStatement statement = connection.prepareStatement("select * from canale where nome in" 
-					+"(select canale from iscrizione where email_utente = ?)");
+					+"(select canale from iscrizione where email_utente = ?) ORDER BY nome");
 			statement.setString(1, utente.getEmail());
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {

@@ -26,9 +26,9 @@ public class CreaCommento extends HttpServlet {
 		private String idPost;
 		private String commento;		
 	}
-	
+
+	@SuppressWarnings("unused")
 	private class InfoCommento{
-		
 		private String username;
 		private Long idCommento;
 		
