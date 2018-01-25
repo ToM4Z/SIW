@@ -44,6 +44,7 @@ function inviaNotificaSegnalazione(idPost){
 
 function inviaNotificaCommento(idPost){
 	
+	//alert("invio notifica commento");
 	var tipo = "commento";
 	$.ajax({
 		type: "POST",
@@ -51,7 +52,7 @@ function inviaNotificaCommento(idPost){
 		datatype: "json",
 		data: JSON.stringify({"idPost": idPost, "tipo" : tipo, "nomeGruppo": "", "nomeCanale" : ""}),
 		success: function(data){
-			alert("notifica commento inviata");
+			//alert("notifica commento inviata");
 
 	    	}
 	});
@@ -94,6 +95,7 @@ function convertDatePost(post,data){
 
 function addCommento(idPost){
 	
+	//alert("ok");
 	  var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
 	  var commento = $("#commento"+idPost).val();
@@ -103,6 +105,8 @@ function addCommento(idPost){
 		datatype: "json",
 		data: JSON.stringify({"gruppo": gruppo,"canale" : canale, "idPost":idPost, "commento": commento}),
 		success: function(data){
+			
+			inviaNotificaCommento(idPost);
 			
 			var out = JSON.parse(data);
 			$("#listaCommenti").prepend(
