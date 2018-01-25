@@ -109,18 +109,18 @@ function addCommento(idPost){
 		success: function(data){
 			
 			var out = JSON.parse(data);
-			$("#listaCommenti").append(
+			$("#listaCommenti").prepend(
 					"<li style=\"list-style-type: none;\">"
-						+"<hr class=\"post-hr\">"
 						+"<div id=commento_"+out.idCommento+" style=\"display:none\">"
+							+"<hr class=\"post-hr\">"
 							+"<h4>"+out.username+"</h4>"
 							+"<a onclick=\"javascript:deleteCommento("+out.idCommento+")\"><span class=\"glyphicon glyphicon-trash\" style=\"float:right\"></span></a>"
 							+"<h4>"+commento+"</h4>"
 							+"<small id=\"date"+out.idCommento+"\" style=\"float:right\">"
 								+out.data
 							+"</small>"
-					+"</div>"
-				+"</li>");	
+						+"</div>"
+					+"</li>");	
 			$("#commento_"+out.idCommento).slideDown().show();
 			$("#commento"+idPost).val("");
 		}
@@ -129,7 +129,7 @@ function addCommento(idPost){
 
 function deleteCommento(idCommento){
 	
-	if (confirm("Sei sicuro di voler cancellare il post?") == true) {
+	if (confirm("Sei sicuro di voler cancellare il commento?") == true) {
 		  var idPost = $("#idPost").text();
 		  var elimina = "true";
 		  var json = JSON.stringify({"idCommento": idCommento, "elimina" : elimina});

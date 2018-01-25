@@ -15,8 +15,8 @@
 
 function aggiungiMembro(x){
 	
-	var canale = $("#nomeCanale").text();
-	var gruppo = $("#nomeGruppo").text();
+	var canale = $("#NomeCanale").text();
+	var gruppo = $("#NomeGruppo").text();
 	var azione = "aggiungi";
 	
 	$.ajax({
@@ -33,11 +33,12 @@ function aggiungiMembro(x){
 }
 
 function rimuoviMembro(x){
-	  
+	 
 	  //alert(x);
-	  var canale = $("#nomeCanale").text();
-	  var gruppo = $("#nomeGruppo").text();
+	  var canale = $("#NomeCanale").text();
+	  var gruppo = $("#NomeGruppo").text();
 	  var azione = "rimuovi";
+	  //alert(gruppo);
 	  $.ajax({
 			type: "POST",
 			url: "gestioneMembri",
@@ -79,8 +80,8 @@ function unload(){
 			<div id="homePost" style="margin-top: 60px; text-align: center;">
 
 				<h2>Stai gestendo i membri del gruppo:</h2>
-				<h1 id="nomeGruppo">${nomegruppo}</h1>
-				<h1 id="nomeCanaleMembri" style="display:none">${nomecanale}</h1>
+				<h1 id="NomeGruppo">${nomegruppo}</h1>
+				<h1 id="NomeCanale" style="display:none">${nomecanale}</h1>
 				<c:forEach var="riga" items="${righe}">
 	
 					${riga}

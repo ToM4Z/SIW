@@ -81,6 +81,7 @@ function unload(){
 			<jsp:include page="chatGruppo.jsp" />
 		</div>
 		<div class="col-bg-6 brd">
+
 			<br><br>
 			<div id = post_${post.id}> 
 				  <div class="row">
@@ -138,8 +139,8 @@ function unload(){
 				    <ul id = "listaCommenti"  style="text-align:left;margin-left:-42px;margin-bottom:30px;">
 						<c:forEach var="commento" items="${commenti}">
 							<li style="list-style-type: none;">
-								<hr class="post-hr">		
 								<div id=commento_${commento.id}>
+								<hr class="post-hr">		
 									<h4>${commento.creatore.username}</h4>
 									<c:if test = "${commento.creatore.email == user.email || post.creatore.email == user.email || admin == true}">
 										<a onclick="javascript:deleteCommento(${commento.id})"><span class="glyphicon glyphicon-trash" style="float:right"></span></a>
@@ -157,6 +158,7 @@ function unload(){
 				</div>
 				</div>
 			</div>	
+
 		</div>
 	</div>
 </body>
