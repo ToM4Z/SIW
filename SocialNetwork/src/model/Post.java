@@ -2,6 +2,8 @@ package model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class Post {
@@ -9,7 +11,7 @@ public class Post {
 	private Utente creatore;
 	private String contenuto;
 	private Long id;
-	private Set<Commento> commenti;
+	private List<Commento> commenti;
 	private Gruppo gruppo;
 	private Canale canale;
 	private Date dataCreazione;	
@@ -18,7 +20,7 @@ public class Post {
 	private int numLikes,numDislikes;
 
 	public Post(){
-		commenti = new HashSet<>();
+		commenti = new LinkedList<>();
 		like = new HashSet<>();
 		dislike = new HashSet<>();
 		numLikes=0;
@@ -31,7 +33,7 @@ public class Post {
 		canale = c;
 		gruppo = g;
 		dataCreazione = data;
-		commenti = new HashSet<>();
+		commenti = new LinkedList<>();
 		like = new HashSet<>();
 		dislike = new HashSet<>();
 		numLikes=0;
@@ -62,11 +64,11 @@ public class Post {
 		this.id = id;
 	}
 
-	public Set<Commento> getCommenti() {
+	public List<Commento> getCommenti() {
 		return commenti;
 	}
 
-	public void setCommenti(Set<Commento> commenti) {
+	public void setCommenti(List<Commento> commenti) {
 		this.commenti = commenti;
 	}
 	

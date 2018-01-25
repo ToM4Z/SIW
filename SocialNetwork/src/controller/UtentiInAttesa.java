@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -30,7 +31,7 @@ public class UtentiInAttesa extends HttpServlet {
 		
 		Gruppo gruppo = gruppoDao.findByPrimaryKey(nomeGruppo, canale);
 		
-		Set<Utente> inAttesa = gruppo.getUtentiInAttesa();
+		List<Utente> inAttesa = gruppo.getUtentiInAttesa();
 		
 		//System.out.println("in servlet utentiInAttesa "+inAttesa.size() +"del gruppo "+gruppo.getNome());
 		

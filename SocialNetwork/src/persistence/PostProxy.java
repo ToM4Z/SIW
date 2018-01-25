@@ -5,7 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
-
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import model.Commento;
@@ -19,10 +20,10 @@ public class PostProxy extends Post{
 		dataSource = ds;
 	}
 	
-	public Set<Commento> getCommenti() { 
+	public List<Commento> getCommenti() { 
 		
 		Connection connection = this.dataSource.getConnection();
-		Set<Commento> commenti = new HashSet<>();
+		List<Commento> commenti = new LinkedList<>();
 		try {
 			PreparedStatement statement;
 			statement = connection.prepareStatement("select * from commento where id_post = ?");

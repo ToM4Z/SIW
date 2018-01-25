@@ -22,8 +22,8 @@ public class GruppoProxy extends Gruppo {
 		dataSource = ds;
 	}
 	
-	public Set<Utente> getMembri() { 
-		Set<Utente> utenti = new HashSet<>();
+	public List<Utente> getMembri() { 
+		List<Utente> utenti = new LinkedList<>();
 		Connection connection = this.dataSource.getConnection();
 		
 		try {
@@ -56,9 +56,9 @@ public class GruppoProxy extends Gruppo {
 		return super.getMembri(); 
 	}
 	
-	public Set<Utente> getAdmins(){
+	public List<Utente> getAdmins(){
 		
-		Set<Utente> admins = new HashSet<>();
+		List<Utente> admins = new LinkedList<>();
 		Connection connection = this.dataSource.getConnection();
 		
 		try {
@@ -165,8 +165,8 @@ public class GruppoProxy extends Gruppo {
 		return super.getChat();
 	}
 	
-	public Set<Utente> getUtentiInAttesa() { 
-		Set<Utente> utenti = new HashSet<>();
+	public List<Utente> getUtentiInAttesa() { 
+		List<Utente> utenti = new LinkedList<>();
 		Connection connection = this.dataSource.getConnection();
 		
 		try {
