@@ -98,7 +98,6 @@ function convertDatePost(post,data){
 
 function addCommento(idPost){
 	
-	//alert($("#commento"+idPost).val());
 	  var gruppo = $("#nomeGruppo").text();
 	  var canale = $("#nomeCanale").text();
 	  var commento = $("#commento"+idPost).val();
@@ -110,18 +109,36 @@ function addCommento(idPost){
 		success: function(data){
 			
 			var out = JSON.parse(data);
-			//alert(out.username);
-			$("#listaCommenti").append("<li><div id=commento_"+out.idCommento+">"
+			$("#listaCommenti").append("<li><div id=commento_"+out.idCommento+" style=\"display:none\">"
 						+"<h4>"+out.username+"</h4>"
 							+"<small onclick = \"javascript:deleteCommento("+out.idCommento+")\">Elimina commento</small>"
 						+"<h4>"+commento+"</h4>"
 					+"</div>"
 				+"</li>");
+			$("#commento_"+out.idCommento).slideDown().show();
+			$("#commento"+idPost).val("");
 		}
-	});
-	
-	 
+	});	 
 }
+
+function deleteCommento(idCommento){
+	
+	if (confirm("Sei sicuro di voler cancellare il post?") == true) {
+		  var idPost = $("#idPost").text();
+		  var elimina = "true";
+		  var json = JSON.stringify({"idCommento": idCommento, "elimina" : elimina});
+		  alert(json);
+		  var xhr = new XMLHttpRequest();
+		  xhr.open("post","eliminaCommenti", true);
+		  xhr.setRequestHeader("content-type", "x-www-form-urlencoded");
+		  xhr.setRequestHeader("connection","close");
+		  xhr.setRequestHeader("Content-Type", "application/json");
+		  
+		  $("#commento_"+idCommento).remove();
+		  
+		  xhr.send(json);
+	}
+};
 
 function eliminaPosts(idPost){
 	
