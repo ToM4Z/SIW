@@ -2,6 +2,8 @@ package model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class Canale {
@@ -11,13 +13,13 @@ public class Canale {
 	private Date data_creazione;
 	private Utente admin;
 	private Set<Utente> membri;
-	private Set<Gruppo> gruppi;
-	private Set<Utente> blacklist;
+	private List<Gruppo> gruppi;
+	private List<Utente> blacklist;
 
 	public Canale() {
 		membri = new HashSet<>();
-		gruppi = new HashSet<>();
-		blacklist = new HashSet<>();
+		gruppi = new LinkedList<>();
+		blacklist = new LinkedList<>();
 	}
 	
 	public Canale(String n, String d, Date dc, Utente ad) {
@@ -26,15 +28,15 @@ public class Canale {
 		data_creazione=dc;
 		admin=ad;
 		membri = new HashSet<>();
-		gruppi = new HashSet<>();
-		blacklist = new HashSet<>();
+		gruppi = new LinkedList<>();
+		blacklist = new LinkedList<>();
 	}
 	
-	public Set<Utente> getBlacklist() {
+	public List<Utente> getBlacklist() {
 		return blacklist;
 	}
 
-	public void setBlacklist(Set<Utente> blacklist) {
+	public void setBlacklist(List<Utente> blacklist) {
 		this.blacklist = blacklist;
 	}
 
@@ -46,11 +48,11 @@ public class Canale {
 		this.data_creazione = data_creazione;
 	}
 
-	public Set<Gruppo> getGruppi() {
+	public List<Gruppo> getGruppi() {
 		return gruppi;
 	}
 
-	public void setGruppi(Set<Gruppo> gruppi) {
+	public void setGruppi(List<Gruppo> gruppi) {
 		this.gruppi = gruppi;
 	}
 

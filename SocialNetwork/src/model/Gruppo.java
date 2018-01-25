@@ -9,18 +9,18 @@ import java.util.Set;
 public class Gruppo {
 
 	private String nome;
-	private Set<Utente> admins;
-	private Set<Utente> membri;
-	private Set<Utente> utentiInAttesa;
+	private List<Utente> admins;
+	private List<Utente> membri;
+	private List<Utente> utentiInAttesa;
 	private List<Post> post;
 	private Date data_creazione;
 	private Canale canale;
 	private List<Messaggio> chat;
 	
 	public Gruppo() {
-		admins = new HashSet<>();
-		membri = new HashSet<>();
-		utentiInAttesa=new HashSet<>();
+		admins = new LinkedList<>();
+		membri = new LinkedList<>();
+		utentiInAttesa=new LinkedList<>();
 		post = new LinkedList<>();
 		chat = new LinkedList<>();
 	}
@@ -29,9 +29,9 @@ public class Gruppo {
 		this.nome=nome;
 		data_creazione=dc;
 		this.canale=canale;
-		admins = new HashSet<>();
-		membri = new HashSet<>();
-		utentiInAttesa=new HashSet<>();
+		admins = new LinkedList<>();
+		membri = new LinkedList<>();
+		utentiInAttesa=new LinkedList<>();
 		post = new LinkedList<>();
 		chat = new LinkedList<>();
 	}
@@ -68,11 +68,11 @@ public class Gruppo {
 		this.data_creazione = data_creazione;
 	}
 
-	public Set<Utente> getMembri() {
+	public List<Utente> getMembri() {
 		return membri;
 	}
 
-	public void setMembri(Set<Utente> membri) {
+	public void setMembri(List<Utente> membri) {
 		this.membri = membri;
 	}
 
@@ -84,11 +84,11 @@ public class Gruppo {
 		this.nome = nome;
 	}
 
-	public Set<Utente> getAdmins() {
+	public List<Utente> getAdmins() {
 		return admins;
 	}
 
-	public void setAdmins(Set<Utente> admin) {
+	public void setAdmins(List<Utente> admin) {
 		this.admins = admin;
 	}
 
@@ -108,11 +108,11 @@ public class Gruppo {
 		this.chat = chat;
 	}
 
-	public Set<Utente> getUtentiInAttesa() {
+	public List<Utente> getUtentiInAttesa() {
 		return utentiInAttesa;
 	}
 
-	public void setUtentiInAttesa(Set<Utente> inAttesa) {
+	public void setUtentiInAttesa(List<Utente> inAttesa) {
 		this.utentiInAttesa = inAttesa;
 	}
 	

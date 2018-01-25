@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import model.Canale;
 import model.Gruppo;
@@ -52,8 +54,8 @@ public class CanaleProxy extends Canale {
 	}
 	
 	
-	public Set<Gruppo> getGruppi() { 
-		Set<Gruppo> gruppi = new HashSet<>();
+	public List<Gruppo> getGruppi() { 
+		List<Gruppo> gruppi = new LinkedList<>();
 		Connection connection = dataSource.getConnection();
 		try {
 			PreparedStatement statement = connection.prepareStatement("select nome, data_creazione from gruppo where canale = ?");
@@ -80,8 +82,8 @@ public class CanaleProxy extends Canale {
 	}
 	
 	@Override
-	public Set<Utente> getBlacklist() {
-		Set<Utente> utenti = new HashSet<>();
+	public List<Utente> getBlacklist() {
+		List<Utente> utenti = new LinkedList<>();
 		Connection connection = dataSource.getConnection();
 		try {
 			String query = "select * from utente where email IN "

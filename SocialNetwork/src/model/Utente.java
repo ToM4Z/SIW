@@ -2,6 +2,8 @@ package model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class Utente {
@@ -12,12 +14,12 @@ public class Utente {
 	private String username;
 	private Date dataDiNascita;
 	private Date dataIscrizione;
-	private Set<Notifica> notifiche; 
+	private List<Notifica> notifiche; 
 	
 	
 	public Utente(){
 		
-		notifiche = new HashSet<>();
+		notifiche = new LinkedList<>();
 	}
 	
 	public Utente(String e, String n, String c,String un,Date di, Date ddn){
@@ -28,7 +30,7 @@ public class Utente {
 		username = un;
 		dataDiNascita = ddn;
 		dataIscrizione = di;
-		notifiche = new HashSet<>();
+		notifiche = new LinkedList<>();
 	}
 	
 	public String getEmail() {
@@ -79,11 +81,11 @@ public class Utente {
 		this.dataIscrizione = dataIscrizione;
 	}
 
-	public Set<Notifica> getNotifiche() {
+	public List<Notifica> getNotifiche() {
 		return notifiche;
 	}
 
-	public void setNotifiche(Set<Notifica> notifiche) {
+	public void setNotifiche(List<Notifica> notifiche) {
 		this.notifiche = notifiche;
 	}
 	
