@@ -6,9 +6,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.Canale;
 import model.Gruppo;
 import model.Utente;
 import persistence.DatabaseManager;
+import persistence.dao.CanaleDao;
 import persistence.dao.GruppoDao;
 
 public class GruppoServlet extends HttpServlet {
@@ -23,13 +25,21 @@ public class GruppoServlet extends HttpServlet {
 		String nomeGruppo = req.getParameter("group");
 		String nomeCanale = req.getParameter("channel");
 		GruppoDao dao =DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
+		CanaleDao canaleDao =DatabaseManager.getInstance().getDaoFactory().getCanaleDAO();
 		
+		Canale canale = canaleDao.findByPrimaryKey(nomeCanale);
 		Gruppo gruppo = dao.findByPrimaryKey(nomeGruppo, nomeCanale);
 		req.setAttribute("gruppo", gruppo);
 		
 		boolean admin = false;
 		boolean iscritto = false;
 		Utente utente = (Utente) req.getSession().getAttribute("user");
+		boolean blacklist = false;
+		for (Utente u : canale.getBlacklist()) {
+			
+			if (u.getEmail().equals(utente.getEmail()))
+				blacklist = true;
+		}
 		
 		for(Utente u : gruppo.getAdmins())			
 			if (u.getEmail().equals(utente.getEmail()))
@@ -48,7 +58,7 @@ public class GruppoServlet extends HttpServlet {
 			canaleAdmin = true;
 		
 		req.setAttribute("canaleAdmin", canaleAdmin);
-		
+		req.setAttribute("blacklist", blacklist);
 		
 		req.getRequestDispatcher("gruppo.jsp").forward(req, resp);
 	}

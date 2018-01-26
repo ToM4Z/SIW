@@ -124,6 +124,10 @@ function unload(){
 	<c:if test="${empty user.username}">
 		<c:redirect url="login.html" />
 	</c:if>
+	<c:if test = "${blacklist == true }">
+		<c:redirect url = "home"/>
+	</c:if>
+	
 	<jsp:include page="imageModal.jsp" />
 	<jsp:include page="createPost.jsp" />
 	<jsp:include page="LoosyNetBar.jsp" />
