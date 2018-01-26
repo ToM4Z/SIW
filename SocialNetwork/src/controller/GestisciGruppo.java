@@ -39,7 +39,7 @@ public class GestisciGruppo extends HttpServlet {
 			gruppoDao.removeUserFromGroup(gruppo, utente);
 			
 			
-			resp.sendRedirect("canale?channel="+nomeCanale);
+			resp.sendRedirect("home");
 			
 		}
 		else {
@@ -56,12 +56,10 @@ public class GestisciGruppo extends HttpServlet {
 				gruppoDao.removeUserFromAttesa(gruppo, utente);
 				gruppoDao.addUserToGroup(gruppo, utente);
 			}
-			else if (esito.equals("n")) {
-				
+			else if (esito.equals("n"))				
 				gruppoDao.removeUserFromAttesa(gruppo, utente);
-			}
 			
-			resp.sendRedirect("utentiInAttesa?group="+nomeGruppo+"&channel="+nomeCanale);
+			resp.getWriter().write("success");
 		}
 	}
 

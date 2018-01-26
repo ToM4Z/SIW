@@ -27,16 +27,17 @@ img.avatarChannel{
 </style>
 <script>
 function getCanali(){
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function() {
-	    if (this.readyState == 4 && this.status == 200) {
-	        var liste = JSON.parse(this.responseText);
+	$.ajax({
+		type:"GET",
+		url:"barraCanali",
+		success: function(data) {
+    		$("div#loaderChannels.loader").remove();
+	        var liste = JSON.parse(data);
 	        var cont = 0;
 	        var canale;
 	        $.each(liste, function(i,lista){
 	        	cont = 0;
 	        	$.each(lista, function(i, stringhe){
-	        		$("div#loaderChannels.loader").remove();
 	        		if (cont === 0){
 	        			canale = stringhe;
 	        			$("#listaCanali").append("<img src=\"images/channels/"+canale+".jpg\" class=\"avatarChannel\" alt=\"Avatar\" onclick='showImageModal(this.src);' onerror='this.src=\"images/channels/unknown.jpg\";'>"
@@ -52,9 +53,7 @@ function getCanali(){
 	        	$("#listaCanali").append("</ul></li></ul>");
 	        });
 	    }
-	};
-	xmlhttp.open("GET", "barraCanali", true);
-	xmlhttp.send();	
+	});
 }
 
 function addChannel(name){

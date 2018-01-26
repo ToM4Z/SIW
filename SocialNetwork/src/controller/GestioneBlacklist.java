@@ -50,16 +50,16 @@ public class GestioneBlacklist extends HttpServlet {
 				}
 			
 			if (blacklist) {
-				out.add("<div id=\"bl"+u.getUsername()+"\"><h4>"+u.getNome()+" "+u.getCognome()+"<a onclick = javascript:rimuoviBlacklist('"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4></div>");
+				out.add("<div id=\"bl"+u.getUsername()+"\"><h4>"+u.getNome()+" "+u.getCognome()+"<a href = javascript:rimuoviBlacklist('"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4></div>");
 				//System.out.println("admin"+u.getUsername());
 			}
 			else {
-				out.add("<div id=\"bl"+u.getUsername()+"\"><h4>"+u.getNome()+" "+u.getCognome()+"<a onclick = javascript:aggiungiBlacklist('"+u.getEmail()+"')>Aggiungi alla Blacklist</a></h4></div>");
+				out.add("<div id=\"bl"+u.getUsername()+"\"><h4>"+u.getNome()+" "+u.getCognome()+"<a href = javascript:aggiungiBlacklist('"+u.getEmail()+"')>Aggiungi alla Blacklist</a></h4></div>");
 				//System.out.println("non admin"+u.getUsername());
 			}
 		}
 		for (Utente u : canale.getBlacklist()) {
-			out.add("<div id=\"bl"+u.getUsername()+"\"><h4>"+u.getNome()+" "+u.getCognome()+"<a onclick = javascript:rimuoviBlacklist('"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4></div>");
+			out.add("<div id=\"bl"+u.getUsername()+"\"><h4>"+u.getNome()+" "+u.getCognome()+"<a href = javascript:rimuoviBlacklist('"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4></div>");
 		}
 		System.out.println(out.toString());
 		req.setAttribute("righe", out);

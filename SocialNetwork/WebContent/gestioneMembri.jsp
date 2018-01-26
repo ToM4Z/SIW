@@ -25,10 +25,9 @@ function aggiungiMembro(x){
 		datatype: "json",
 		data: JSON.stringify({"nomeCanale" : canale, "nomeGruppo" : gruppo, "user" : x, "azione": azione}),
 		success: function(data){
-			var data = JSON.parse(data);
-			//alert("#mem"+data);
-			$("#mem"+data).replaceWith("<div id = \"mem"+data+"\"><h4 onclick = javascript:rimuoviMembro('"+x+"')>"+data+" Rimuovi membro</h4></div>");
-	    	}
+			var user = JSON.parse(data);
+		    $("#mem"+user+" a").replaceWith("<a href = javascript:rimuoviMembro('"+x+"')> Rimuovi membro</a>");
+	    }
 	});
 }
 
@@ -45,10 +44,9 @@ function rimuoviMembro(x){
 			datatype: "json",
 			data: JSON.stringify({"nomeCanale" : canale, "nomeGruppo" : gruppo, "user" : x, "azione": azione}),
 			success: function(data){
-				var data = JSON.parse(data);
-		        //alert("#mem"+data);
-		        $("#mem"+data).replaceWith("<div id=\"mem"+data+"\"><h4 onclick = javascript:aggiungiMembro('"+x+"')>"+data+" Aggiungi membro</h4></div>");
-		    	}
+				var user = JSON.parse(data);
+		        $("#mem"+user+" a").replaceWith("<a href = javascript:aggiungiMembro('"+x+"')> Aggiungi membro</a>");
+	    	}
 		});
 }
 
@@ -79,7 +77,7 @@ function unload(){
 		<div class="col-bg-6 brd">
 			<div id="homePost" style="margin-top: 60px; text-align: center;">
 
-				<h2>Stai gestendo i membri del gruppo:</h2>
+				<h2>Gestione membri del gruppo:</h2>
 				<h1 id="NomeGruppo">${nomegruppo}</h1>
 				<h1 id="NomeCanale" style="display:none">${nomecanale}</h1>
 				<c:forEach var="riga" items="${righe}">

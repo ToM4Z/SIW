@@ -58,11 +58,11 @@ public class GestioneMembri extends HttpServlet {
 					in = true;
 			}
 			if (in) {
-				out.add("<div id=\"mem"+u.getUsername()+"\"><h4 onclick = javascript:rimuoviMembro('"+u.getEmail()+"')>"+u.getUsername()+" Rimuovi membro</h4></div>");
+				out.add("<div id=\"mem"+u.getNome()+u.getCognome()+"\"><h4>"+u.getNome()+" "+u.getCognome()+" ("+u.getUsername()+") <a href = javascript:rimuoviMembro('"+u.getEmail()+"')> Rimuovi membro</a></h4></div>");
 				//System.out.println("admin"+u.getUsername());
 			}
 			else {
-				out.add("<div id= \"mem"+u.getUsername()+"\"><h4 onclick = javascript:aggiungiMembro('"+u.getEmail()+"')>"+u.getUsername()+" Aggiungi membro</h4></div>");
+				out.add("<div id= \"mem"+u.getNome()+u.getCognome()+"\"><h4>"+u.getNome()+" "+u.getCognome()+" ("+u.getUsername()+") <a href = javascript:aggiungiMembro('"+u.getEmail()+"')> Aggiungi membro</a></h4></div>");
 				//System.out.println("non admin"+u.getUsername());
 			}
 		}
@@ -100,7 +100,7 @@ public class GestioneMembri extends HttpServlet {
         	System.out.println("nomeGruppo: "+m.nomeGruppo+" nomeCanale:"+m.nomeCanale);
         	gruppoDao.addUserToGroup(gruppo, utente);
         	System.out.println("aggiunto ai membri");
-        	resp.getWriter().write(new Gson().toJson(utente.getUsername()));
+        	resp.getWriter().write(new Gson().toJson(utente.getNome()+utente.getCognome()));
         }
         
         else if (m.azione.equals("rimuovi")) {
@@ -111,7 +111,7 @@ public class GestioneMembri extends HttpServlet {
         	Gruppo gruppo = gruppoDao.findByPrimaryKey(m.nomeGruppo, m.nomeCanale);
         	System.out.println("nomeGruppo: "+m.nomeGruppo+" nomeCanale:"+m.nomeCanale);
         	gruppoDao.removeUserFromGroup(gruppo, utente);
-        	resp.getWriter().write(new Gson().toJson(utente.getUsername()));
+        	resp.getWriter().write(new Gson().toJson(utente.getNome()+utente.getCognome()));
         }
         
 	}

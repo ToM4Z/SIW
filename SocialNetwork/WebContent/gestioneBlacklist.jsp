@@ -24,9 +24,9 @@ function aggiungiBlacklist(x){
 		datatype: "json",
 		data: JSON.stringify({"nomeCanale" : canale, "user" : x, "azione": azione}),
 		success: function(data){
-			var data = JSON.parse(data);
+			var usern = JSON.parse(data);
 			//alert("#mem"+data);
-			$("#bl"+data).replaceWith("<div id = \"bl"+data+"\"><h4 onclick = javascript:rimuoviBlacklist('"+x+"')>"+data+" Rimuovi dalla Blacklist</h4></div>");
+			$("#bl"+usern+" h4 a").replaceWith("<a href = javascript:rimuoviBlacklist('"+x+"')>Rimuovi dalla Blacklist</a>");
 	    	}
 	});
 

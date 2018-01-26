@@ -79,7 +79,7 @@ function inviaNotificaEliminaGruppo(){
 		type: "POST",
 		url: "inviaNotifica",
 		datatype: "json",
-		data: JSON.stringify({"nomeGruppo": gruppo,"nomeCanale" : canale, "tipo" : tipo, "idPost" : ""}),
+		data: JSON.stringify({"nomeGruppo": gruppo,"nomeCanale" : canale, "tipo" : "eliminazioneGruppo", "idPost" : ""}),
 		success: function(data){
 			
 
@@ -153,19 +153,21 @@ function unload(){
 				    	<div class="post-header-right">
 				    		<c:choose>
 				    			<c:when test="${iscritto == true}">
-									<a onclick="showCreatePost()" style="position:relative;right:70px;top:-2px;">Crea post</a>
+									<a href="javascript:showCreatePost()" style="position:relative;right:70px;top:-2px;">Crea post</a>
 							    	<div class="dropdown" style="position:relative; top:-31px; right:-10px;">
 									  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
 									  		data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-									    <i class="glyphicon glyphicon-cog" style="font-size:20px"></i>
+									    <span class="glyphicon glyphicon-cog" style="font-size:20px"></span>
 									  </button>
 									  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 									  	<ul style="margin-left:-30px;">
 						    			<c:if test = "${admin == true }">
-										    <li style="list-style-type: none;"><a onclick="seiSicuroGruppo()" class="dropdown-item">Elimina gruppo</a></li>
+						    				<c:if test='${gruppo.nome != "home" }'>
+										    <li style="list-style-type: none;"><a href = "javascript:seiSicuroGruppo()" class="dropdown-item">Elimina gruppo</a></li>
 											<li style="list-style-type: none;"><a href = utentiInAttesa?group=${gruppo.nome}&channel=${gruppo.canale.nome} class="dropdown-item" style="width:100%">Gestisci iscrizioni</a></li>
-											<li style="list-style-type: none;"><a href = gestioneAdmin?group=${gruppo.nome}&channel=${gruppo.canale.nome} class="dropdown-item">Gestisci admin</a></li>
 											<li style="list-style-type: none;"><a href = gestioneMembri?group=${gruppo.nome}&channel=${gruppo.canale.nome} class="dropdown-item">Gestisci membri</a></li>
+											</c:if>
+											<li style="list-style-type: none;"><a href = gestioneAdmin?group=${gruppo.nome}&channel=${gruppo.canale.nome} class="dropdown-item">Gestisci admin</a></li>
 										</c:if>
 										<c:if test="${canaleAdmin == false && gruppo.nome != 'home'}">
 											<li style="list-style-type: none;"><a href=gestisciGruppo?channel=${gruppo.canale.nome}&group=${gruppo.nome}&esito=cancellazione class="dropdown-item">Disiscriviti dal gruppo</a></li>
@@ -175,7 +177,7 @@ function unload(){
 									</div>
 								</c:when>
 								<c:when test="${iscritto == false }">
-									<a onclick = "javascript:inviaNotificaRichiesta()">Iscriviti</a>
+									<a href = "javascript:inviaNotificaRichiesta()">Iscriviti</a>
 								</c:when>
 							</c:choose>
 						</div>

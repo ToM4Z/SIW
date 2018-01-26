@@ -45,7 +45,7 @@ function showChannel(channel){
 									: "" ) 
 							+"</td><td>"+ (json.iscritto ? "<button id=\"showCreateGroupButton\" onclick=\"showCreateGroup()\">Crea Gruppo</button>"
 									+"<form id=\"createGroupForm\" action=\"javascript:createGroup('"+json.canale.nome+"')\" style=\"display:none\">"
-									+"<input type=\"text\" id=\"nomeNewGruppo\" placeHolder=\"Nome\" autoComplete=\"off\">"
+									+"<input type=\"text\" id=\"nomeNewGruppo\" placeHolder=\"Nome\" autoComplete=\"off\" style=\"max-width:170px\">"
 									+"<input type=\"submit\" value=\"Crea\"></form>"
 							 		: "")+"</td></tr>"
 					+"<tr><td>"+ (json.canale.admin.username == "${sessionScope.user.username}" ? "<form action=\"gestioneBlacklist\" method=\"get\">"
@@ -68,7 +68,7 @@ function createGroup(channel){
 			if(data == "AlreadyExists"){
 				$("#MessageErrorCreateGroupModal").text("Il gruppo "+$("#nomeNewGruppo").val()+" è già esistente!").slideDown().show();
 			}else
-				window.location.href = "gruppo?group="+$("#nomeNewGruppo").val()+"&channel="+channel;
+				window.location.href = "gestioneMembri?group="+$("#nomeNewGruppo").val()+"&channel="+channel;
 		}
 	});
 }

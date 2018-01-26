@@ -14,7 +14,7 @@
 
 <script>
 
-function aggiungiAdmin(x){
+function aggiungiAdmin(fullname,x){
 	
 	var canale = $("#NomeCanale").text();
 	var gruppo = $("#NomeGruppo").text();
@@ -26,15 +26,14 @@ function aggiungiAdmin(x){
 		datatype: "json",
 		data: JSON.stringify({"nomeCanale" : canale, "nomeGruppo" : gruppo, "user" : x, "azione": azione}),
 		success: function(data){
-			var data = JSON.parse(data);
-			//alert("#mem"+data);
-			$("#ad"+data).replaceWith("<div id = \"ad"+data+"\"><h4 onclick = javascript:rimuoviAdmin('"+x+"')>"+data+" Rimuovi dagli admin</h4></div>");
-	    	}
+			if(data == "success")
+        		$("#ad"+fullname+" a").replaceWith("<a href = javascript:rimuoviAdmin('"+fullname+"','"+x+"')> Rimuovi dagli admin</a>");
+    	}
 	});
 	
 }
 
-function rimuoviAdmin(x){
+function rimuoviAdmin(fullname,x){
 	
 	var canale = $("#NomeCanale").text();
 	  var gruppo = $("#NomeGruppo").text();
@@ -45,10 +44,9 @@ function rimuoviAdmin(x){
 			datatype: "json",
 			data: JSON.stringify({"nomeCanale" : canale, "nomeGruppo" : gruppo, "user" : x, "azione": azione}),
 			success: function(data){
-				var data = JSON.parse(data);
-		        //alert("#mem"+data);
-		        $("#ad"+data).replaceWith("<div id=\"ad"+data+"\"><h4 onclick = javascript:aggiungiAdmin('"+x+"')>"+data+" Aggiungi agli admin</h4></div>");
-		    	}
+				if(data == "success")
+	        		$("#ad"+fullname+" a").replaceWith("<a href = javascript:aggiungiAdmin('"+fullname+"','"+x+"')> Aggiungi agli admin</a>");
+	    	}
 		});
 	
 }
@@ -78,17 +76,14 @@ function unload(){
 		</div>
 		<div class="col-bg-6 brd">
 			<div id="homePost" style="margin-top: 60px; text-align: center;">
-	
-				<h2>Stai gestendo gli admin del gruppo:</h2>
-				<h1 id="NomeGruppo">${nomegruppo}</h1>
+				<br>
+				<h2>Gestione Admin del gruppo ${nomegruppo}</h2>
+				<h1 id="NomeGruppo" style="display: none">${nomegruppo}</h1>
 				<h1 id="NomeCanale" style="display: none">${nomecanale}</h1>
-				<h1></h1>
-				<c:forEach var="riga" items="${righe}">
-		
-					${riga}
-		
-				</c:forEach>
-	
+				<br>
+				<c:forEach var="riga" items="${righe}">		
+					${riga}		
+				</c:forEach>	
 			</div>
 		</div>
 	</div>

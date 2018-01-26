@@ -38,12 +38,12 @@ function loadMessaggi(){
 		url:"receiveMessage",
 		data: {first: "1", gruppo : $("#nomeGruppo").text(), canale : $("#nomeCanale").text()},
 		success: function(data){
+			$("div#loaderChat.loader").remove();
 			if(data != "[]" && data != "error"){
 				var json = JSON.parse(data);
 				var liste = json.messaggi;
 				numberMessageSession = json.numberMessageSession;
 				console.log("session "+numberMessageSession);
-				$("div#loaderChat.loader").remove();
 				appendMessages(liste);
 			}else if(data == "error"){
 				stopChat();

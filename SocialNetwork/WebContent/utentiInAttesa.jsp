@@ -12,6 +12,35 @@
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script>
+
+function AccettaRichiestaIscrizione(fullname,email,gruppo,canale){
+	$.ajax({
+		type: "GET",
+		url: "gestisciGruppo",
+		data: {"esito": "y", "group":gruppo, "channel": canale, "utente": email},
+		success: function(data){
+			$("#acceptUser"+fullname).remove();
+			if (isEmpty($('#listUserRequest')))
+				$('#listUserRequest').append("Non ci sono altre richieste");
+		}
+	});
+}
+function RifiutaRichiestaIscrizione(fullname,email,gruppo,canale){
+	$.ajax({
+		type: "GET",
+		url: "gestisciGruppo",
+		data: {"esito": "n", "group":gruppo, "channel": canale, "utente": email},
+		success: function(data){
+			$("#acceptUser"+fullname).remove();
+			if (isEmpty($('#listUserRequest')))
+				$('#listUserRequest').append("Non ci sono altre richieste");
+		}
+	});
+}
+function isEmpty( el ){
+    return !$.trim(el.html())
+}
+
 function load(){
 	$("input.onload").each(function(){
 		$(this).trigger("click");
@@ -38,15 +67,19 @@ function unload(){
 		</div>
 		<div class="col-bg-6 brd">
 			<div id="homePost" style="margin-top:60px; text-align: center;">
-				<c:if test = "${vuoto == true}">
-					<h4>Non ci sono altri utenti in attesa</h4>
-				</c:if>
+				<h2>Lista iscrizioni al gruppo ${gruppo.nome}</h2>
 				
+				<c:if test = "${vuoto == true}">
+					<h4>Non ci sono altre richieste</h4>
+				</c:if>
+				<br>
+				<div id="listUserRequest">
 				<c:forEach var="utente" items="${utentiInAttesa}">
-					<h4>${utente.nome} ${utente.cognome} Lo vuoi aggiungere al gruppo ${gruppo.nome}? 
-						<a href = gestisciGruppo?esito=y&group=${gruppo.nome}&channel=${gruppo.canale.nome}&utente=${utente.email}>Sì</a> / 
-						<a href = gestisciGruppo?esito=n&group=${gruppo.nome}&channel=${gruppo.canale.nome}&utente=${utente.email}>No</a></h4>
+					<h4 id="acceptUser${utente.nome}${utente.cognome}">${utente.nome} ${utente.cognome} (${utente.username}) : 
+						<a href ='javascript:AccettaRichiestaIscrizione("${utente.nome}${utente.cognome}","${utente.email}","${gruppo.nome}","${gruppo.canale.nome}")'>Accetta</a> / 
+						<a href ='javascript:RifiutaRichiestaIscrizione("${utente.nome}${utente.cognome}","${utente.email}","${gruppo.nome}","${gruppo.canale.nome}")'>Rifiuta</a></h4>
 				</c:forEach>
+				</div>
 			</div>
 		</div>
 	</div>
