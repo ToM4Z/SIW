@@ -18,6 +18,7 @@ public class GruppoServlet extends HttpServlet {
       
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
+		req.setCharacterEncoding("UTF-8");
 		if(req.getSession().getAttribute("user") == null) {
 			resp.sendRedirect("login.html");
 			return;

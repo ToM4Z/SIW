@@ -40,7 +40,8 @@ public class Commenti extends HttpServlet {
 			if (u.getEmail().equals(utente.getEmail()))
 				admin = true;
 		}
-		
+
+		req.setCharacterEncoding("UTF-8");
 		req.setAttribute("commenti", post.getCommenti());
 		req.setAttribute("post", post);
 		req.setAttribute("admin", admin);
