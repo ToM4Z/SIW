@@ -40,8 +40,8 @@ public class GestioneAdmin extends HttpServlet {
 		Canale canale = canaleDao.findByPrimaryKey(nomeCanale);
 		List<String> out = new LinkedList<>();
 		
-		System.out.println("membri "+gruppo.getMembri().size());
-		System.out.println("admins: "+gruppo.getAdmins().size());
+		//System.out.println("membri "+gruppo.getMembri().size());
+		//System.out.println("admins: "+gruppo.getAdmins().size());
 		
 		for (Utente u : gruppo.getMembri()) {
 			boolean admin = false;
