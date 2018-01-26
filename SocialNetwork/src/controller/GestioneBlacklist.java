@@ -61,7 +61,7 @@ public class GestioneBlacklist extends HttpServlet {
 		for (Utente u : canale.getBlacklist()) {
 			out.add("<div id=\"bl"+u.getNome()+u.getCognome()+"\"><h4>"+u.getNome()+" "+u.getCognome()+" ("+u.getUsername()+") <a href = javascript:rimuoviBlacklist('"+u.getNome()+u.getCognome()+"','"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4></div>");
 		}
-		System.out.println(out.toString());
+		//System.out.println(out.toString());
 		req.setAttribute("righe", out);
 		req.setAttribute("nomecanale", nomeCanale);
 		

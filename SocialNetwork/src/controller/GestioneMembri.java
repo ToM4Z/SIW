@@ -44,7 +44,7 @@ public class GestioneMembri extends HttpServlet {
 		
 		List<String> out = new LinkedList<>();
 		
-		System.out.println(gruppo.getMembri().size());
+		//System.out.println(gruppo.getMembri().size());
 		
 		for (Utente u : canale.getMembri()) {
 			boolean in = false;
@@ -109,7 +109,7 @@ public class GestioneMembri extends HttpServlet {
         	GruppoDao gruppoDao =DatabaseManager.getInstance().getDaoFactory().getGruppoDAO();
         	Utente utente = utenteDao.findByPrimaryKey(m.user);
         	Gruppo gruppo = gruppoDao.findByPrimaryKey(m.nomeGruppo, m.nomeCanale);
-        	System.out.println("nomeGruppo: "+m.nomeGruppo+" nomeCanale:"+m.nomeCanale);
+        	//System.out.println("nomeGruppo: "+m.nomeGruppo+" nomeCanale:"+m.nomeCanale);
         	gruppoDao.removeUserFromGroup(gruppo, utente);
         	resp.getWriter().write(new Gson().toJson(utente.getNome()+utente.getCognome()));
         }
