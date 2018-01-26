@@ -15,12 +15,14 @@
 
 <script>
 function sendMessage(){
+	$("#loaderSendingMessage").show();
 	$.ajax({
 			type:"POST",
 			url:"sendMessage",
 			datatype: "json",
 			data: {gruppo : $("#nomeGruppo").text(), canale : $("#nomeCanale").text(), testo : $("#messaggio").val()},
 			success: function(data){
+				$("#loaderSendingMessage").hide();
 				if(data == "error"){
 					console.log("error");
 				}
@@ -125,6 +127,7 @@ function onbeforeunloadChat(){
 	<div id="chatGruppo" class="panel panel-default"
 		style="position: fixed; width: 25%; height: 100%; right: 0%; margin-top: 40px; margin-bottom: -20px;">
 		<div class="panel-heading" style="text-align: center">
+			<div id="loaderSendingMessage"class="loader" style="width:50px;height:50px;position:absolute;top:20px;left:20px;border: 8px solid #fff;border-top: 8px solid #3498db;display:none"></div>
 			<h3>Chat ${gruppo.nome}</h3>
 		</div>
 		<div class="panel-body" style="padding-left:0px;">
