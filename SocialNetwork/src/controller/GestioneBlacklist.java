@@ -50,16 +50,16 @@ public class GestioneBlacklist extends HttpServlet {
 				}
 			
 			if (blacklist) {
-				out.add("<div id=\"bl"+u.getUsername()+"\"><h4>"+u.getNome()+" "+u.getCognome()+"<a href = javascript:rimuoviBlacklist('"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4></div>");
+				out.add("<div id=\"bl"+u.getNome()+u.getCognome()+"\"><h4>"+u.getNome()+" "+u.getCognome()+" ("+u.getUsername()+") <a href = javascript:rimuoviBlacklist('"+u.getNome()+u.getCognome()+"','"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4></div>");
 				//System.out.println("admin"+u.getUsername());
 			}
 			else {
-				out.add("<div id=\"bl"+u.getUsername()+"\"><h4>"+u.getNome()+" "+u.getCognome()+"<a href = javascript:aggiungiBlacklist('"+u.getEmail()+"')>Aggiungi alla Blacklist</a></h4></div>");
+				out.add("<div id=\"bl"+u.getNome()+u.getCognome()+"\"><h4>"+u.getNome()+" "+u.getCognome()+" ("+u.getUsername()+") <a href = javascript:aggiungiBlacklist('"+u.getNome()+u.getCognome()+"','"+u.getEmail()+"')>Aggiungi alla Blacklist</a></h4></div>");
 				//System.out.println("non admin"+u.getUsername());
 			}
 		}
 		for (Utente u : canale.getBlacklist()) {
-			out.add("<div id=\"bl"+u.getUsername()+"\"><h4>"+u.getNome()+" "+u.getCognome()+"<a href = javascript:rimuoviBlacklist('"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4></div>");
+			out.add("<div id=\"bl"+u.getNome()+u.getCognome()+"\"><h4>"+u.getNome()+" "+u.getCognome()+" ("+u.getUsername()+") <a href = javascript:rimuoviBlacklist('"+u.getNome()+u.getCognome()+"','"+u.getEmail()+"')> Rimuovi dalla Blacklist</a></h4></div>");
 		}
 		System.out.println(out.toString());
 		req.setAttribute("righe", out);
@@ -79,9 +79,7 @@ public class GestioneBlacklist extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-		String linea = br.readLine();
-		Blacklist a = new Gson().fromJson(linea, Blacklist.class);
-		//System.out.println(linea);
+		Blacklist a = new Gson().fromJson(br.readLine(), Blacklist.class);
     	  
         if (a.azione.equals("aggiungi")) {
             
@@ -91,8 +89,7 @@ public class GestioneBlacklist extends HttpServlet {
         	Utente utente = utenteDao.findByPrimaryKey(a.user);
         	System.out.println(canale.getNome());
         	canaleDao.addUserToBlackList(canale, utente);
-        	//System.out.println("aggiunto alla blacklist");
-        	resp.getWriter().write(new Gson().toJson(utente.getUsername()));
+        	resp.getWriter().write("success");
         	
         }
         
@@ -104,7 +101,7 @@ public class GestioneBlacklist extends HttpServlet {
         	Utente utente = utenteDao.findByPrimaryKey(a.user);
 
         	canaleDao.removeUserFromBlackList(canale, utente);
-        	resp.getWriter().write(new Gson().toJson(utente.getUsername()));
+        	resp.getWriter().write("success");
         }
 		
 	}
