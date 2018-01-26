@@ -58,5 +58,12 @@ ritiene inadatti, nominare (o rimuovere) altri admin ed infine ovviamente elimin
 il gruppo (come avviene per il canale gli utenti membri del gruppo verranno avvisati 
 dell'eliminazione attraverso notifica).
 
-Abbiamo utilizzato l’api di facebook per effettuare il login, la registrazione 
-( in questo caso l’email di conferma non viene mandata) e per condividere i post su facebook.
+Abbiamo utilizzato:
+- l’api di facebook per effettuare il login, la registrazione 
+	( in questo caso l’email di conferma non viene mandata) e per condividere i post su facebook.
+	
+- l'api di twitter per condividere un post su twitter.
+
+- l'api di youtube per visualizzare un video se in un post è contenuto un link di youtube
+
+

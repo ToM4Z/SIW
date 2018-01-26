@@ -13,7 +13,7 @@
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <script>
 
-function aggiungiBlacklist(x){
+function aggiungiBlacklist(user,x){
 	
 	var canale = $("#canale").text();
 	var azione = "aggiungi";
@@ -24,23 +24,20 @@ function aggiungiBlacklist(x){
 		datatype: "json",
 		data: JSON.stringify({"nomeCanale" : canale, "user" : x, "azione": azione}),
 		success: function(data){
-			var usern = JSON.parse(data);
-			//alert("#mem"+data);
-			$("#bl"+usern+" h4 a").replaceWith("<a href = javascript:rimuoviBlacklist('"+x+"')>Rimuovi dalla Blacklist</a>");
-	    	}
+			$("#bl"+user+" a").replaceWith("<a href = javascript:rimuoviBlacklist('"+user+"','"+x+"')>Rimuovi dalla Blacklist</a>");
+    	}
 	});
 
 }
 
-function rimuoviBlacklist(x){
+function rimuoviBlacklist(user,x){
 	  $.ajax({
 			type: "POST",
 			url: "gestioneBlacklist",
 			datatype: "json",
 			data: JSON.stringify({"nomeCanale" : $("#canale").text(), "user" : x, "azione": "rimuovi"}),
 			success: function(data){
-				var data = JSON.parse(data);
-		        $("#bl"+data).remove();
+		        $("#bl"+user).remove();
 	    	}
 		});
 }
