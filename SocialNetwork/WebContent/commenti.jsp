@@ -34,19 +34,21 @@ window.fbAsyncInit = function() {
    }(document, 'script', 'facebook-jssdk'));
   
   function shareOnFacebook(x){
+	  var text = $("#post-body"+x+" p").text();
 	    FB.ui({
 	      method: 'share',
 	      display: 'popup',
 	      href: 'http://i67.tinypic.com/144bkzr.png',
-	      quote: x,
+	      quote: text,
 	    }, function(response){});
 	  }	
   
 function shareOnTwitter(x){
+	  var text = $("#post-body"+x+" p").text();
 	  
 	  var url = "https://twitter.com/intent/tweet";
 	  var via = "userName";
-	  window.open(url+"?text="+x,"","width=500,height=300");
+	  window.open(url+"?text="+text,"","width=500,height=300");
 }
 
 function convertDateComment(comment,date){
@@ -93,8 +95,8 @@ function unload(){
 				    </div>
 				    <div class="post-header-right">
 				    <a onclick = "javascript:inviaNotificaSegnalazione('${post.id}')"><i class="fa fa-exclamation-triangle" style="font-size:20px"></i></a>
-				    <a onclick="javascript:shareOnTwitter('${post.contenuto}')"><i class="fa fa-twitter" style="font-size:24px"></i></a>
-				    <a onclick="javascript:shareOnFacebook('${post.contenuto}')"><i class="fa fa-facebook-square" style="font-size:22px"></i></a>
+				    <a onclick="javascript:shareOnTwitter('${post.id}')"><i class="fa fa-twitter" style="font-size:24px"></i></a>
+				    <a onclick="javascript:shareOnFacebook('${post.id}')"><i class="fa fa-facebook-square" style="font-size:22px"></i></a>
 				      <c:if test = "${post.creatore.email == user.email}">
 				      
 				      <a onclick="javascript:modificaPost(${post.id})"><span class="glyphicon glyphicon-pencil"></span></a>
